@@ -1,0 +1,27 @@
+Subpage: Section stealthing functionality
+=========================================
+
+Section stealthing has been added to subpage to allow subpage creators
+to be able to make a section on a subpage not visible to normal enrolled
+course users, yet the activities contained within that section available
+to those users.
+
+
+User interface
+--------------
+
+Subpage creators (course team members) will find the new subpage icon just
+below the normal hide/show 'eye' icon when editing is turned on. Hovering over
+this icon displays the words 'Stealth/Un-stealth' indicating the action
+when clicked. For subpage creators a stealthed section will display all text
+within the section in grey, unstealthing brings the text back to normal colour.
+
+For students, once a section is stealthed that section will no longer appear
+(in exactly the same way as if the section were hidden with the hide/show
+icon). However a steathed section's activities are still viewable if a link
+is provided, where as if the section is hidden then the activities within
+are not available to students.
+
+While it is possible to both hide and stealth a section, it is not
+recomended as it may be confusing to another course editor as to whether
+the section is really hidden or should be just stealthed.

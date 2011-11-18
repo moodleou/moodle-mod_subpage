@@ -1,0 +1,545 @@
+Test script for Subpage module
+==============================
+
+The following test script is designed to check all features of the subpage.
+
+Test case general info
+======================
+
+Each section has a unique (within this test case) three letter code and the
+steps are numbered so that the location where a failure occurs can be reported.
+
+Steps are shown in the following format:
+
+XXX01 / U.S1 [change]
+  Do something
+  - Check something
+
+The unique step number is followed by the user that you should be logged
+in as for that step. If the user changes from the previous step, the word
+[Change] will be noted.
+
+Some steps don't have specific items to check. In that case, the check
+'passes' if there are no errors or warnings while completing the task.
+
+The first two stages SUB and BSC are required for each other stage. After that,
+other stages are independent of each other.
+
+Note that the test script suggests specific names for things like courses,
+users, labels, etc. You can of course ignore these and use different names.
+
+System settings
+===============
+
+After making a Moodle 2 install, apply the following changes while leaving other
+settings at default values. (These settings may already be set on the test server
+but you probably should verify them before beginning testing. All settings are
+controlled via the 'Site administration' area.)
+
+Under Developer/Debugging, ensure that debug level is set to 'Developer' and
+set to display messages. Any error or warning displayed during the test script
+is a failure.
+
+Under Advanced features, ensure that Enable completion tracking and Enable
+conditional access are enabled.
+
+Under Development/Experimental settings, ensure that Enable group members only
+is enabled.
+
+Under Appearance/Ajax and Javascript ensure the admin option enablecourseajax is on
+(I think this is on by default).
+
+Search for 'requiremodintro' in the admin settings box at bottom left and turn
+off all checkboxes if necessary.
+
+Check that the subpage module is installed.
+
+Initial setup
+=============
+
+Create a test course with shortname 'SUBPAGE'.
+  In the course edit page ensure group mode is set to visible groups
+  and completion tracking is set to enabled.
+
+Under Settings/Users/Groups create the grouping G and group G1, then
+place G1 in the grouping G.
+
+Create the following users:
+  U.ET (an [editing] teacher).
+  U.S1 (a student) who should be added to group G1.
+  U.S2 (another student) who does not belong to any group.
+  If the course short name is SUBPAGE then you can use the following CSV script
+  to upload users:
+username,password,firstname,lastname,course1,role1,group1,email
+uet,A1;apple,U,ET,SUBPAGE,editingteacher,,x@x.x
+us1,A1;apple,U,S1,SUBPAGE,student,G1,x1@x.x
+us2,A1;apple,U,S2,SUBPAGE,student,,x2@x.x
+  The user U.ET should have AJAX enabled, but I think this is default.
+
+Enrol the users on the course SUBPAGE
+
+Test script
+===========
+
+This script should take a bit over an hour, although times are very roughly
+estimated.
+
+Create subpages (~4m)
+---------------
+(When options for the create form are not specifically mentioned, the defaults
+should be left.)
+
+CRE01 / U.ET
+  On the course in the top section, create a new subpage called SP1 with
+  default settings and no intro.
+
+CRE02 / U.ET
+  Create a new subpage called SP2:
+  - Verify that the grouping option is available (may require clicking
+  Advanced button, if applicable), but greyed out.
+  - Verify that the 'group members only' option is available.
+  - Verify that turning on the 'group members only' option causes the
+  grouping dropdown to become active.
+  Select grouping G in the grouping dropdown.
+
+CRE03 / U.ET
+  Create a new subpage called SP3:
+  Enter the text INTRO into the intro box.
+  In the completion options selection, choose the automatic option
+  ('when conditions are met').
+  - Verify that the 'when viewed' tickbox is available. Tick it.
+
+Basic editing and adding content (~4m)
+--------------------------------
+
+EDT01 / U.ET
+  On the course page, turn editing on. Click on SP1.
+  - Verify that the resulting page includes the subpage title (in crumb
+  trail), a single empty section box, and an 'Add section' button.
+  - Verify that the empty section box appears essentially the same as a
+  section box on the main course page, with the exception that it does not
+  display a section number or date. It should include an edit icon that can be
+  used to edit the section title and summary, and dropdowns that can be used to
+  add resources or activities.
+
+EDT03 / U.ET
+  Click the Resource dropdown to add a label.
+  - Verify that the editing page URL is in standard Moodle code and contains
+  a returnto parameter.
+  Set the label content to LABEL and click save.
+  At this point the browser may return to the course URL rather than the
+  subpage URL. Return to the subpage manually.
+  - Verify that the label LABEL now appears within the section and contains
+  standard edit icons.
+
+EDT04 / U.ET
+  Click the Activities dropdown to add a forum.
+  - Verify that the editing page URL is in standard Moodle code and contains
+  a returnto parameter.
+  Set the name to FORUM and click save.
+  At this point the browser may return to the course URL rather than the subpage
+  URL. Return to the subpage manually.
+  - Verify that the forum FORUM now appears within the section and contains
+  standard edit icons.
+
+Activity editing icons (~10m)
+----------------------
+
+AEI01 / U.ET
+  Click the Edit icon next to the forum.
+  - Verify that the same edit form appears.
+  Change the forum name to BASILICA. Hit save.
+  At this point the browser may return to the course URL rather than the subpage URL.
+  Return to the subpage manually.
+  - Verify that the forum name has changed to BASILICA.
+
+AEI02 / U.ET
+  Mouse over the Indent (right arrow) icon next to the forum.
+  - Verify that it points to a standard Moodle URL but contains a returnto parameter.
+  Click the icon.
+  At this point the browser may return to the course URL rather than the subpage URL.
+  Return to the subpage manually.
+  - Verify that the forum has now been indented.
+  - Repeat with the Un-indent (left arrow) icon.
+
+AEI03 / U.ET
+  Mouse over the visibility (eye) icon next to the label.
+  - Verify that it points to a standard Moodle URL but contains a returnto parameter.
+  Click the icon.
+  At this point the browser may return to the course URL rather than the subpage URL.
+  Return to the subpage manually.
+  - Verify that the eye has now closed, indicating the label is invisible.
+  - Repeat and verify that the eye opens again.
+
+AEI04 / U.ET
+  Mouse over the groups (person) icon next to the forum.
+  - Verify that it points to a standard Moodle URL but contains a returnto parameter.
+  Click the icon.
+  At this point the browser may return to the course URL rather than the subpage URL.
+  Return to the subpage manually.
+  - Verify that the icon has changed to the 'visible groups' icon.
+  - Repeat; it should change to separate groups.
+  - Repeat again, it should return to the no groups icon.
+
+AEI05 / U.ET
+  Click on the 'Assign roles' icon next to the forum.
+  - Verify that the standard Moodle assign roles page appears and that it is
+  assigning roles for the named forum (BASILICA). (Because there is no way to
+  'continue' after assigning roles, there is no need for a returnto parameter.)
+  Return to subpage using browser controls.
+
+AEI06 / U.ET
+  Click the Delete icon next to the label.
+  - Verify that the standard Moodle confirm prompt appears, served from a standard
+  Moodle URL, and contains a returnto parameter.
+  Click Yes on the confirm prompt.
+ At this point the browser may return to the course URL rather than the subpage URL.
+  Return to the subpage manually.
+  - Verify that the label has now been deleted.
+
+Basic section editing (~3m)
+---------------------
+
+SEC01 / U.ET
+  Click the edit icon to edit the section.
+  - Verify that the URL is that of the standard Moodle script to edits section options,
+  rather than any code within subpage.
+  - Verify that the page parameters include a returnto URL that points to the correct subpage.
+  Set the title to TITLE and the summary to SUMMARY and click save.
+  At this point the browser may return to the course URL rather than the subpage URL.
+  Return to the subpage manually.
+  - Verify that the section now shows the title TITLE and summary SUMMARY.
+  HTML formatting should be essentially the same as an equivalent section on the
+  main page. Appearance may differ slightly depending on theme.
+
+SEC02 / U.ET
+  Click the Add button to add a new section.
+  - Verify that the page reloads immediately.
+  - Verify that a new empty section has appeared below the existing one.
+  - Verify that the new section does not have a title or summary.
+
+SEC03 / U.ET
+  Click the edit icon next to the second section, set the title to FROG, and click save.
+  At this point the browser may return to the course URL rather than the subpage URL.
+  Return to the subpage manually.
+  - Verify that the second section now correctly has title FROG and no summary,
+  while the first one still has TITLE and SUMMARY.
+
+Move items [JS on] (~10m)
+----------
+(Before trying this section it may be worth verifying that AJAX is enabled correctly:
+go to the course page and check that moving an item works by drag and drop.
+The 'Shift-Reload' sequence refers to holding Shift while clicking the Reload browser
+button with the mouse. There are other ways to trigger the same 'really reload' action.)
+
+MVJ01 / U.ET
+  Add three new activities (any type, e.g. web page) to the top section.
+  These should be named FROG, TOAD, and ZOMBIE. The initial list of activities
+  should be BASILICA, FROG, TOAD, ZOMBIE in the first section, and no items
+  in the second section.
+  - Verify that each item has a four-directional 'move' arrow.
+
+MVJ02 / U.ET
+  Click and drag the move arrow next to the BASILICA item to move it to the end
+  of the first section, then release the mouse button.
+  - Verify that the order shown is now FROG, TOAD, ZOMBIE, BASILICA.
+  - Press Shift-Reload and verify that the new order remains in place
+  (i.e. it was saved correctly).
+
+MVJ03 / U.ET
+  Click and drag to move ZOMBIE to the start of the first section.
+  Click and drag to move FROG after TOAD.
+  - Verify that the order shown is now ZOMBIE, TOAD, FROG, BASILICA.
+  - Press Shift-Reload and verify that the new order remains in place.
+
+MVJ04 / U.ET
+  Click and drag to move FROG to the start of the second section.
+  Then move TOAD to the end of the second section.
+  - Verify that the order shown, taking account of sections, is now
+  [ZOMBIE, BASILICA], [FROG, TOAD].
+  - Press Shift-Reload and verify that the new order remains in place.
+
+MVJ05 / U.ET
+  Click the button to add a new section so that there are now three sections.
+  Using the section move icon on the left of the section, drag the new empty
+  section to the top of the page and release it.
+  - Verify that the order shown is now [], [ZOMBIE, BASILICA], [FROG, TOAD].
+  - Press Shift-Reload and verify that the new order remains in place.
+
+MVJ06 / U.ET
+  Drag the middle section to the end and release it.
+  - Verify that the order shown is now [], [FROG, TOAD], [ZOMBIE, BASILICA].
+  - Press Shift-Reload and verify that the new order remains in place.
+
+MVJ07 / U.ET
+  Drag the first empty section to the middle and release it.
+  - Verify that the order shown is now [FROG, TOAD], [], [ZOMBIE, BASILICA].
+  - Press Shift-Reload and verify that the new order remains in place.
+
+MVJ08 / U.ET
+  Move the items ZOMBIE and BASILICA back into the top section so that the
+  resulting order is [BASILICA, FROG, TOAD, ZOMBIE], [], []. (This is really
+  just to get things back into the same place for the start of the next test.)
+
+Move items [JS off] (~6m)
+----------
+(Before starting this sequence, disable JavaScript using browser settings.
+Don't make any other change to Moodle or user settings.)
+
+MVN01 / U.ET
+  Reload the page.
+  - Verify that the four-directional move arrows do not appear but instead
+  there are two-directional move arrows by each item, and up/down arrows on the
+  sections. The top section doesn't have an up arrow and the bottom section
+  doesn't have a down arrow.
+
+MVN02 / U.ET
+  Click the move icon next to BASILICA.
+  - Verify that the page reloads with 'target' icons at the start of the
+  first section, after each activity in the first section, and in each of
+  the other two sections.
+  Click on the target icon at the end of the first section.
+  - Verify that the order shown is now [FROG, TOAD, ZOMBIE, BASILICA], [], [].
+
+MVN03 / U.ET
+  Click the move icon next to ZOMBIE.
+  Click the target icon at the start of the first section.
+  Click the move icon next to FROG.
+  Click the target icon after TOAD.
+  - Verify that the order shown is now ZOMBIE, TOAD, FROG, BASILICA.
+
+MVJ04 / U.ET
+  Click the move icon next to FROG. Click the target icon in the second section.
+  Click the move icon next to TOAD. Click the target icon at the end of the second section.
+  - Verify that the order shown is now [ZOMBIE, BASILICA], [FROG, TOAD], [].
+
+MVJ05 / U.ET
+  Click the up arrow icon next to the last empty section.
+  - Verify that the order shown is now [ZOMBIE, BASILICA], [], [FROG, TOAD].
+
+MVJ06 / U.ET
+  Click the up arrow icon next to the middle empty section.
+  - Verify that the order shown is now [], [ZOMBIE, BASILICA], [FROG, TOAD].
+
+MVJ07 / U.ET
+  Click the down arrow icon next to the middle section that contains ZOMBIE.
+  - Verify that the order shown is now [], [FROG, TOAD], [ZOMBIE, BASILICA].
+
+Completion support (~8m)
+------------------
+
+COM01 / U.ET
+  Go to subpage SP3.
+  Create forum on that page called COLOSSEUM and set its completion settings
+  to 'manual' (user can mark complete).
+  Create forum on that page called PANTHEON and set its completion settings
+  to automatic, system marks complete when user views it.
+
+COM02 / U.S1
+  Look at course main page.
+  - Verify that subpage SP3 has an 'unticked' icon to the right of it.
+  (The icon might be impossible to see, depending on your theme, as it may be
+  a white square; mouse around to find it.)
+
+COM03 / U.S1
+  Click to view SP3. Then use the breadcrumb trail or navigation block to click
+  back to the course main page (do not use browser Back button).
+  - Verify that subpage SP3 now has a 'ticked' icon to the right of it.
+
+COM04 / U.S1
+  Go back to SP3. Click the tickbox icon next to COLOSSEUM.
+  - Verify that the icon becomes ticked using AJAX (without reloading the page
+  and with a little 'Saved' note).
+
+COM05 / U.S1
+  Go to course main page, then click the link to return to SP3 (without using Back button).
+  - Verify that the COLOSSEUM forum is still ticked.
+
+COM06 / U.S1
+  Click the tickbox icon
+    - verify that it becomes unticked.
+
+COM07 / U.S1
+  Disable JavaScript in browser. Reload the page.
+  - Verify that icon is unticked. Click it.
+  - Verify that the same page reloads, with the icon now ticked. Click it again.
+  - Verify that the page reloads, with the icon now unticked. Turn JavaScript back on.
+
+COM08 / U.S1
+  Click to view the PANTHEON forum. Return to subpage without using Back button.
+  At this point there might not be a link in the breadcrumbs to get back to SP3,
+  so you may need to return via the course page.
+  - Verify that the PANTHEON forum now displays as ticked.
+
+Grouping support (~2m)
+----------------
+
+GRP01 / U.S1
+  Go to course page.
+  - Verify that subpage SP2 is visible. Click the link to SP2 and copy the
+  address into clipboard.
+
+GRP02 / U.S2
+  Go to course page.
+  - Verify that subpage SP2 is not visible. Paste the link to SP2 from clipboard
+  into browser.
+  - Verify that you get an error.
+
+Section stealthing (~4m)
+------------------
+
+STE00 /U.ET
+  Go to subpage SP1 and confirm there are three sections [], [FROG, TOAD], [ZOMBIE, BASILICA].
+  Turn on editing.
+  Add a label SECTION1 to the first section.
+  Add a label SECTION2 to the second section.
+  Add a label SECTION3 to the third section.
+  Ensure all sections are visible.
+  - Verify that the icons for stealth display on each section and a
+  tool tip 'Stealth' displays on mouseover.
+  Copy the url to FROG.
+  Add a new URL resource to the section with label SECTION1.
+  Use the url to FROG as the link in the URL resource and name this link LINKtoFROG.
+
+STE01 / U.S1
+  Go to subpage SP1.
+  - Verify that you can see the three sections and their activities and labels.
+  - Verify that you can access FROG from both the section with label SECTION2
+  and the link in section with label SECTION1 called LINKtoFROG.
+
+STE02 / U.ET
+  Click the stealth icon for the section with label SECTION2.
+  - Verify that the text within the section has turned grey.
+
+STE03 / U.S1
+  Refresh the browser or go to SP1 again.
+  - Verify that you cannot see section with label SECTION2.
+  - Verify that you can see the other two sections.
+  Click on the link LINKtoFROG.
+  - Verify that you can see FROG.
+
+STE04 / U.ET
+  Click the un-stealth icon for the section with label SECTION2.
+  - Verify that the text within the section has returned to its original look.
+
+STE05 / U.S1
+  Go to SP1 again.
+  - Verify that you can see the section with label SECTION2.
+
+STE04 / U.ET
+  Click the un-stealth icon for the section with label SECTION2. This is
+  really just preparation for the next section.
+
+Backup and restore (~4m)
+------------------
+
+BAR01 / Adm
+  Back up the course. Use default options.
+
+BAR02 / Adm
+  Restore the backup to a new course. Use default options.
+  - Verify that the new course contains the same three subpages.
+  - Verify that subpages SP1 and SP3 contain the same content.
+  - Verify that the section SECTION2 on subpage SP1 is still stealthed.
+  - Click the link to forum PANTHEON in SP3 to verify that the forum works OK.
+
+Bulk move (~15m)
+---------
+
+BKM01 / U.ET
+  Make sure editing is turned on, then view SP1.
+  - Verify that links 'Move items to this page' and 'Move items from this page'
+  are visible at bottom.
+  For testing, add a label to this page. The label should have very long text,
+  such as the following:
+    It was a dark and stormy night; the rain fell in torrents — except at occasional
+    intervals, when it was checked by a violent gust of wind which swept up the streets
+    (for it is in London that our scene lies), rattling along the housetops, and fiercely
+    agitating the scanty flame of the lamps that struggled against the darkness.
+  - Verify that the label displays correctly with text wrapping as normal.
+
+BKM02 / U.ET
+  Click 'Move items from this page'.
+  - Verify that the resulting page includes a list of all items on the page with
+  headings for each section name.
+  - Verify that each item is shown as an icon and text, but no link.
+  - Verify that each item has a checkbox to the left of it.
+  - Verify that the label is shown as an abbreviated version (with the first
+  part of the text then '…').
+  The current order of items on the page should be [], [FROG, TOAD], [ZOMBIE, BASILICA].
+
+BKM03 / U.ET
+  Without selecting any items, click the 'Move selected items' button.
+  - Verify that either the button is greyed out and doesn't work, or that it takes
+  you to an error page.
+  Continue from the error page (should return to the same bulk move form).
+  Click the 'Cancel' button.
+  - Verify that you are returned to the subpage.
+
+BKM04 / U.ET
+  Click 'Move items from this page'.
+  Select the boxes next to FROG and ZOMBIE.
+  From the 'Move to' dropdown, select the option 'New section' under
+  'Another section on this subpage'.
+  Click 'Move selected items'.
+  - Verify that the subpage loads with the new order [], [TOAD], [BASILICA], [FROG, ZOMBIE].
+
+BKM05 / U.ET
+  Click 'Move items from this page'.
+  Select the boxes next to TOAD and BASILICA.
+  From the 'Move to' dropdown, select the option 'Section 1' under 'Another
+  section on this subpage'.
+  Submit form.
+  - Verify new order [TOAD, BASILICA], [], [], [FROG, ZOMBIE].
+
+BKM06 / U.ET
+  Click 'Move items from this page'.
+  Select the boxes next to TOAD and FROG.
+  From the 'Move to' dropdown, select 'Section 1' under 'Subpage: S2'.
+  Submit form.
+  - Verify that you are taken to S2. Verify that S2 now has order [TOAD, FROG].
+  Return to S1.
+  - Verify that S1 now has order [BASILICA], [], [], [ZOMBIE].
+
+BKM07 / U.ET
+  Click 'Move items from this page'.
+  Select the boxes next to BASILICA and ZOMBIE.
+  From the 'Move to' dropdown, select 'New section' under 'Subpage: S2'.
+  Submit form.
+  - Verify that you are taken to S2.
+  - Verify that S2 now has order [TOAD, FROG], [BASILICA, ZOMBIE].
+
+BKM08 / U.ET
+  Click 'Move items from this page'.
+  Select TOAD and BASILICA. From the dropdown, select 'Top section' under
+  'Course main page'.
+  Submit form.
+  - Verify that you are taken to the course main page.
+  - Verify that items TOAD and BASILICA are added to the end of the top section.
+
+BKM09 / U.ET
+  Return to S2.
+  Click 'Move items from this page'.
+  Select FROG and ZOMBIE.
+  From the dropdown, select a named (well, dated) week from under 'Course main page'.
+  Submit form.
+  - Verify that you are taken to the course main page.
+  - Verify that the browser jumps to the week you selected due to a #anchor in the URL.
+  - Verify that items FROG and ZOMBIE are added to the end of the selected week.
+
+BKM10 / U.ET
+  Go to S1. Click 'Move items to this page'.
+  - Verify that the resulting page shows all items on the course homepage,
+  except this subpage S1.
+  - Verify that the page includes headings for all the sections in the course
+  (up to the number of weeks on the course), possibly except for those sections
+  that have no items in.
+  - Verify that it does not include any headings or items from subpages.
+
+BKM11 / U.ET
+  Select TOAD, FROG, and subpage S2.
+  - Verify that the 'Move to' dropdown contains the names of all sections on this page.
+  Select 'Section 1'.
+  Submit form.
+  - Verify that you are taken back to subpage S1.
+  - Verify that it now includes [S2, TOAD, FROG], [], [], [].

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/subpage/db" VERSION="20111005" COMMENT="XMLDB file for Moodle mod/subpage"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="subpage" COMMENT="Main information about each subpage" NEXT="subpage_sections">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="course"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="Foreign key references course.id" PREVIOUS="id" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The name of this subpage" PREVIOUS="course" NEXT="intro"/>
+        <FIELD NAME="intro" TYPE="text" LENGTH="small" NOTNULL="true" SEQUENCE="false" COMMENT="The introductory text" PREVIOUS="name" NEXT="introformat"/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="text format of intro field" PREVIOUS="intro" NEXT="enablesharing"/>
+
+        <FIELD NAME="enablesharing" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" COMMENT="If set to 1, this field allows the subpage to be shared, meaning that it can be selected for use by the sharedsubpage module." PREVIOUS="introformat" NEXT="sharedcontenthash"/>
+        <FIELD NAME="sharedcontenthash" TYPE="char" LENGTH="40" NOTNULL="false" SEQUENCE="false" COMMENT="When sharing is enabled, this field is updated to include an SHA-1 hash of the shared content. If the hash changes, all shared copies will be refreshed." PREVIOUS="enablesharing"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
+      </INDEXES>
+
+    </TABLE>
+    <TABLE NAME="subpage_sections" COMMENT="Lists the course sections that are used by each subpage, basically a cross reference between subpage and course_sections tables" PREVIOUS="subpage">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="subpageid"/>
+        <FIELD NAME="subpageid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="foreign key to subpage.id" PREVIOUS="id" NEXT="sectionid"/>
+        <FIELD NAME="sectionid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="foreign key to course_sections.id" PREVIOUS="subpageid" NEXT="stealth"/>
+        <FIELD NAME="stealth" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="hide from view yet permit access" PREVIOUS="sectionid" NEXT="pageorder"/>
+        <FIELD NAME="pageorder" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="order of sections within subpage" PREVIOUS="stealth"/>
+      </FIELDS>
+
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="sectionid"/>
+        <KEY NAME="sectionid" TYPE="foreign-unique" FIELDS="sectionid" REFTABLE="course_sections" REFFIELDS="id" PREVIOUS="primary" NEXT="subpageid"/>
+        <KEY NAME="subpageid" TYPE="foreign" FIELDS="subpageid" REFTABLE="subpage" REFFIELDS="id" PREVIOUS="sectionid"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>

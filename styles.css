@@ -1,0 +1,13 @@
+#page-mod-subpage-view .stealthed,
+#page-mod-subpage-view .stealthed .instancename {
+    color: #AAAAAA;
+}
+
+#page-mod-subpage-view .dimmed,
+#page-mod-subpage-view .dimmed .instancename {
+    color: #AAAAAA;
+}
+
+#page-mod-subpage-view .section_add_menus {
+    padding-bottom: 2em;
+}

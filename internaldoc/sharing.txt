@@ -1,0 +1,51 @@
+Subpage: Sharing functionality
+==============================
+
+Some functionality was added to subpage in order to support the new
+'shared subpage' module. This only affects the settings form.
+
+See the test script in the shared subpage module.
+
+
+New setting
+-----------
+
+There is a new 'enable sharing' checkbox.
+
+This checkbox only appears if the shared subpage module is installed.
+
+The value of this setting is stored in the database and in backups.
+
+
+Validation
+----------
+
+New validation is applied:
+
+- If you enable sharing, the idnumber must be set.
+
+- If the idnumber is set, it must be different from every other idnumber for
+  every module across the system.
+
+  - We recommend (and in some cases require) that idnumbers begin with the
+    website shortname in lower-case followed by a dot and then some text
+    referring to the name of the specific page. This ensures the name will be
+    unique throughout the system. E.g.:
+
+    b747-10k.sharedresources
+
+- If you disable sharing, there must be no shared subpages that copy this
+  page.
+
+Violating any of these 'musts' will result in an appropriate error message.
+
+
+Backup and restore
+------------------
+
+When you restore a subpage that contains an idnumber, the idnumber will
+not be restored (it will be set to blank) if there is an existing item anywhere
+on the system that uses the same idnumber.
+
+In this case, a warning will be displayed in the restore log. (There is
+currently no way to see the restore log.)
