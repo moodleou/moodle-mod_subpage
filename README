@@ -1,0 +1,66 @@
+Subpage
+=======
+
+Copyright 2011 The Open University
+
+
+Thes subpage module allows users to create, manage, and view lists of Moodle
+activities separately from the main course page
+
+Limitations:
+
+The subpage module does not require any core changes. However, if you use it
+without making core changes you will find that you are constantly redirected
+back to the course page when you expected to be on the subpage.
+
+If you would like a patch that you can apply - at your own risk, of course,
+as is this whole thing - in order to make it all work a little more neatly, I
+have included this as corechanges.patch. This applies on MOODLE_21_STABLE as
+of writing. (If you do not know how to apply patches then this is not the time
+to learn...) It would be nice if we could get this functionality included into
+core at some point.
+
+Also please note that if you put something on a subpage it will seem natural
+for the subpage to be included in the breadcrumbs, but it is not. We may
+implement code to address this as part of our theme, but have not yet done
+so at time of writing. 
+
+
+Support:
+
+We cannot offer direct support. Please do not contact me directly.
+
+Bug reports:
+
+Please report bugs to the Moodle tracker using the 'contributed code' project
+and 'Module: subpage' component. Under Version, please select your Moodle
+version e.g. 2.1, 2.2.
+
+Before reporting a bug, please ensure you are running the latest version of
+the subpage that is available from:
+
+https://github.com/moodleou/moodle-mod_subpage
+
+Status:
+
+Beta quality code. We intend to switch this project to include live quality
+code at some point after our December update.
+
+Please note that this code is tested on OU systems but we rely on the
+community for testing on other systems.
+
+Requires:
+
+Moodle 2.1+
+Postgres / MySQL
+
+Install:
+
+Place the contents of this source tree into your Moodle installation so that
+within your Moodle root, this file is mod/subpage/README. Then visit the
+Moodle notifications page to install.
+
+Documentation:
+
+None. Please feel free to contribute documentation in the relevant area of
+the MoodleDocs wiki.

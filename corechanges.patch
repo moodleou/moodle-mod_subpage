@@ -1,0 +1,204 @@
+diff --git a/course/editsection.php b/course/editsection.php
+index e9a065b..50b461e 100644
+--- a/course/editsection.php
++++ b/course/editsection.php
+@@ -47,6 +47,11 @@ $mform->set_data($section); // set current value
+ 
+ /// If data submitted, then process and store.
+ if ($mform->is_cancelled()){
++// ou-specific begins #169
++    if ($returnurl = optional_param('returnurl', '', PARAM_URL)) {
++        redirect($returnurl);
++    }
++// ou-specific ends #169
+     redirect($CFG->wwwroot.'/course/view.php?id='.$course->id);
+ 
+ } else if ($data = $mform->get_data()) {
+@@ -61,6 +66,11 @@ if ($mform->is_cancelled()){
+     $DB->update_record('course_sections', $section);
+     add_to_log($course->id, "course", "editsection", "editsection.php?id=$section->id", "$section->section");
+     $PAGE->navigation->clear_cache();
++// ou-specific begins #169
++    if ($returnurl = optional_param('returnurl', '', PARAM_URL)) {
++        redirect($returnurl);
++    }
++// ou-specific ends #169
+     redirect("view.php?id=$course->id");
+ }
+ 
+diff --git a/course/editsection_form.php b/course/editsection_form.php
+index ab26049..3fc4c81 100644
+--- a/course/editsection_form.php
++++ b/course/editsection_form.php
+@@ -14,6 +14,11 @@ class editsection_form extends moodleform {
+         $mform  = $this->_form;
+         $course = $this->_customdata['course'];
+ 
++// ou-specific begins #169
++        $mform->addElement('hidden', 'returnurl');
++        $mform->setDefault('returnurl', optional_param('returnurl', '', PARAM_URL));
++
++// ou-specific ends #169
+         $mform->addElement('checkbox', 'usedefaultname', get_string('sectionusedefaultname'));
+         $mform->setDefault('usedefaultname', true);
+ 
+diff --git a/course/mod.php b/course/mod.php
+index 062760f..c773266 100644
+--- a/course/mod.php
++++ b/course/mod.php
+@@ -72,14 +72,32 @@ if (!empty($add)) {
+     $type        = optional_param('type', '', PARAM_ALPHA);
+     $returntomod = optional_param('return', 0, PARAM_BOOL);
+ 
++// ou-specific begins #169
++/*
+     redirect("$CFG->wwwroot/course/modedit.php?add=$add&type=$type&course=$id&section=$section&return=$returntomod");
++*/
++    $returnurl = optional_param('returnurl', '', PARAM_URL);
++    if ($returnurl) {
++        $returnurl = '&returnurl=' . urlencode($returnurl);
++    }
++    redirect("$CFG->wwwroot/course/modedit.php?add=$add&type=$type&course=$id&section=$section&return=$returntomod$returnurl");
++// ou-specific ends #169
+ 
+ } else if (!empty($update)) {
+     if (!$cm = get_coursemodule_from_id('', $update, 0, true)) {
+         print_error('invalidcoursemodule');
+     }
+     $returntomod = optional_param('return', 0, PARAM_BOOL);
++// ou-specific begins #169
++/*
+     redirect("$CFG->wwwroot/course/modedit.php?update=$update&return=$returntomod");
++*/
++    $returnurl = optional_param('returnurl', '', PARAM_URL);
++    if ($returnurl) {
++        $returnurl = '&returnurl=' . urlencode($returnurl);
++    }
++    redirect("$CFG->wwwroot/course/modedit.php?update=$update&return=$returntomod$returnurl");
++// ou-specific ends #169
+ 
+ } else if (!empty($delete)) {
+     if (!$cm = get_coursemodule_from_id('', $delete, 0, true)) {
+@@ -95,11 +113,17 @@ if (!empty($add)) {
+     require_capability('moodle/course:manageactivities', $context);
+ 
+     $return = "$CFG->wwwroot/course/view.php?id=$cm->course#section-$cm->sectionnum";
++// ou-specific begins #169
++    $return = optional_param('returnurl', $return, PARAM_URL);
++// ou-specific ends #169
+ 
+     if (!$confirm or !confirm_sesskey()) {
+         $fullmodulename = get_string('modulename', $cm->modname);
+ 
+         $optionsyes = array('confirm'=>1, 'delete'=>$cm->id, 'sesskey'=>sesskey());
++// ou-specific begins #169
++        $optionsyes['returnurl'] = $return;
++// ou-specific ends #169
+         $optionsno  = array('id'=>$cm->course);
+ 
+         $strdeletecheck = get_string('deletecheck', '', $fullmodulename);
+@@ -201,6 +225,12 @@ if ((!empty($movetosection) or !empty($moveto)) and confirm_sesskey()) {
+ 
+     rebuild_course_cache($section->course);
+ 
++// ou-specific begins #169
++    if ($returnurl = optional_param('returnurl', '', PARAM_URL)) {
++        redirect($returnurl);
++    }
++// ou-specific ends #169
++
+     if (SITEID == $section->course) {
+         redirect($CFG->wwwroot);
+     } else {
+@@ -227,6 +257,11 @@ if ((!empty($movetosection) or !empty($moveto)) and confirm_sesskey()) {
+ 
+     rebuild_course_cache($cm->course);
+ 
++// ou-specific begins #169
++    if ($returnurl = optional_param('returnurl', '', PARAM_URL)) {
++        redirect($returnurl);
++    }
++// ou-specific ends #169
+     if (SITEID == $cm->course) {
+         redirect($CFG->wwwroot);
+     } else {
+@@ -246,6 +281,11 @@ if ((!empty($movetosection) or !empty($moveto)) and confirm_sesskey()) {
+ 
+     rebuild_course_cache($cm->course);
+ 
++// ou-specific begins #169
++    if ($returnurl = optional_param('returnurl', '', PARAM_URL)) {
++        redirect($returnurl);
++    }
++// ou-specific ends #169
+     if (SITEID == $cm->course) {
+         redirect($CFG->wwwroot);
+     } else {
+@@ -274,6 +314,11 @@ if ((!empty($movetosection) or !empty($moveto)) and confirm_sesskey()) {
+         rebuild_course_cache($cm->course);
+     }
+ 
++// ou-specific begins #169
++    if ($returnurl = optional_param('returnurl', '', PARAM_URL)) {
++        redirect($returnurl);
++    }
++// ou-specific ends #169
+     if (SITEID == $cm->course) {
+         redirect($CFG->wwwroot);
+     } else {
+@@ -294,6 +339,11 @@ if ((!empty($movetosection) or !empty($moveto)) and confirm_sesskey()) {
+ 
+     rebuild_course_cache($cm->course);
+ 
++// ou-specific begins #169
++    if ($returnurl = optional_param('returnurl', '', PARAM_URL)) {
++        redirect($returnurl);
++    }
++// ou-specific ends #169
+     if (SITEID == $cm->course) {
+         redirect($CFG->wwwroot);
+     } else {
+diff --git a/course/modedit.php b/course/modedit.php
+index 4b5c615..3f0bbe0 100644
+--- a/course/modedit.php
++++ b/course/modedit.php
+@@ -223,6 +223,11 @@ if ($mform->is_cancelled()) {
+     if ($return && !empty($cm->id)) {
+         redirect("$CFG->wwwroot/mod/$module->name/view.php?id=$cm->id");
+     } else {
++// ou-specific begins #169
++        if ($returnurl = optional_param('returnurl', '', PARAM_URL)) {
++            redirect($returnurl);
++        }
++// ou-specific ends #169
+         redirect("$CFG->wwwroot/course/view.php?id=$course->id#section-".$cw->section);
+     }
+ } else if ($fromform = $mform->get_data()) {
+@@ -568,6 +573,11 @@ if ($mform->is_cancelled()) {
+     if (isset($fromform->submitbutton)) {
+         redirect("$CFG->wwwroot/mod/$module->name/view.php?id=$fromform->coursemodule");
+     } else {
++// ou-specific begins #169
++        if ($returnurl = optional_param('returnurl', '', PARAM_URL)) {
++            redirect($returnurl);
++        }
++// ou-specific ends #169
+         redirect("$CFG->wwwroot/course/view.php?id=$course->id");
+     }
+     exit;
+diff --git a/course/moodleform_mod.php b/course/moodleform_mod.php
+index 0482168..ea21242 100644
+--- a/course/moodleform_mod.php
++++ b/course/moodleform_mod.php
+@@ -337,6 +337,11 @@ abstract class moodleform_mod extends moodleform {
+         global $COURSE, $CFG, $DB;
+         $mform =& $this->_form;
+ 
++// ou-specific begins #169
++        $mform->addElement('hidden', 'returnurl');
++        $mform->setDefault('returnurl', optional_param('returnurl', '', PARAM_URL));
++
++// ou-specific ends #169
+         $this->_outcomesused = false;
+         if ($this->_features->outcomes) {
+             if ($outcomes = grade_outcome::fetch_all_available($COURSE->id)) {
