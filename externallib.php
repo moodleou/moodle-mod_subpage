@@ -264,7 +264,7 @@ class mod_subpage_external extends external_api {
 
         self::require_access($course->id);
 
-        //finally create the subpage.
+        // finally create the file item
         // first add course_module record because we need the context
         $newcm = new stdClass();
         $newcm->course           = $course->id;
@@ -339,7 +339,7 @@ class mod_subpage_external extends external_api {
         $DB->set_field('course_modules', 'instance', $module->instance, array('id'=>$coursemodule));
 
         add_mod_to_section($module);
-        rebuild_course_cache($course->id);
+        rebuild_course_cache($course->id, true);
 
         return array('id'=>$coursemodule);
     }
@@ -401,7 +401,7 @@ class mod_subpage_external extends external_api {
      * @return last section id for a given subpage
      */
     public function get_last_subpage_section_id($subpagecmid) {
-        global $DB;
+        global $DB, $CFG;
 
         $sql = "SELECT sectionid
                 FROM {subpage_sections}
@@ -411,7 +411,16 @@ class mod_subpage_external extends external_api {
         $params = array($subpagecmid);
         $records = $DB->get_records_sql($sql, $params, 0, 1);
         if (count($records) == 0) {
-            throw new coding_exception("No section defined in subpage $subpagecmid");
+            // When there are no sections, add one
+            require_once($CFG->dirroot . '/mod/subpage/locallib.php');
+            $subpage = mod_subpage::get_from_cmid($subpagecmid);
+            $subpage->add_section();
+
+            // Redo the query
+            $records = $DB->get_records_sql($sql, $params, 0, 1);
+            if (count($records) == 0) {
+                throw new coding_exception("No section defined in subpage $subpagecmid");
+            }
         }
         return reset($records)->sectionid;
     }
