@@ -58,7 +58,7 @@ $PAGE->set_cm($subpage->get_course_module());
 $coursecontext = get_context_instance(CONTEXT_COURSE, $course->id);
 
 require_login($course, true, $subpage->get_course_module());
-add_to_log($course->id, 'course', 'view', "view.php?id=$course->id", "$course->id");
+add_to_log($course->id, 'subpage', 'view', "view.php?id=$cmid", '', $cmid);
 
 if (!empty($recache) && confirm_sesskey()) {
     $context = get_context_instance(CONTEXT_COURSE, $subpage->get_course()->id);
