@@ -71,7 +71,34 @@ class mod_subpage_renderer extends plugin_renderer_base {
         } else {
             $content .= html_writer::start_tag('ul', array('class' => 'topics'));
         }
+
         foreach ($sections as $section) {
+            // check to see whether cms within the section are visible or not
+            $visible = false;
+            $visiblitychanged = false;
+            if ($section->sequence) {
+                // get cm_info for this resources
+                $instances = explode(',', $section->sequence);
+            } else {
+                $instances = array();
+            }
+            foreach ($instances as $instance) {
+                $cm = $modinfo->get_cm($instance);
+                // check to see whether cm is visible
+                if ($cm->uservisible) {
+                    $visible = true;
+                    break;
+                }
+            }
+            // check to see whether all cms within section are not visible
+            if (! $visible) {
+                // check to see whether section visible is set to true
+                if ($section->visible) {
+                    $section->visible = false;
+                    $visiblitychanged = true;
+                }
+            }
+
             $content .= html_writer::start_tag('li',
                     array('class' => 'section main clearfix', 'id'=>'section-'.$section->section));
             $content .= html_writer::tag('div', '&nbsp;', array('class' => 'left side'));
@@ -247,13 +274,18 @@ class mod_subpage_renderer extends plugin_renderer_base {
             }
             $content .= html_writer::end_tag('div'); //end of div class=content
             $content .= html_writer::end_tag('li');
+
+            // change back section visibility if changed further up
+            if ($visiblitychanged) {
+                $section->visible = true;
+            }
+
         }
         $content .= html_writer::end_tag('ul');
         if ($editing) {
             $content .= $this->render_add_button($subpage);
             $content .= $this->render_bulkmove_buttons($subpage);
         }
-
         return $content;
     }
 
