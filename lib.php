@@ -159,7 +159,15 @@ function subpage_get_coursemodule_info($cm) {
             $DB->set_field('subpage', 'sharedcontenthash', $hash, array('id'=>$subpage->id));
         }
     }
-    return new cached_cm_info();
+    // Add the all the sectionids within this subpage to the customdata
+    $info = new cached_cm_info();
+    $info->customdata = array();
+    $sections = $DB->get_records('subpage_sections',
+            array('subpageid'=>$subpage->id), 'pageorder');
+    foreach ($sections as $section) {
+        $info->customdata[] = $section->sectionid;
+    }
+    return $info;
 }
 
 /**

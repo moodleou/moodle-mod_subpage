@@ -140,6 +140,7 @@ if ($formdata = $mform->get_data()) {
                 moveto_module($cm, $section);
             }
         }
+        rebuild_course_cache($course->id, true);
     }
 
     // return to original subpage view
