@@ -29,7 +29,7 @@ require_once('lib.php');
 require_once('move_form.php');
 require_once($CFG->dirroot.'/course/lib.php');
 
-$cmid        = required_param('id', 0, PARAM_INT);
+$cmid        = required_param('id', PARAM_INT);
 $move        = optional_param('move', '', PARAM_RAW);
 
 $subpage = mod_subpage::get_from_cmid($cmid);
