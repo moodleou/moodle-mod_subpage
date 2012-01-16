@@ -41,9 +41,14 @@ class mod_subpage_renderer extends plugin_renderer_base {
      */
     public function render_subpage($subpage, $modinfo, $sections, $editing,
             $moveitem, $movesection) {
-        global $PAGE, $OUTPUT, $CFG;
-        $content = $this->render_intro($subpage);
+        global $PAGE, $OUTPUT, $CFG, $USER;
         $this->subpagecm = $subpage->get_course_module()->id;
+        if (!empty($USER->activitycopy) && $movesection) {
+            $content = $this->render_cancel_link($this->subpagecm);
+        } else {
+            $content = '';
+        }
+        $content .= $this->render_intro($subpage);
         $streditsummary  = get_string('editsummary');
         $strdelete = get_string('delete');
 
@@ -328,6 +333,24 @@ class mod_subpage_renderer extends plugin_renderer_base {
                     'id' => 'intro'));
 
         return $intro;
+    }
+
+    /**
+     * Displays information about the item currently being moved, and a cancel link
+     * @param int $cmid coursemodule id
+     * @return string
+     */
+    public function render_cancel_link($cmid){
+        global $USER;
+        $sesskey = sesskey();
+        $stractivityclipboard =
+                strip_tags(get_string('activityclipboard', '', $USER->activitycopyname));
+        $cancelurl = new moodle_url('view.php', array('cancelcopy' => true, 'id' => $cmid,
+                'sesskey' => $sesskey));
+
+        $cancellink = html_writer::link($cancelurl, get_string('cancel'));
+        $content = $stractivityclipboard . '&nbsp;&nbsp;(' . $cancellink . ')';
+        return html_writer::tag('div', $content, array('class' => 'clipboard'));
     }
 
     /**

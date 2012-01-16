@@ -41,9 +41,17 @@ $copy        = optional_param('copy', 0, PARAM_INT);
 $confirm     = optional_param('confirm', 0, PARAM_INT);
 $addsection  = optional_param('addsection', 0, PARAM_INT);
 $recache     = optional_param('recache', 0, PARAM_INT);
+$cancelcopy = optional_param('cancelcopy', 0, PARAM_BOOL);
 
 if (empty($cmid)) {
     print_error('unspecifysubpageid', 'subpage');
+}
+
+if (!empty($cancelcopy) && confirm_sesskey()) {
+    unset($USER->activitycopy);
+    unset($USER->activitycopycourse);
+    unset($USER->activitycopyname);
+    redirect("view.php?id=$cmid");
 }
 
 // This must be done first because some horrible combination of junk means that
