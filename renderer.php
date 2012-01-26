@@ -78,9 +78,10 @@ class mod_subpage_renderer extends plugin_renderer_base {
         }
 
         foreach ($sections as $section) {
-            // check to see whether cms within the section are visible or not
+            // Check to see whether cms within the section are visible or not
+            // If all cms are not visible then we don't show the section at all,
+            // unless editing
             $visible = false;
-            $visiblitychanged = false;
             if ($section->sequence) {
                 // get cm_info for this resources
                 $instances = explode(',', $section->sequence);
@@ -95,14 +96,8 @@ class mod_subpage_renderer extends plugin_renderer_base {
                     break;
                 }
             }
-            // check to see whether all cms within section are not visible
-            if (! $visible) {
-                // check to see whether section visible is set to true
-                if ($section->visible) {
-                    $section->visible = false;
-                    $visiblitychanged = true;
-                }
-            }
+            // If section is empty so should be hidden, record that in object
+            $section->autohide = !$visible;
 
             $content .= html_writer::start_tag('li',
                     array('class' => 'section main clearfix', 'id'=>'section-'.$section->section));
@@ -206,8 +201,9 @@ class mod_subpage_renderer extends plugin_renderer_base {
 
             $content .= html_writer::start_tag('div', array('class' => 'content'));
             // Only show the section if visible and not stealthed or to users with permission
-            if (($section->visible && !$section->stealth) ||
-                    has_capability('moodle/course:viewhiddensections', $coursecontext)) {
+            if ((($section->visible && !$section->stealth) ||
+                    has_capability('moodle/course:viewhiddensections', $coursecontext)) &&
+                    ($editing || !$section->autohide)) {
                 if ($section->stealth) {
                     $content .= html_writer::start_tag('div', array('class' => 'stealthed'));
                 }
@@ -279,13 +275,8 @@ class mod_subpage_renderer extends plugin_renderer_base {
             }
             $content .= html_writer::end_tag('div'); //end of div class=content
             $content .= html_writer::end_tag('li');
-
-            // change back section visibility if changed further up
-            if ($visiblitychanged) {
-                $section->visible = true;
-            }
-
         }
+
         $content .= html_writer::end_tag('ul');
         if ($editing) {
             $content .= $this->render_add_button($subpage);
