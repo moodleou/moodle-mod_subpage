@@ -144,7 +144,7 @@ function subpage_get_coursemodule_info($cm) {
     if ($subpage->enablesharing) {
         // Work out current value
         require_once($CFG->dirroot . '/mod/sharedsubpage/locallib.php');
-        $content = sharedsubpage_get_subpage_content($subpage);
+        $content = serialize(sharedsubpage_gather_data($subpage));
         $hash = sha1($subpage->name . "\n" . $content);
 
         if ($hash != $subpage->sharedcontenthash) {
