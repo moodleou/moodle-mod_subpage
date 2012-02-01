@@ -131,34 +131,38 @@ class mod_subpage_renderer extends plugin_renderer_base {
                 if ($section->stealth) {
                     $content .= html_writer::start_tag('form',
                             array('method' => 'post', 'action' => 'stealth.php'));
-                    $content .= html_writer::start_tag('input',
+                    $content .= html_writer::start_tag('div');
+                    $content .= html_writer::empty_tag('input',
                             array('name' => 'id', 'value' => $subpage->get_course_module()->id,
                             'type' => 'hidden'));
-                    $content .= html_writer::start_tag('input',
+                    $content .= html_writer::empty_tag('input',
                             array('name' => 'sesskey', 'value' => sesskey(), 'type' => 'hidden'));
-                    $content .= html_writer::start_tag('input',
+                    $content .= html_writer::empty_tag('input',
                             array('name' => 'unstealth', 'value' => $section->id,
                             'type' => 'hidden'));
-                    $content .= html_writer::start_tag('input',
+                    $content .= html_writer::empty_tag('input',
                             array('name' => 'icon',
                             'src' => $OUTPUT->pix_url('unstealth', 'mod_subpage'),
                             'type' => 'image', 'title' => $strunstealth, 'alt' => $strunstealth));
+                    $content .= html_writer::end_tag('div');
                     $content .= html_writer::end_tag('form');
                 } else {
                     $content .= html_writer::start_tag('form',
                             array('method' => 'post', 'action' => 'stealth.php'));
-                    $content .= html_writer::start_tag('input',
+                    $content .= html_writer::start_tag('div');
+                    $content .= html_writer::empty_tag('input',
                             array('name' => 'id', 'value' => $subpage->get_course_module()->id,
                             'type' => 'hidden'));
-                    $content .= html_writer::start_tag('input',
+                    $content .= html_writer::empty_tag('input',
                             array('name' => 'sesskey', 'value' => sesskey(), 'type' => 'hidden'));
-                    $content .= html_writer::start_tag('input',
+                    $content .= html_writer::empty_tag('input',
                             array('name' => 'stealth', 'value' => $section->id,
                             'type' => 'hidden'));
-                    $content .= html_writer::start_tag('input',
+                    $content .= html_writer::empty_tag('input',
                             array('name' => 'icon',
                             'src' => $OUTPUT->pix_url('stealth', 'mod_subpage'),
                             'type' => 'image', 'title' => $strstealth, 'alt' => $strstealth));
+                    $content .= html_writer::end_tag('div');
                     $content .= html_writer::end_tag('form');
                 }
                 $content .= html_writer::empty_tag('br', array());
