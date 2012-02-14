@@ -62,3 +62,5 @@ $string['error_sharingused'] = 'Cannot disable sharing because there is already 
 $string['stealth'] = 'Stealth';
 $string['unstealth'] = 'Un-stealth';
 $string['error_deletingsection'] = 'Can not delete this section due to it still containing content';
+
+$string['subpage:view'] = 'View subpages';

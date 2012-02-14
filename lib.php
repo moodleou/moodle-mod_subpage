@@ -171,6 +171,17 @@ function subpage_get_coursemodule_info($cm) {
 }
 
 /**
+ * Sets the module uservisible to false if the user has not got the view
+ * capability.
+ * @param cm_info $cm Module data
+ */
+function subpage_cm_info_dynamic(cm_info $cm) {
+    if (!has_capability('mod/subpage:view', get_context_instance(CONTEXT_MODULE, $cm->id))) {
+        $cm->set_available(false);
+    }
+}
+
+/**
  * Used to add options to the Settings menu for the subpage
  * @param unknown_type $settings Don't know what this parameter is
  * @param navigation_node $subpagenode Navigation node object for subpage

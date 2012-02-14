@@ -15,15 +15,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Code fragment to define the version of subpage
- * This fragment is called by moodle_needs_upgrading() and /admin/index.php
+ * Capability definitions for subpage.
  *
  * @package mod
  * @subpackage subpage
  * @copyright 2011 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+$capabilities = array(
 
-$module->version  = 2012020100;
-$module->requires = 2011031500;
-$module->cron     = 60*60*4; // 4 hours
+    'mod/subpage:view' => array(
+
+        'riskbitmask' => 0,
+
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => array(
+            // Assigning this to all users means the default behaviour is
+            // similar to course main page (no extra permissions needed beyond
+            // enrolment + login)
+            'user' => CAP_ALLOW
+        )
+    ),
+);

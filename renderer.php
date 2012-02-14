@@ -335,7 +335,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
      * @param int $cmid coursemodule id
      * @return string
      */
-    public function render_cancel_link($cmid){
+    public function render_cancel_link($cmid) {
         global $USER;
         $sesskey = sesskey();
         $stractivityclipboard =

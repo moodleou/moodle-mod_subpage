@@ -185,4 +185,5 @@ WHERE
         upgrade_mod_savepoint(true, 2011120800, 'subpage');
     }
 
+    return true;
 }

@@ -63,9 +63,10 @@ $course = $subpage->get_course();
 $thisurl = new moodle_url('/mod/subpage/view.php', array('id' => $cmid));
 $PAGE->set_url($thisurl);
 $PAGE->set_cm($subpage->get_course_module());
-$coursecontext = get_context_instance(CONTEXT_COURSE, $course->id);
+$modcontext = get_context_instance(CONTEXT_MODULE, $cmid);
 
 require_login($course, true, $subpage->get_course_module());
+require_capability('mod/subpage:view', $modcontext);
 add_to_log($course->id, 'subpage', 'view', "view.php?id=$cmid", '', $cmid);
 
 if (!empty($recache) && confirm_sesskey()) {
@@ -175,7 +176,7 @@ $useajax = false;
 if (!empty($CFG->enablecourseajax)
         and !empty($USER->editing)
         and $PAGE->theme->enablecourseajax
-        and has_capability('moodle/course:manageactivities', $coursecontext)) {
+        and has_capability('moodle/course:manageactivities', $modcontext)) {
     $PAGE->requires->yui2_lib('dragdrop');
     $PAGE->requires->yui2_lib('connection');
     $PAGE->requires->yui2_lib('selector');
@@ -247,7 +248,7 @@ echo $renderer->render_subpage($subpage, $modinfo, $sections, $PAGE->user_is_edi
 echo html_writer::end_tag('div');
 
 // Use AJAX?
-if ($useajax && has_capability('moodle/course:manageactivities', $coursecontext)) {
+if ($useajax && has_capability('moodle/course:manageactivities', $modcontext)) {
     $jsmodule = array(
         'name'     => 'mod_subpage',
         'fullpath' => '/mod/subpage/module.js',
