@@ -38,9 +38,11 @@ require_login($course, true, $subpage->get_course_module());
 
 if ($stealth && confirm_sesskey()) {
     $subpage->set_section_stealth($stealth, 1);
+    rebuild_course_cache($course->id, true);
 }
 if ($unstealth && confirm_sesskey()) {
     $subpage->set_section_stealth($unstealth, 0);
+    rebuild_course_cache($course->id, true);
 }
 
 redirect($thisurl);

@@ -161,12 +161,16 @@ function subpage_get_coursemodule_info($cm) {
     }
     // Add the all the sectionids within this subpage to the customdata
     $info = new cached_cm_info();
-    $info->customdata = array();
+    $sectionids = array();
+    $sectionstealth = array();
     $sections = $DB->get_records('subpage_sections',
             array('subpageid'=>$subpage->id), 'pageorder');
     foreach ($sections as $section) {
-        $info->customdata[] = $section->sectionid;
+        $sectionids[] = $section->sectionid;
+        $sectionstealth[$section->sectionid] = $section->stealth;
     }
+    $info->customdata = (object)array('sectionids' => $sectionids,
+            'sectionstealth' => $sectionstealth);
     return $info;
 }
 
