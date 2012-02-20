@@ -296,6 +296,11 @@ class mod_subpage_external extends external_api {
         $module->popupheight = $config->popupheight;
         $module->printheading = $config->printheading;
         $module->printintro = $config->printintro;
+        // 'Show size' support only from Moodle 2.3 / OU moodle April 2012
+        if (isset($config->showsize)) {
+            $module->showsize = $config->showsize;
+            $module->showtype = $config->showtype;
+        }
         $module->filterfiles = $config->filterfiles;
         $module->section = $section->section;
         //check $params['path'] and create files based on that and attach to $module->files
