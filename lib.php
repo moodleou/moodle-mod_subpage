@@ -69,10 +69,32 @@ function subpage_update_instance($subpage) {
  * @return bool
  */
 function subpage_delete_instance($id) {
-    global $DB;
+    global $DB, $PAGE, $CFG;
 
     if (! $subpage = $DB->get_record("subpage", array("id"=>$id))) {
         return false;
+    }
+    require_once($CFG->dirroot . '/mod/subpage/locallib.php');
+    $transaction = $DB->start_delegated_transaction();
+
+    // if deleting a subpage activity from course/mod.php page (not delete the whole course)
+    if ($PAGE->pagetype == 'course-mod') {
+        $subpagecmid = required_param('delete', PARAM_INT);
+        // Check if all the sections in this subpage is empty
+        $subpageinstance = mod_subpage::get_from_cmid($subpagecmid);
+        $subpagesections = $DB->get_records('subpage_sections',
+                array("subpageid" => $subpage->id), '', 'sectionid');
+        foreach ($subpagesections as $sections) {
+            if (!$subpageinstance->is_section_empty($sections->sectionid)) {
+                // Section is not empty
+                $url = new moodle_url('/mod/subpage/view.php', array('id' => $subpagecmid));
+                print_error('error_deletingsubpage', 'mod_subpage', $url);
+            }
+        }
+        // all sections are empty, delete the empty sections
+        foreach ($subpagesections as $sections) {
+            $subpageinstance->delete_section($sections->sectionid);
+        }
     }
 
     // Delete main table and sections
@@ -88,7 +110,7 @@ function subpage_delete_instance($id) {
             rebuild_course_cache($sharedsubpage->course, true);
         }
     }
-
+    $transaction->allow_commit();
     return true;
 }
 

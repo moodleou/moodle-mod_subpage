@@ -560,5 +560,18 @@ ORDER BY
 
         return $options;
     }
-
+    /**
+    * Check if the section contains any modules
+    *
+    * @param int $sectionid the course section id (the id in the course_section table) to delete
+    * @return bool true if the section doesn't contains any modules or false otherwise
+    */
+    public function is_section_empty($sectionid) {
+        global $DB;
+        if ($DB->count_records('course_modules',
+                array('course' => $this->course->id, 'section' => $sectionid))) {
+            return false;
+        }
+        return true;
+    }
 }
