@@ -37,4 +37,17 @@ $capabilities = array(
             'user' => CAP_ALLOW
         )
     ),
+
+    // Ability to add new subpage to a course
+    'mod/subpage:addinstance' => array(
+        'riskbitmask' => RISK_XSS,
+
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        ),
+        'clonepermissionsfrom' => 'moodle/course:manageactivities'
+    ),
 );
