@@ -63,8 +63,6 @@ class restore_subpage_activity_structure_step extends restore_activity_structure
         $oldid = $data->id;
         $data->course = $this->get_courseid();
 
-        $this->potential_dot();
-
         // insert the subpage record
         $newitemid = $DB->insert_record('subpage', $data);
 
