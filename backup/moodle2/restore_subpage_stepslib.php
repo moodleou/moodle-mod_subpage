@@ -26,7 +26,6 @@ class restore_subpage_activity_structure_step extends restore_activity_structure
     private $subpageid;
 
     protected function define_structure() {
-        $this->potential_dot();
 
         $paths = array();
         $userinfo = $this->get_setting_value('userinfo');
@@ -39,25 +38,8 @@ class restore_subpage_activity_structure_step extends restore_activity_structure
         return $this->prepare_activity_structure($paths);
     }
 
-    /**
-     * In case of long-running restores, we support the optional
-     * potential_dot method in the restore logger, anywhere in the chain
-     * (this is for OU custom use).
-     */
-    private function potential_dot() {
-        $logger = $this->get_logger();
-        while ($logger) {
-            if (method_exists($logger, 'potential_dot')) {
-                $logger->potential_dot();
-            }
-            $logger = $logger->get_next();
-        }
-    }
-
     protected function process_subpage($data) {
         global $DB;
-
-        $this->potential_dot();
 
         $data = (object)$data;
         $oldid = $data->id;
@@ -75,7 +57,6 @@ class restore_subpage_activity_structure_step extends restore_activity_structure
         global $DB;
 
         $data = (object)$data;
-
         $oldid = $data->id;
 
         $data->subpageid = $this->get_new_parentid('subpage');
@@ -94,8 +75,6 @@ class restore_subpage_activity_structure_step extends restore_activity_structure
 
     protected function after_execute() {
         global $DB;
-
-        $this->potential_dot();
 
         // Add subpage related files, no need to match by itemname (just
         // internally handled context)

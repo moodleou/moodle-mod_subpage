@@ -63,5 +63,4 @@ $string['stealth'] = 'Stealth';
 $string['unstealth'] = 'Un-stealth';
 $string['error_deletingsection'] = 'Can not delete this section due to it still containing content';
 $string['error_deletingsubpage'] = 'This subpage cannot be deleted because it still contains activities. Before deleting this subpage, you must delete or move away the activities inside it.';
-$string['subpage:addinstance'] = 'Add a new subpage';
 $string['subpage:view'] = 'View subpages';
