@@ -25,5 +25,5 @@
  */
 
 $module->version  = 2012030701;
-$module->requires = 2011031500;
+$module->requires = 2011120100;
 $module->cron     = 60*60*4; // 4 hours
