@@ -402,7 +402,7 @@ ORDER BY
      * @return Array mixed
      */
     public static function moveable_modules($subpage, $allsubpages,
-            $coursesections, $modinfo, $move) {
+            $coursesections, course_modinfo $modinfo, $move) {
         global $OUTPUT;
 
         get_all_mods($subpage->get_course()->id, $allmods, $modnames,
@@ -458,17 +458,7 @@ ORDER BY
                         $instancename = format_string($modinfo->cms[$modnumber]->name,
                         true, $subpage->get_course()->id);
 
-                        $customicon = $modinfo->cms[$modnumber]->icon;
-                        if (!empty($customicon)) {
-                            if (substr($customicon, 0, 4) === 'mod/') {
-                                list($modname, $iconname) = explode('/', substr($customicon, 4), 2);
-                                $icon = $OUTPUT->pix_url($iconname, $modname);
-                            } else {
-                                $icon = $OUTPUT->pix_url($customicon);
-                            }
-                        } else {
-                            $icon = $OUTPUT->pix_url('icon', $modinfo->cms[$modnumber]->modname);
-                        }
+                        $icon = $modinfo->get_cm($modnumber)->get_icon_url();
                         $mod = $allmods[$modnumber];
                         $mods[$section->section]['section'] = $name;
                         $mods[$section->section]['pageorder'] = $sectionalt;
