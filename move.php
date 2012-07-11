@@ -29,6 +29,9 @@ require_once('lib.php');
 require_once('move_form.php');
 require_once($CFG->dirroot.'/course/lib.php');
 
+// In large courses, this page runs out of memory.
+raise_memory_limit(MEMORY_EXTRA);
+
 $cmid        = required_param('id', PARAM_INT);
 $move        = optional_param('move', '', PARAM_RAW);
 
@@ -43,8 +46,7 @@ $coursecontext = get_context_instance(CONTEXT_COURSE, $course->id);
 require_login($course);
 add_to_log($course->id, 'course', 'move', "move.php?id=$course->id&move=$move", "$course->id");
 
-$PAGE->set_pagelayout('course');
-$PAGE->set_pagetype('course-view-' . $course->format);
+$PAGE->set_pagelayout('incourse');
 $PAGE->set_other_editing_capability('moodle/course:manageactivities');
 
 if ($course->id == SITEID) {
