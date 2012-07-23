@@ -534,7 +534,7 @@ ORDER BY
                 // These need to be formatted based on $course->format.
                 foreach ($coursesections as $coursesection) {
                     if ($coursesection->section < self::SECTION_NUMBER_MIN
-                    && ($coursesection->section <= $subpage->get_course()->numsections)) {
+                            && ($coursesection->section <= $subpage->get_course()->numsections)) {
                         if (function_exists($callbackfunction)) {
                             $coursesection->name =
                             $callbackfunction($subpage->get_course(), $coursesection);
