@@ -31,14 +31,13 @@ class backup_subpage_activity_task extends backup_activity_task {
      * Define (add) particular settings this activity can have
      */
     protected function define_my_settings() {
-        // No particular settings for this activity
+        // No particular settings for this activity.
     }
 
     /**
      * Define (add) particular steps this activity can have
      */
     protected function define_my_steps() {
-        // Wiki only has one structure step
         $this->add_step(new backup_subpage_activity_structure_step(
                 'subpage_structure', 'subpage.xml'));
     }
@@ -50,7 +49,6 @@ class backup_subpage_activity_task extends backup_activity_task {
     static public function encode_content_links($content) {
         global $CFG;
 
-        // No particular settings for this activity
         $base = preg_quote($CFG->wwwroot, "/");
 
         $search="/(".$base."\/mod\/subpage\/view.php\?id\=)([0-9]+)/";
@@ -59,4 +57,23 @@ class backup_subpage_activity_task extends backup_activity_task {
         return $content;
     }
 
+    public function execute() {
+        $this->potential_dot();
+        parent::execute();
+    }
+
+    /**
+     * In case of long-running backups, we support the optional
+     * potential_dot method in the backup logger, anywhere in the chain
+     * (this is for OU custom use).
+     */
+    private function potential_dot() {
+        $logger = $this->get_logger();
+        while ($logger) {
+            if (method_exists($logger, 'potential_dot')) {
+                $logger->potential_dot();
+            }
+            $logger = $logger->get_next();
+        }
+    }
 }
