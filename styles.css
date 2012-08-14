@@ -15,3 +15,7 @@
 #page-mod-subpage-view .clipboard {
     padding-bottom: 1em;
 }
+#page-mod-subpage-view.editing .singlebutton {
+    float: left;
+    margin-left: 10px;
+}

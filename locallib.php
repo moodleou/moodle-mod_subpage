@@ -32,35 +32,25 @@
  */
 
 if (!defined('MOODLE_INTERNAL')) {
-    die('Direct access to this script is forbidden.'); /// It must be included from a Moodle page.
+    die('Direct access to this script is forbidden.');
 }
 
-/**
- * Include those library functions that are also used by core Moodle or other modules
- */
+// Library functions that are also used by core Moodle or other modules.
 require_once($CFG->dirroot . '/mod/subpage/lib.php');
 
 
-/// Constants ///////////////////////////////////////////////////////////////////
-
 class mod_subpage  {
-    protected $subpage; //content of the subpage table row
-    protected $cm;      //content of the relevant course_modules table
-    protected $course;  //content of the relevant course table row
+    protected $subpage; // Content of the subpage table row.
+    protected $cm;      // Content of the relevant course_modules table.
+    protected $course;  // Content of the relevant course table row.
 
     /**
      * Start of range of section numbers used by subpages. Designed to be above any
      * likely week or topic number, but not too high that it causes heavy database
      * bulk in terms of unused sections.
+     * Note: 110 is slightly more than two years (104).
      */
-    const SECTION_NUMBER_MIN = 100;
-
-    /**
-     * End of range of section numbers used by subpages. Designed to allow more
-     * subpage sections than anyone could possibly need. (Max real course so
-     * far is using ~100 sections; this allows 900.)
-     */
-    const SECTION_NUMBER_MAX = 1000;
+    const SECTION_NUMBER_MIN = 110;
 
     /**
      * Constructor
@@ -185,45 +175,53 @@ class mod_subpage  {
      */
     public function add_section($name= '', $summary = '') {
         global $DB, $CFG;
-        require_once($CFG->dirroot .'/course/lib.php'); //needed for get_course_section
+        require_once($CFG->dirroot .'/course/lib.php'); // Needed for get_course_section.
 
         $transaction = $DB->start_delegated_transaction();
 
-        // Pick a section number. This query finds the first subpage section
-        // on the course that does not have a subpage section in the following
-        // section number, and returns that following section number. (This
-        // means it can fill up gaps if sections are deleted.)
+        // Extra condition if the oucontent module (which has similar but simpler
+        // behaviour) is installed, so they don't tread on each others' toes.
+        $oucontentjoin = '';
+        $oucontentwhere = '';
+        if (file_exists($CFG->dirroot . '/mod/oucontent')) {
+             $oucontentjoin = 'LEFT JOIN {oucontent} o ' .
+                     'ON o.course = cs.course AND o.coursesectionid = cs2.id';
+             $oucontentwhere = 'AND o.id IS NULL';
+        }
+
+        // Pick a section number. This query finds the first section
+        // on the course that is at least the minimum number, and does not have
+        // a used section in the following number, and returns that following
+        // section number. (This means it can fill up gaps if sections are
+        // deleted.)
         $sql = "
 SELECT
     cs.section+1 AS num
 FROM
-    {subpage} s
-    JOIN {subpage_sections} ss ON ss.subpageid = s.id
-    JOIN {course_sections} cs ON cs.id = ss.sectionid AND cs.course = s.course
-    LEFT JOIN  {course_sections} cs2 ON cs2.course = s.course AND cs2.section = cs.section+1
+    {course_sections} cs
+    LEFT JOIN {course_sections} cs2 ON cs2.course = cs.course AND cs2.section = cs.section+1
     LEFT JOIN {subpage_sections} ss2 ON ss2.sectionid = cs2.id
+    $oucontentjoin
 WHERE
-    s.course = ?
+    cs.course = ?
+    AND cs.section >= ?
     AND ss2.id IS NULL
+    $oucontentwhere
 ORDER BY
     cs.section";
-        $result = $DB->get_records_sql($sql, array($this->course->id), 0, 1);
+        $result = $DB->get_records_sql($sql,
+                array($this->course->id, self::SECTION_NUMBER_MIN), 0, 1);
         if (count($result) == 0) {
-            // If no existing sections, use the min number
+            // If no existing sections, use the min number.
             $sectionnum = self::SECTION_NUMBER_MIN;
         } else {
             $sectionnum = reset($result)->num;
         }
 
-        // Check to make sure there aren't too many sections
-        if ($sectionnum >= self::SECTION_NUMBER_MAX) {
-            throw new moodle_exception('sectionlimitexceeded', 'subpage');
-        }
-
-        // create a section entry with this section number - this function creates
+        // Create a section entry with this section number - this function creates
         // and returns the section.
         $section = get_course_section($sectionnum, $this->course->id);
-        //now update summary/name if set above.
+        // Now update summary/name if set above.
         if (!empty($name) or !empty($summary)) {
             $section->name = format_string($name);
             $section->summary = format_text($summary);
@@ -231,7 +229,7 @@ ORDER BY
         }
 
         $sql = "SELECT MAX(pageorder) FROM {subpage_sections} WHERE subpageid = ?";
-        //get highest pageorder and add 1
+        // Get highest pageorder and add 1.
         $pageorder = $DB->get_field_sql($sql, array($this->subpage->id))+1;
 
         $subpage_section = new stdClass();
@@ -292,10 +290,10 @@ ORDER BY
         $DB->delete_records('subpage_sections',
                 array('sectionid'=>$sectionid, 'subpageid'=>$this->subpage->id));
 
-        //now delete from course_sections;
+        // Now delete from course_sections.
         $DB->delete_records('course_sections',
                 array('id'=>$sectionid, 'course'=>$this->get_course()->id));
-        //now fix pageorder
+        // Fix pageorder.
         $subpagesections = $DB->get_records('subpage_sections',
                 array('subpageid' => $this->subpage->id), 'pageorder');
         $pageorder = 1;
@@ -332,7 +330,7 @@ ORDER BY
             echo $OUTPUT->notification("Could not delete the $cm->modname (instance)");
         }
 
-        // remove all module files in case modules forget to do that
+        // Remove all module files in case modules forget to do that.
         $fs = get_file_storage();
         $fs->delete_area_files($modcontext->id);
 
@@ -402,7 +400,7 @@ ORDER BY
      * @return Array mixed
      */
     public static function moveable_modules($subpage, $allsubpages,
-            $coursesections, $modinfo, $move) {
+            $coursesections, course_modinfo $modinfo, $move) {
         global $OUTPUT;
 
         get_all_mods($subpage->get_course()->id, $allmods, $modnames,
@@ -430,7 +428,7 @@ ORDER BY
                     $sectionalt = (isset($section->pageorder)) ? $section->pageorder
                     : $section->section;
                     if ($move === 'to') {
-                        // include the required course/format library
+                        // Include the required course/format library.
                         global $CFG;
                         require_once("$CFG->dirroot/course/format/" .
                         $subpage->get_course()->format . "/lib.php");
@@ -458,17 +456,7 @@ ORDER BY
                         $instancename = format_string($modinfo->cms[$modnumber]->name,
                         true, $subpage->get_course()->id);
 
-                        $customicon = $modinfo->cms[$modnumber]->icon;
-                        if (!empty($customicon)) {
-                            if (substr($customicon, 0, 4) === 'mod/') {
-                                list($modname, $iconname) = explode('/', substr($customicon, 4), 2);
-                                $icon = $OUTPUT->pix_url($iconname, $modname);
-                            } else {
-                                $icon = $OUTPUT->pix_url($customicon);
-                            }
-                        } else {
-                            $icon = $OUTPUT->pix_url('icon', $modinfo->cms[$modnumber]->modname);
-                        }
+                        $icon = $modinfo->get_cm($modnumber)->get_icon_url();
                         $mod = $allmods[$modnumber];
                         $mods[$section->section]['section'] = $name;
                         $mods[$section->section]['pageorder'] = $sectionalt;
@@ -495,7 +483,7 @@ ORDER BY
 
         $options = array();
 
-        // subpage we're on are the default options
+        // Subpage we're on are the default options.
         if ($sections = $subpage->get_sections()) {
             $options = ($move === 'to')
                     ? $options[] = array()
@@ -510,14 +498,14 @@ ORDER BY
             $options[$othersectionstr][$subpage->get_course_module()->id . ',new'] = $newstr;
         }
 
-        // only move from has other options
+        // Only move from has other options.
         if ($move === 'from') {
-            // other subpage sections
+            // Other subpage sections.
             if (!empty($allsubpages)) {
                 foreach ($allsubpages as $sub) {
                     $subpagestr = get_string('modulename', 'mod_subpage');
                     $subpagestr .= ': '.$sub->get_subpage()->name;
-                    // ignore the current subpage
+                    // Ignore the current subpage.
                     if ($sub->get_course_module()->id !== $subpage->get_course_module()->id) {
                         $options[$subpagestr] = array();
                         if ($sections = $sub->get_sections()) {
@@ -533,21 +521,20 @@ ORDER BY
                 }
             }
 
-            // course sections
+            // Course sections.
             if (!empty($coursesections)) {
 
-                // include the required course/format library
+                // Include the required course/format library.
                 global $CFG;
                 require_once($CFG->dirroot . '/course/format/' .
                         $subpage->get_course()->format . '/lib.php');
                 $callbackfunction = 'callback_' . $subpage->get_course()->format .
                         '_get_section_name';
 
-                // these need to be formatted based on $course->format
+                // These need to be formatted based on $course->format.
                 foreach ($coursesections as $coursesection) {
-                    if (($coursesection->section > self::SECTION_NUMBER_MAX
-                    || $coursesection->section < self::SECTION_NUMBER_MIN)
-                    && ($coursesection->section <= $subpage->get_course()->numsections)) {
+                    if ($coursesection->section < self::SECTION_NUMBER_MIN
+                            && ($coursesection->section <= $subpage->get_course()->numsections)) {
                         if (function_exists($callbackfunction)) {
                             $coursesection->name =
                             $callbackfunction($subpage->get_course(), $coursesection);
@@ -560,12 +547,13 @@ ORDER BY
 
         return $options;
     }
+
     /**
-    * Check if the section contains any modules
-    *
-    * @param int $sectionid the course section id (the id in the course_section table) to delete
-    * @return bool true if the section doesn't contains any modules or false otherwise
-    */
+     * Check if the section contains any modules
+     *
+     * @param int $sectionid the course section id (the id in the course_section table) to delete
+     * @return bool true if the section doesn't contains any modules or false otherwise
+     */
     public function is_section_empty($sectionid) {
         global $DB;
         if ($DB->count_records('course_modules',
