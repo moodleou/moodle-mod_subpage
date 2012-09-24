@@ -32,9 +32,7 @@ We cannot offer direct support. Please do not contact me directly.
 
 Bug reports:
 
-Please report bugs to the Moodle tracker using the 'contributed code' project
-and 'Module: subpage' component. Under Version, please select your Moodle
-version e.g. 2.1, 2.2.
+Please report bugs using the GitHub 'Issues' tab above.
 
 Before reporting a bug, please ensure you are running the latest version of
 the subpage that is available from:
