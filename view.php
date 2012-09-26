@@ -230,7 +230,7 @@ if ($completion->is_enabled() && ajaxenabled()) {
 // Course wrapper start.
 echo html_writer::start_tag('div', array('class'=>'course-content'));
 
-$modinfo =& get_fast_modinfo($COURSE);
+$modinfo = get_fast_modinfo($COURSE);
 
 if (! $sections = $subpage->get_sections()) {   // No sections found
     // Double-check to be extra sure
