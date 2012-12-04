@@ -23,12 +23,12 @@
  * the module-indpendent code for handling questions and which in turn
  * initialises all the questiontype classes.
  *
- * @package mod_subpage
- * @copyright 2012 The Open University
+ * @package mod
+ * @subpackage subpage
+ * @copyright 2011 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author Dan Marsden <dan@danmarsden.com>
  * @author Stacey Walker <stacey@catalyst-eu.net>
- * @author Open University developers
  */
 
 if (!defined('MOODLE_INTERNAL')) {
@@ -45,35 +45,12 @@ class mod_subpage  {
     protected $course;  // Content of the relevant course table row.
 
     /**
-     * Gets start of range of section numbers used by subpages. Designed to be
-     * above any likely week or topic number, but not too high that it causes
-     * heavy database bulk in terms of unused sections.
-     *
-     * Default 110 is slightly more than two years (104).
-     *
-     * It is possible to override this (per-course) in the config table.
-     *
-     * This function may make a database call so should not be used if
-     * performance is important.
-     *
-     * @param int $courseid Course id
-     * @return int Start of range
+     * Start of range of section numbers used by subpages. Designed to be above any
+     * likely week or topic number, but not too high that it causes heavy database
+     * bulk in terms of unused sections.
+     * Note: 110 is slightly more than two years (104).
      */
-    public static function get_min_section_number($courseid) {
-        // Check config option, ignore if empty / missing / invalid.
-        $config = get_config('mod_subpage', 'courseminsections');
-        if (preg_match('~^([0-9]+=[0-9]+)(,\s*[0-9]+=[0-9]+)*$~', $config)) {
-            foreach (explode(',', $config) as $courseconfig) {
-                list ($thiscourseid, $setting)  = explode('=', $courseconfig);
-                if ($courseid == $thiscourseid || $courseid == '*') {
-                    return $setting;
-                }
-            }
-        }
-
-        // Default, over 2 years.
-        return 110;
-    }
+    const SECTION_NUMBER_MIN = 110;
 
     /**
      * Constructor
@@ -232,12 +209,11 @@ WHERE
     $oucontentwhere
 ORDER BY
     cs.section";
-        $minsection = self::get_min_section_number($this->course->id);
         $result = $DB->get_records_sql($sql,
-                array($this->course->id, $minsection), 0, 1);
+                array($this->course->id, self::SECTION_NUMBER_MIN), 0, 1);
         if (count($result) == 0) {
             // If no existing sections, use the min number.
-            $sectionnum = $minsection;
+            $sectionnum = self::SECTION_NUMBER_MIN;
         } else {
             $sectionnum = reset($result)->num;
         }
@@ -556,9 +532,8 @@ ORDER BY
                         '_get_section_name';
 
                 // These need to be formatted based on $course->format.
-                $minsection = self::get_min_section_number($subpage->get_course()->id);
                 foreach ($coursesections as $coursesection) {
-                    if ($coursesection->section < $minsection
+                    if ($coursesection->section < self::SECTION_NUMBER_MIN
                             && ($coursesection->section <= $subpage->get_course()->numsections)) {
                         if (function_exists($callbackfunction)) {
                             $coursesection->name =
