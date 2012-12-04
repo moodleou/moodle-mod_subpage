@@ -1,7 +1,7 @@
 Subpage
 =======
 
-Copyright 2011 The Open University
+Copyright 2012 The Open University
 
 
 Thes subpage module allows users to create, manage, and view lists of Moodle
@@ -21,10 +21,9 @@ to learn...) It would be nice if we could get this functionality included into
 core at some point.
 
 Also please note that if you put something on a subpage it will seem natural
-for the subpage to be included in the breadcrumbs, but it is not. We may
-implement code to address this as part of our theme, but have not yet done
-so at time of writing. 
-
+for the subpage to be included in the breadcrumbs, but it is not. We have
+implemented code to address this as part of our theme; doing this properly
+would require a significant core change which we haven't implemented yet.
 
 Support:
 
@@ -32,24 +31,25 @@ We cannot offer direct support. Please do not contact me directly.
 
 Bug reports:
 
-Please report bugs using the GitHub 'Issues' tab above.
+Please report bugs using the 'Issues' tab on GitHub.
 
 Before reporting a bug, please ensure you are running the latest version of
 the subpage that is available from:
 
 https://github.com/moodleou/moodle-mod_subpage
 
+In the bug report, please include your Moodle version (e.g. 2.3.2) and your
+subpage version (which you can find under plugins/activities page). 
+
 Status:
 
-Beta quality code. We intend to switch this project to include live quality
-code at some point after our December update.
-
-Please note that this code is tested on OU systems but we rely on the
-community for testing on other systems.
+Development code. This has not been fully tested and may contain serious bugs.
+Please see the current stable branch if you want a tested version for a specific
+Moodle release.
 
 Requires:
 
-Moodle 2.1+
+Moodle 2.3+
 Postgres / MySQL
 
 Install:
