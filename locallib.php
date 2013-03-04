@@ -242,9 +242,10 @@ ORDER BY
             $sectionnum = reset($result)->num;
         }
 
-        // Create a section entry with this section number - this function creates
-        // and returns the section.
-        $section = get_course_section($sectionnum, $this->course->id);
+        // Create a section entry with this section number then get it.
+        course_create_sections_if_missing($this->course, $sectionnum);
+        $section = $DB->get_record('course_sections', array(
+                'course' => $this->course->id, 'section' => $sectionnum), 'id');
         // Now update summary/name if set above.
         if (!empty($name) or !empty($summary)) {
             $section->name = format_string($name);
