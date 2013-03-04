@@ -35,7 +35,7 @@ class mod_subpage_move_form extends moodleform {
     protected function definition() {
         global $CFG;
 
-        $mform =& $this->_form;
+        $mform = $this->_form;
 
         $moveable = $this->_customdata['moveable'];
         $options = $this->_customdata['options'];

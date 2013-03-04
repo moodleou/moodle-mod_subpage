@@ -428,8 +428,11 @@ ORDER BY
             $coursesections, course_modinfo $modinfo, $move) {
         global $OUTPUT;
 
-        get_all_mods($subpage->get_course()->id, $allmods, $modnames,
-                $modnamesplural, $modnamesused);
+        $modinfo = get_fast_modinfo($subpage->get_course()->id);
+        $allmods = $modinfo->get_cms();
+        $modnames = get_module_types_names();
+        $modnamesplural = get_module_types_names(true);
+        $modnamesused = $modinfo->get_used_module_names();
         $mods = array();
 
         $subsections = array();
@@ -556,11 +559,15 @@ ORDER BY
                 $callbackfunction = 'callback_' . $subpage->get_course()->format .
                         '_get_section_name';
 
+                // Get numsections.
+                $courseformatoptions = course_get_format($subpage->get_course())->get_format_options();
+                $numsections = $courseformatoptions['numsections'];
+
                 // These need to be formatted based on $course->format.
                 $minsection = self::get_min_section_number($subpage->get_course()->id);
                 foreach ($coursesections as $coursesection) {
                     if ($coursesection->section < $minsection
-                            && ($coursesection->section <= $subpage->get_course()->numsections)) {
+                            && ($coursesection->section <= $numsections)) {
                         if (function_exists($callbackfunction)) {
                             $coursesection->name =
                             $callbackfunction($subpage->get_course(), $coursesection);

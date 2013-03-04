@@ -61,8 +61,8 @@ $PAGE->navbar->add(format_string($subpage->get_name()),
 $PAGE->navbar->add(get_string('moveitems', 'mod_subpage'));
 
 // general information
-$modinfo =& get_fast_modinfo($course);
-$coursesections = get_all_sections($course->id);
+$modinfo = get_fast_modinfo($course);
+$coursesections = $modinfo->get_section_info_all();
 $allsubpages =  mod_subpage::get_course_subpages($course);
 
 // options specifically for moving

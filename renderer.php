@@ -61,11 +61,16 @@ class mod_subpage_renderer extends plugin_renderer_base {
             $strunstealth = get_string('unstealth', 'subpage');
         }
         $coursecontext = get_context_instance(CONTEXT_COURSE, $subpage->get_course()->id);
-        get_all_mods($subpage->get_course()->id, $mods, $modnames, $modnamesplural, $modnamesused);
+
+        $modinfo = get_fast_modinfo($subpage->get_course()->id);
+        $mods = $modinfo->get_cms();
+        $modnames = get_module_types_names();
+        $modnamesplural = get_module_types_names(true);
+        $modnamesused = $modinfo->get_used_module_names();
         foreach ($mods as $modid => $unused) {
             if (!isset($modinfo->cms[$modid])) {
                 rebuild_course_cache($subpage->get_course()->id);
-                $modinfo =& get_fast_modinfo($subpage->get_course());
+                $modinfo = get_fast_modinfo($subpage->get_course());
                 debugging('Rebuilding course cache', DEBUG_DEVELOPER);
                 break;
             }
