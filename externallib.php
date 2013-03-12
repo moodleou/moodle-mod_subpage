@@ -78,9 +78,7 @@ class mod_subpage_external extends external_api {
         $instance = subpage_add_instance($subpage);
 
         $DB->set_field('course_modules', 'instance', $instance, array('id'=>$coursemodule));
-        $subpage->section = $section->section;
-        $subpage->coursemodule = $coursemodule;
-        add_mod_to_section($subpage);
+        course_add_cm_to_section($subpage->course, $coursemodule, $section->section);
         rebuild_course_cache($course->id);
 
         return array('id'=>$coursemodule);
@@ -194,12 +192,10 @@ class mod_subpage_external extends external_api {
         $module->printheading = $config->printheading;
         $module->printintro = $config->printintro;
         $module->instance = url_add_instance($module, array());
-        $module->coursemodule = $coursemodule;
-        $module->section = $section->section;
 
         $DB->set_field('course_modules', 'instance', $module->instance, array('id'=>$coursemodule));
 
-        add_mod_to_section($module);
+        course_add_cm_to_section($module->course, $coursemodule, $section->section);
         rebuild_course_cache($course->id);
 
         return array('id'=>$coursemodule);
@@ -343,7 +339,7 @@ class mod_subpage_external extends external_api {
 
         $DB->set_field('course_modules', 'instance', $module->instance, array('id'=>$coursemodule));
 
-        add_mod_to_section($module);
+        course_add_cm_to_section($module->course, $coursemodule, $section->section);
         rebuild_course_cache($course->id, true);
 
         return array('id'=>$coursemodule);
