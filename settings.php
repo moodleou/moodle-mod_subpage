@@ -15,13 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version number.
+ * Settings page.
  *
  * @package mod_subpage
  * @copyright 2012 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$module->version  = 2012120400;
-$module->requires = 2011120100;
-$module->cron     = 60*60*4; // 4 hours.
+// Minimum section number per course (see mod_subpage::get_min_section_number).
+$settings->add(new admin_setting_configtext('mod_subpage/courseminsection',
+        get_string('courseminsection', 'subpage'),
+        get_string('courseminsection_desc', 'subpage'), '', PARAM_RAW));
