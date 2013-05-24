@@ -55,7 +55,9 @@ When enabling sharing you must enter an ID number in the field below. This ID nu
 
 Sharing only works for items of the following types: Label, Heading, File, and URL. Other items will not be shared.
 
-Items are also not shared if they contain any type of access restriction (date, grouping, etc) or have completion tickboxes.';
+Items are also not shared if they contain any type of access restriction (date, grouping, etc) or have completion tickboxes.
+
+You can&rsquo;t turn sharing off if there are any shared copies of this page; delete the shared subpages first.';
 $string['error_noidnumber'] = 'When sharing is enabled, you must enter an ID number';
 $string['error_duplicateidnumber'] = 'The ID number must be unique across the system; choose something different';
 $string['error_sharingused'] = 'Cannot disable sharing because there is already a shared subpage that copies this page';

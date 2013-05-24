@@ -57,6 +57,22 @@ class mod_subpage_mod_form extends moodleform_mod {
         $this->add_action_buttons();
     }
 
+    public function definition_after_data() {
+        global $DB;
+        parent::definition_after_data();
+        $mform = $this->_form;
+
+        // If sharing is turned on, check to see if they can turn it off.
+        if ($mform->elementExists('enablesharing') &&
+                $mform->getElementValue('enablesharing')) {
+            // Look for any shared pages that use this id.
+            $subpageid = $mform->getElementValue('instance');
+            if ($DB->record_exists('sharedsubpage', array('subpageid' => $subpageid))) {
+                $mform->getElement('enablesharing')->freeze();
+            }
+        }
+    }
+
     public function validation($data, $files) {
         global $DB;
         $errors = parent::validation($data, $files);

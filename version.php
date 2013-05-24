@@ -18,10 +18,10 @@
  * Version number.
  *
  * @package mod_subpage
- * @copyright 2012 The Open University
+ * @copyright 2013 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$module->version  = 2012120400;
+$module->version  = 2013052400;
 $module->requires = 2011120100;
 $module->cron     = 60*60*4; // 4 hours.
