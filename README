@@ -1,7 +1,7 @@
 Subpage
 =======
 
-Copyright 2012 The Open University
+Copyright 2013 The Open University
 
 
 Thes subpage module allows users to create, manage, and view lists of Moodle
@@ -25,6 +25,11 @@ for the subpage to be included in the breadcrumbs, but it is not. We have
 implemented code to address this as part of our theme; doing this properly
 would require a significant core change which we haven't implemented yet.
 
+Finally please note that in order to be able to add activities to the subpage,
+you need to turn OFF the 'Activity chooser' feature that was introduced in
+Moodle 2.3, and use the old 'Add an activity/resource' dropdowns. Currently
+it doesn't support the activity chooser.
+
 Support:
 
 We cannot offer direct support. Please do not contact me directly.
@@ -38,18 +43,19 @@ the subpage that is available from:
 
 https://github.com/moodleou/moodle-mod_subpage
 
-In the bug report, please include your Moodle version (e.g. 2.3.2) and your
-subpage version (which you can find under plugins/activities page). 
+In the bug report, please include your Moodle version and your subpage
+version (which you can find under plugins/activities page). 
 
 Status:
 
-Development code. This has not been fully tested and may contain serious bugs.
-Please see the current stable branch if you want a tested version for a specific
-Moodle release.
+Tested, live code based on our Moodle 2.4 release.
+
+Please note that this code is tested on OU systems but we rely on the
+community for testing on other systems.
 
 Requires:
 
-Moodle 2.3+
+Moodle 2.4+
 Postgres / MySQL
 
 Install:
