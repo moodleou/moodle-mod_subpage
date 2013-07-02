@@ -24,7 +24,7 @@
  * initialises all the questiontype classes.
  *
  * @package mod_subpage
- * @copyright 2012 The Open University
+ * @copyright 2013 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author Dan Marsden <dan@danmarsden.com>
  * @author Stacey Walker <stacey@catalyst-eu.net>
@@ -61,14 +61,16 @@ class mod_subpage  {
      */
     public static function get_min_section_number($courseid) {
         // Check config option, ignore if empty / missing / invalid.
-        $config = get_config('mod_subpage', 'courseminsections');
-        if (preg_match('~^([0-9]+=[0-9]+)(,\s*[0-9]+=[0-9]+)*$~', $config)) {
+        $config = get_config('mod_subpage', 'courseminsection');
+        if (preg_match('~^((?:[0-9]+|\*)=[0-9]+)(,\s*(?:[0-9]+|\*)=[0-9]+)*$~', $config)) {
             foreach (explode(',', $config) as $courseconfig) {
-                list ($thiscourseid, $setting)  = explode('=', $courseconfig);
-                if ($courseid == $thiscourseid || $courseid == '*') {
+                list ($thiscourseid, $setting) = explode('=', $courseconfig);
+                if ($courseid == $thiscourseid || $thiscourseid == '*') {
                     return $setting;
                 }
             }
+        } else if ($config !== '') {
+            throw new moodle_exception('invalidcourseminsections', 'subpage');
         }
 
         // Default, over 2 years.
