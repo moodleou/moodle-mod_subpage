@@ -417,18 +417,19 @@ ORDER BY
 
     /**
      * Return an array of modules that can be moved in this situation
-     *    The Array is keyed first with sections (subpage or main course)
-     *    and then the modules within each section by cmid
-     * @param Object $subpage current subpage
-     * @param Array $allsubpages
-     * @param Array $coursesections
-     * @param Object $modinfo
-     * @param String $move to or from
-     * @return Array mixed
+     *
+     * The Array is keyed first with sections (subpage or main course)
+     * and then the modules within each section by cmid.
+     *
+     * @param mod_subpage $subpage Current subpage
+     * @param array $allsubpages Array of other subpage objects
+     * @param array $coursesections Array of course sections
+     * @param course_modinfo $modinfo Modinfo object
+     * @param string $move Whether to move 'to' or 'from' the current subpage
+     * @return array An array of items organised by section
      */
-    public static function moveable_modules($subpage, $allsubpages,
+    public static function moveable_modules(mod_subpage $subpage, array $allsubpages,
             $coursesections, course_modinfo $modinfo, $move) {
-        global $OUTPUT;
 
         $modinfo = get_fast_modinfo($subpage->get_course()->id);
         $allmods = $modinfo->get_cms();
@@ -436,6 +437,33 @@ ORDER BY
         $modnamesplural = get_module_types_names(true);
         $modnamesused = $modinfo->get_used_module_names();
         $mods = array();
+
+        if ($move === 'to') {
+            $parentcmids = array();
+
+            // Get the subpage cm that owns each section.
+            $subpagesectioncm = array();
+            foreach ($modinfo->get_instances_of('subpage') as $subpageid => $cm) {
+                // Get sectionsids array stored in the customdata.
+                $cmdata = $cm->get_custom_data();
+                if ($cmdata) {
+                    foreach ($cmdata->sectionids as $sectionid) {
+                        $subpagesectioncm[$sectionid] = $cm;
+                    }
+                }
+            }
+
+            // Loop through ancestor subpages.
+            $cm = $modinfo->get_cm($subpage->get_course_module()->id);
+            while(true) {
+                if (array_key_exists($cm->section, $subpagesectioncm)) {
+                    $cm = $subpagesectioncm[$cm->section];
+                    $parentcmids[$cm->id] = true;
+                } else {
+                    break;
+                }
+            }
+        }
 
         $subsections = array();
         if (!empty($allsubpages) && $move === 'to') {
@@ -456,12 +484,12 @@ ORDER BY
                     }
 
                     $sectionalt = (isset($section->pageorder)) ? $section->pageorder
-                    : $section->section;
+                            : $section->section;
                     if ($move === 'to') {
                         // Include the required course/format library.
                         global $CFG;
                         require_once("$CFG->dirroot/course/format/" .
-                        $subpage->get_course()->format . "/lib.php");
+                                $subpage->get_course()->format . "/lib.php");
                         $callbackfunction = 'callback_' .
                         $subpage->get_course()->format . '_get_section_name';
 
@@ -469,7 +497,7 @@ ORDER BY
                             $name =  $callbackfunction($subpage->get_course(), $section);
                         } else {
                             $name = $section->name ? $section->name
-                            : get_string('section') . ' ' . $sectionalt;
+                                    : get_string('section') . ' ' . $sectionalt;
                         }
 
                     } else {
@@ -480,11 +508,19 @@ ORDER BY
                     $sectionmods = explode(',', $section->sequence);
                     foreach ($sectionmods as $modnumber) {
                         if (empty($allmods[$modnumber]) ||
-                        $modnumber === $subpage->get_course_module()->id) {
+                                $modnumber === $subpage->get_course_module()->id) {
                             continue;
                         }
+
+                        if ($move === 'to') {
+                            // Prevent moving a parent subpage to its child.
+                            if (!empty($parentcmids[$modnumber])) {
+                                continue;
+                            }
+                        }
+
                         $instancename = format_string($modinfo->cms[$modnumber]->name,
-                        true, $subpage->get_course()->id);
+                                true, $subpage->get_course()->id);
 
                         $icon = $modinfo->get_cm($modnumber)->get_icon_url();
                         $mod = $allmods[$modnumber];
