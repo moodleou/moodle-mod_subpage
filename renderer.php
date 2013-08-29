@@ -264,8 +264,9 @@ class mod_subpage_renderer extends plugin_renderer_base {
                 $content .= $this->render_section($subpage, $modinfo, $section,
                         $editing, $moveitem, $mods, $modnamesused);
                 if ($editing) {
-                    $content .= print_section_add_menus($subpage->get_course(),
-                            $section->section, $modnames, false, true);
+                    $courserenderer = $PAGE->get_renderer('core', 'course');
+                    $content .= $courserenderer->course_section_add_cm_control($subpage->get_course(),
+                            $section->section);
                     if (!empty($CFG->enablecourseajax) and $PAGE->theme->enablecourseajax) {
                         // hacky way to add list to empty section to allow drag/drop into
                         // empty sections
@@ -361,11 +362,9 @@ class mod_subpage_renderer extends plugin_renderer_base {
      */
     protected function render_section($subpage, $modinfo, $section, $editing,
             $moveitem, $mods, $modnamesused) {
-        global $CFG;
-        ob_start();
-        print_section($subpage->get_course(), $section, $mods, $modnamesused, true);
-        $content = ob_get_contents();
-        ob_end_clean(); //end buffering.
+        global $CFG, $PAGE;
+        $courserenderer = $PAGE->get_renderer('core', 'course');
+        $content = $courserenderer->course_section_cm_list($subpage->get_course(), $section);
         $content = str_replace($CFG->wwwroot.'/course/mod.php?copy',
                 'view.php?id='.$subpage->get_course_module()->id.'&amp;copy', $content);
         $content = str_replace("'togglecompletion.php'", "'" . $CFG->wwwroot .
