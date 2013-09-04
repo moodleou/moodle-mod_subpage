@@ -25,6 +25,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+require_once($CFG->dirroot.'/course/format/renderer.php');
 
 class mod_subpage_renderer extends plugin_renderer_base {
     protected $subpagecm;
@@ -42,6 +43,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
     public function render_subpage($subpage, $modinfo, $sections, $editing,
             $moveitem, $movesection) {
         global $PAGE, $OUTPUT, $CFG, $USER;
+        $courserenderer = $PAGE->get_renderer('core_course');
         $this->subpagecm = $subpage->get_course_module()->id;
         if (!empty($USER->activitycopy) && $movesection) {
             $content = $this->render_cancel_link($this->subpagecm);
@@ -76,12 +78,8 @@ class mod_subpage_renderer extends plugin_renderer_base {
             }
         }
         $lastpageorder = $subpage->get_last_section_pageorder();
-        if ($subpage->get_course()->format == 'weeks') {
-            $content .= html_writer::start_tag('ul', array('class' => 'weeks'));
-        } else {
-            $content .= html_writer::start_tag('ul', array('class' => 'topics'));
-        }
-
+        $content .= html_writer::start_tag('ul', array('class' => 'topics'));
+        $PAGE->requires->js('/course/format/topics/format.js');
         foreach ($sections as $section) {
             // Check to see whether cms within the section are visible or not
             // If all cms are not visible then we don't show the section at all,
@@ -264,7 +262,6 @@ class mod_subpage_renderer extends plugin_renderer_base {
                 $content .= $this->render_section($subpage, $modinfo, $section,
                         $editing, $moveitem, $mods, $modnamesused);
                 if ($editing) {
-                    $courserenderer = $PAGE->get_renderer('core', 'course');
                     $content .= $courserenderer->course_section_add_cm_control($subpage->get_course(),
                             $section->section);
                     if (!empty($CFG->enablecourseajax) and $PAGE->theme->enablecourseajax) {
@@ -373,7 +370,6 @@ class mod_subpage_renderer extends plugin_renderer_base {
         $content = str_replace($findcontent, "<input type='hidden' name='backto' value='" .
                 $CFG->wwwroot.'/mod/subpage/view.php?id=' . $subpage->get_course_module()->id .
                 "'/>" . $findcontent, $content);
-
         return $content;
     }
 

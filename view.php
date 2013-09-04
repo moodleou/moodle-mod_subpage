@@ -173,28 +173,13 @@ if ($course->id == SITEID) {
 // AJAX-capable?
 $useajax = false;
 
-if (!empty($CFG->enablecourseajax)
-        and !empty($USER->editing)
-        and $PAGE->theme->enablecourseajax
-        and has_capability('moodle/course:manageactivities', $modcontext)) {
-    $PAGE->requires->yui2_lib('dragdrop');
-    $PAGE->requires->yui2_lib('connection');
-    $PAGE->requires->yui2_lib('selector');
-    $PAGE->requires->js('/lib/ajax/block_classes.js', true);
 
-    // Okay, global variable alert. VERY UGLY. We need to create
-    // this object here before the <blockname>_print_block()
-    // function is called, since that function needs to set some
-    // stuff in the javascriptportal object.
-    $COURSE->javascriptportal = new jsportal();
-    $useajax = true;
-}
 
 // this will add a new class to the header so we can style differently
 $CFG->blocksdrag = $useajax;
 
 $completion = new completion_info($course);
-if ($completion->is_enabled()) {
+if ($completion->is_enabled() && ajaxenabled()) {
     $PAGE->requires->string_for_js('completion-title-manual-y', 'completion');
     $PAGE->requires->string_for_js('completion-title-manual-n', 'completion');
     $PAGE->requires->string_for_js('completion-alt-manual-y', 'completion');
@@ -213,7 +198,7 @@ $PAGE->set_heading($course->fullname);
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($subpage->get_name()));
 
-if ($completion->is_enabled()) {
+if ($completion->is_enabled() && ajaxenabled()) {
     // This value tracks whether there has been a dynamic change to the page.
     // It is used so that if a user does this - (a) set some tickmarks, (b)
     // go to another page, (c) clicks Back button - the page will
@@ -246,18 +231,7 @@ echo $renderer->render_subpage($subpage, $modinfo, $sections, $PAGE->user_is_edi
 // Content wrapper end.
 
 echo html_writer::end_tag('div');
-
-// Use AJAX?
-if ($useajax && has_capability('moodle/course:manageactivities', $modcontext)) {
-    $jsmodule = array(
-        'name'     => 'mod_subpage',
-        'fullpath' => '/mod/subpage/module.js',
-        'requires' => array('dd-constrain', 'dd-proxy', 'dd-drop'),
-        'strings' => array());
-
-    $PAGE->requires->js_init_call('M.mod_subpage.init_dragdrop',
-            array($OUTPUT->pix_url('i/move_2d')->__toString(), get_string('move'),
-            $subpage->get_course_module()->id, sesskey()), false, $jsmodule);
-}
+$modnamesused = $modinfo->get_used_module_names();
+include_course_ajax($COURSE, $modnamesused);
 
 echo $OUTPUT->footer();
