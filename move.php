@@ -39,7 +39,8 @@ $subpage = mod_subpage::get_from_cmid($cmid);
 $cm = $subpage->get_course_module();
 $course = $subpage->get_course();
 // Defined here to avoid notices on errors etc
-$PAGE->set_url('/mod/subpage/move.php', array('id' => $cmid, 'move' => $move));
+$moveurl = new moodle_url('/mod/subpage/move.php', array('id' => $cmid, 'move' => $move));
+$PAGE->set_url($moveurl);
 
 $coursecontext = get_context_instance(CONTEXT_COURSE, $course->id);
 
@@ -99,13 +100,21 @@ if ($formdata = $mform->get_data()) {
     $info = explode(',', $destinationstr);
     $createnew = ($info[1] === 'new') ? true : false;
 
-    // get the actual items to move; $cmid values
+    // Get the actual items to move; $cmid values.
     $cmids = array();
     foreach ($formdata as $key => $data) {
         if (substr($key, 0, 3) === 'mod' && $data == 1) {
             $cmids[] = substr($key, 3);
         }
     }
+    // Check if they tried to move something else that isn't in the form, maybe
+    // because something has changed since the form was displayed.
+    foreach ($_POST as $key => $data) {
+        if (substr($key, 0, 3) === 'mod' && !array_key_exists($key, $formdata)) {
+            print_error('error_movenotallowed', 'subpage', $moveurl);
+        }
+    }
+
     if (empty($cmids)) {
         echo $OUTPUT->header();
         // Course wrapper start.
@@ -116,6 +125,8 @@ if ($formdata = $mform->get_data()) {
         echo $OUTPUT->footer();
         exit;
     } else {
+        $transaction = $DB->start_delegated_transaction();
+
         // destination is either null or a subpage
         $dest = ($info[0] !== 'course') ? mod_subpage::get_from_cmid($info[0]) : null;
         if ($createnew && $dest) {
@@ -123,6 +134,33 @@ if ($formdata = $mform->get_data()) {
             $id = $newsection['sectionid'];
         } else {
             $id = $info[1];
+        }
+
+        // When moving to a subpage, calculate data required to prevent loops.
+        if ($dest) {
+            // Get the subpage cm that owns each section.
+            $subpagesectioncm = array();
+            foreach ($modinfo->get_instances_of('subpage') as $subpageid => $cm) {
+                // Get sectionsids array stored in the customdata.
+                $cmdata = $cm->get_custom_data();
+                if ($cmdata) {
+                    foreach ($cmdata->sectionids as $sectionid) {
+                        $subpagesectioncm[$sectionid] = $cm;
+                    }
+                }
+            }
+
+            // Loop through ancestor subpages.
+            $parentcmids = array();
+            $cm = $modinfo->get_cm($dest->get_course_module()->id);
+            while(true) {
+                if (array_key_exists($cm->section, $subpagesectioncm)) {
+                    $cm = $subpagesectioncm[$cm->section];
+                    $parentcmids[$cm->id] = true;
+                } else {
+                    break;
+                }
+            }
         }
 
         // ensure that the destination section does exists
@@ -137,12 +175,19 @@ if ($formdata = $mform->get_data()) {
                         "$CFG->wwwroot/mod/subpage/view.php?id=$cmid");
             }
 
+            // Check this move won't cause a loop.
+            if (!empty($parentcmids[$id])) {
+                print_error('error_movecircular', 'subpage', $moveurl);
+            }
+
             // no reason to move if in the same section
             if ($cm->section !== $section->id) {
                 moveto_module($cm, $section);
             }
         }
         rebuild_course_cache($course->id, true);
+
+        $transaction->allow_commit();
     }
 
     // return to original subpage view

@@ -68,5 +68,9 @@ $string['error_deletingsubpage'] = 'This subpage cannot be deleted because it st
 $string['subpage:addinstance'] = 'Add a new subpage';
 $string['subpage:view'] = 'View subpages';
 
+$string['invalidcourseminsections'] = 'Course min section number option is invalid, please correct in admin settings';
+
 $string['courseminsection'] = 'Min section per course';
 $string['courseminsection_desc'] = 'Advanced setting. The subpage normally uses course sections beginning from section 110. If there is a course which might have more than 109 sections itself, you need to use this setting BEFORE creating any subpages on the course. An example for this setting is &lsquo;37=200,69=300,*=50&rsquo; which means that course id 37 will start from 200, 69 from 300, and all other courses 50. (The * part is optional but must be last if included.)';
+$string['error_movenotallowed'] = 'A selected item cannot be moved because somebody else has moved it since the form was displayed.';
+$string['error_movecircular'] = 'A selected item cannot be moved because it would create a circular reference (e.g. subpage A contains subpage B, which contains subpage A).';
