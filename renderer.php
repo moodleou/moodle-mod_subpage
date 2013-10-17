@@ -15,13 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Moodle subpage Renderer
+ * Renderer.
  *
- * @package mod
- * @subpackage subpage
- * @copyright 2011 The Open University
+ * @package mod_subpage
+ * @copyright 2013 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author Dan Marsden <dan@danmarsden.com>
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -217,6 +215,13 @@ class mod_subpage_renderer extends plugin_renderer_base {
                 if (!empty($section->name)) {
                     $content .= html_writer::tag('h3', format_string($section->name),
                             array('class' => 'sectionname'));
+                }
+                if (!empty($section->groupingid) &&
+                        has_capability('moodle/course:managegroups', $coursecontext)) {
+                    // Get all groupings (this is cached, so quicker than single one).
+                    $groupings = groups_get_all_groupings($modinfo->get_course_id());
+                    $name = $groupings[$section->groupingid]->name;
+                    $content .= html_writer::div(s($name), 'groupinglabel');
                 }
                 $summary = '';
                 if ($section->summary) {
