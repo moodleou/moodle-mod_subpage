@@ -56,24 +56,4 @@ class backup_subpage_activity_task extends backup_activity_task {
 
         return $content;
     }
-
-    public function execute() {
-        $this->potential_dot();
-        parent::execute();
-    }
-
-    /**
-     * In case of long-running backups, we support the optional
-     * potential_dot method in the backup logger, anywhere in the chain
-     * (this is for OU custom use).
-     */
-    private function potential_dot() {
-        $logger = $this->get_logger();
-        while ($logger) {
-            if (method_exists($logger, 'potential_dot')) {
-                $logger->potential_dot();
-            }
-            $logger = $logger->get_next();
-        }
-    }
 }

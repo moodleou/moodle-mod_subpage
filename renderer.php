@@ -15,16 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Moodle subpage Renderer
+ * Renderer.
  *
- * @package mod
- * @subpackage subpage
- * @copyright 2011 The Open University
+ * @package mod_subpage
+ * @copyright 2013 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author Dan Marsden <dan@danmarsden.com>
  */
 
 defined('MOODLE_INTERNAL') || die();
+require_once($CFG->dirroot.'/course/format/renderer.php');
 
 class mod_subpage_renderer extends plugin_renderer_base {
     protected $subpagecm;
@@ -42,6 +41,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
     public function render_subpage($subpage, $modinfo, $sections, $editing,
             $moveitem, $movesection) {
         global $PAGE, $OUTPUT, $CFG, $USER;
+        $courserenderer = $PAGE->get_renderer('core_course');
         $this->subpagecm = $subpage->get_course_module()->id;
         if (!empty($USER->activitycopy) && $movesection) {
             $content = $this->render_cancel_link($this->subpagecm);
@@ -76,12 +76,8 @@ class mod_subpage_renderer extends plugin_renderer_base {
             }
         }
         $lastpageorder = $subpage->get_last_section_pageorder();
-        if ($subpage->get_course()->format == 'weeks') {
-            $content .= html_writer::start_tag('ul', array('class' => 'weeks'));
-        } else {
-            $content .= html_writer::start_tag('ul', array('class' => 'topics'));
-        }
-
+        $content .= html_writer::start_tag('ul', array('class' => 'topics'));
+        $PAGE->requires->js('/course/format/topics/format.js');
         foreach ($sections as $section) {
             // Check to see whether cms within the section are visible or not
             // If all cms are not visible then we don't show the section at all,
@@ -220,6 +216,13 @@ class mod_subpage_renderer extends plugin_renderer_base {
                     $content .= html_writer::tag('h3', format_string($section->name),
                             array('class' => 'sectionname'));
                 }
+                if (!empty($section->groupingid) &&
+                        has_capability('moodle/course:managegroups', $coursecontext)) {
+                    // Get all groupings (this is cached, so quicker than single one).
+                    $groupings = groups_get_all_groupings($modinfo->get_course_id());
+                    $name = $groupings[$section->groupingid]->name;
+                    $content .= html_writer::div(s($name), 'groupinglabel');
+                }
                 $summary = '';
                 if ($section->summary) {
                     $summarytext = file_rewrite_pluginfile_urls($section->summary,
@@ -264,8 +267,8 @@ class mod_subpage_renderer extends plugin_renderer_base {
                 $content .= $this->render_section($subpage, $modinfo, $section,
                         $editing, $moveitem, $mods, $modnamesused);
                 if ($editing) {
-                    $content .= print_section_add_menus($subpage->get_course(),
-                            $section->section, $modnames, false, true);
+                    $content .= $courserenderer->course_section_add_cm_control($subpage->get_course(),
+                            $section->section);
                     if (!empty($CFG->enablecourseajax) and $PAGE->theme->enablecourseajax) {
                         // hacky way to add list to empty section to allow drag/drop into
                         // empty sections
@@ -361,11 +364,9 @@ class mod_subpage_renderer extends plugin_renderer_base {
      */
     protected function render_section($subpage, $modinfo, $section, $editing,
             $moveitem, $mods, $modnamesused) {
-        global $CFG;
-        ob_start();
-        print_section($subpage->get_course(), $section, $mods, $modnamesused, true);
-        $content = ob_get_contents();
-        ob_end_clean(); //end buffering.
+        global $CFG, $PAGE;
+        $courserenderer = $PAGE->get_renderer('core', 'course');
+        $content = $courserenderer->course_section_cm_list($subpage->get_course(), $section);
         $content = str_replace($CFG->wwwroot.'/course/mod.php?copy',
                 'view.php?id='.$subpage->get_course_module()->id.'&amp;copy', $content);
         $content = str_replace("'togglecompletion.php'", "'" . $CFG->wwwroot .
@@ -374,7 +375,6 @@ class mod_subpage_renderer extends plugin_renderer_base {
         $content = str_replace($findcontent, "<input type='hidden' name='backto' value='" .
                 $CFG->wwwroot.'/mod/subpage/view.php?id=' . $subpage->get_course_module()->id .
                 "'/>" . $findcontent, $content);
-
         return $content;
     }
 

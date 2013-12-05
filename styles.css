@@ -19,3 +19,9 @@
     float: left;
     margin-left: 10px;
 }
+
+#page-mod-subpage-view div.groupinglabel {
+    color: #444;
+    font-size: 0.8em;
+    margin: -8px 0 8px;
+}

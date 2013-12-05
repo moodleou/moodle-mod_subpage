@@ -361,7 +361,9 @@ ORDER BY
         $fs = get_file_storage();
         $fs->delete_area_files($modcontext->id);
 
-        if (!delete_course_module($cm->id)) {
+        try {
+            course_delete_module($cm->id);
+        } catch (moodle_exception $e) {
             echo $OUTPUT->notification("Could not delete the $cm->modname (coursemodule)");
         }
         if (!delete_mod_from_section($cm->id, $cm->section)) {

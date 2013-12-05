@@ -387,7 +387,7 @@ class mod_subpage_external extends external_api {
             // section), etext_usage
             $DB->delete_records('resource', array('id' => $resource->id));
             delete_mod_from_section($coursemodule, $coursemodule->section);
-            delete_course_module($cmid);
+            course_delete_module($cmid);
             $DB->delete_records('coursereport_etexts_usage', array('cmid' => $cmid));
         }
 
