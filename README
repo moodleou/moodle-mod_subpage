@@ -48,14 +48,14 @@ version (which you can find under plugins/activities page).
 
 Status:
 
-Tested, live code based on our Moodle 2.4 release.
+Tested, live code based on our Moodle 2.5 release.
 
 Please note that this code is tested on OU systems but we rely on the
 community for testing on other systems.
 
 Requires:
 
-Moodle 2.4+
+Moodle 2.5+
 Postgres / MySQL
 
 Install:
