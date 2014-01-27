@@ -79,33 +79,40 @@ class mod_subpage  {
 
     /**
      * Constructor
-     * @param object $context the context this table relates to.
-     * @param string $id what to put in the id="" attribute.
+     *
+     * @param stdClass $subpage Subpage table row
+     * @param cm_info $cm Course module info object
+     * @param stdClass $course Course object
      */
-    public function __construct($subpage, $cm, $course) {
+    public function __construct($subpage, cm_info $cm, $course) {
         $this->subpage = $subpage;
         $this->cm = $cm;
         $this->course = $course;
     }
 
     /**
-     * Obtains full cm, subpage and course records and constructs a subpage object.
+     * Obtains subpage modinfo, subpage and course records and constructs a subpage object.
      *
      * @param int $cmid the course module id
      * @return class mod_subpage
      */
     public static function get_from_cmid($cmid) {
         global $DB;
-        $cm = get_coursemodule_from_id('subpage', $cmid, 0, false, MUST_EXIST);
+
+        $course = $DB->get_record_sql('
+                SELECT c.*
+                  FROM {course_modules} cm
+                  JOIN {course} c ON c.id = cm.course
+                 WHERE cm.id = ?', array($cmid), MUST_EXIST);
+        $cm = get_fast_modinfo($course)->get_cm($cmid);
         $subpage = $DB->get_record('subpage', array('id'=>$cm->instance), '*', MUST_EXIST);
-        $course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
         return new mod_subpage($subpage, $cm, $course);
     }
 
     /**
-     * returns $cm
+     * Returns subpage modinfo.
      *
-     * @return stdClass full course module record
+     * @return cm_info Course module info object
      */
     public function get_course_module() {
         return $this->cm;
