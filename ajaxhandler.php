@@ -38,7 +38,7 @@ $subpage = mod_subpage::get_from_cmid($subpageid);
 
 require_login($subpage->get_course()->id, false);
 
-$context = get_context_instance(CONTEXT_COURSE, $subpage->get_course()->id);
+$context = context_course::instance($subpage->get_course()->id);
 require_capability('moodle/course:manageactivities', $context);
 
 require_sesskey();

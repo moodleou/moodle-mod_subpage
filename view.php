@@ -63,14 +63,14 @@ $course = $subpage->get_course();
 $thisurl = new moodle_url('/mod/subpage/view.php', array('id' => $cmid));
 $PAGE->set_url($thisurl);
 $PAGE->set_cm($subpage->get_course_module());
-$modcontext = get_context_instance(CONTEXT_MODULE, $cmid);
+$modcontext = context_module::instance($cmid);
 
 require_login($course, true, $subpage->get_course_module());
 require_capability('mod/subpage:view', $modcontext);
 add_to_log($course->id, 'subpage', 'view', "view.php?id=$cmid", '', $cmid);
 
 if (!empty($recache) && confirm_sesskey()) {
-    $context = get_context_instance(CONTEXT_COURSE, $subpage->get_course()->id);
+    $context = context_course::instance($subpage->get_course()->id);
     require_capability('moodle/course:manageactivities', $context);
     rebuild_course_cache($course->id, true);
     redirect($thisurl);
@@ -80,7 +80,7 @@ if (!empty($copy) and confirm_sesskey()) { // value = course module
     if (!$cm = get_coursemodule_from_id('', $copy, 0, true)) {
         print_error('invalidcoursemodule');
     }
-    $context = get_context_instance(CONTEXT_COURSE, $cm->course);
+    $context = context_course::instance($cm->course);
     require_capability('moodle/course:manageactivities', $context);
 
     if (!$section = $DB->get_record('course_sections', array('id'=>$cm->section))) {

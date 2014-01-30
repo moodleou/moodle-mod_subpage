@@ -208,9 +208,9 @@ class mod_subpage_external extends external_api {
             return;
         }
         if ($courseid) {
-            $context = get_context_instance(CONTEXT_COURSE, $courseid);
+            $context = context_course::instance($courseid);
         } else {
-            $context = get_context_instance(CONTEXT_MODULE, $cmid);
+            $context = context_module::instance($cmid);
         }
         self::validate_context($context);
         require_capability('moodle/course:manageactivities', $context);
@@ -301,7 +301,7 @@ class mod_subpage_external extends external_api {
         $module->section = $section->section;
         //check $params['path'] and create files based on that and attach to $module->files
         //now check $path and obtain $filename and $filepath
-        $contextuser = get_context_instance(CONTEXT_USER, $USER->id);
+        $contextuser = context_user::instance($USER->id);
         $fs = get_file_storage();
         $module->files = 0;
         file_prepare_draft_area($module->files, null, null, null, null);

@@ -42,7 +42,7 @@ $course = $subpage->get_course();
 $moveurl = new moodle_url('/mod/subpage/move.php', array('id' => $cmid, 'move' => $move));
 $PAGE->set_url($moveurl);
 
-$coursecontext = get_context_instance(CONTEXT_COURSE, $course->id);
+$coursecontext = context_course::instance($course->id);
 
 require_login($course);
 add_to_log($course->id, 'course', 'move', "move.php?id=$course->id&move=$move", "$course->id");

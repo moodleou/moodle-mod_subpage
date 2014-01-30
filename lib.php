@@ -202,7 +202,7 @@ function subpage_get_coursemodule_info($cm) {
  * @param cm_info $cm Module data
  */
 function subpage_cm_info_dynamic(cm_info $cm) {
-    if (!has_capability('mod/subpage:view', get_context_instance(CONTEXT_MODULE, $cm->id))) {
+    if (!has_capability('mod/subpage:view', context_module::instance($cm->id))) {
         $cm->set_available(false);
     }
 }

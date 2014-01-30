@@ -60,7 +60,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
             $strstealth = get_string('stealth', 'subpage');
             $strunstealth = get_string('unstealth', 'subpage');
         }
-        $coursecontext = get_context_instance(CONTEXT_COURSE, $subpage->get_course()->id);
+        $coursecontext = context_course::instance($subpage->get_course()->id);
 
         $modinfo = get_fast_modinfo($subpage->get_course()->id);
         $mods = $modinfo->get_cms();
