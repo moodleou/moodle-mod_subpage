@@ -372,24 +372,8 @@ class mod_subpage_external extends external_api {
 
         self::require_access($course->id);
 
-        // should be able to get record including context id and instance - file id
-        $contextid = $DB->get_field('context', 'id',
-                array('instanceid'=>$coursemodule->id, 'contextlevel'=>CONTEXT_MODULE));
-
-        $fs = get_file_storage();
-        $files = $fs->get_area_files($contextid, 'mod_resource', 'content', 0,
-                'sortorder, itemid, filepath, filename', false);
-        foreach ($files as $file) {
-            // delete the file
-            $file->delete();
-            // delete from database tables course_module, resource, context (via
-            // delete course module), section sequence (via delete mod from
-            // section), etext_usage
-            $DB->delete_records('resource', array('id' => $resource->id));
-            delete_mod_from_section($coursemodule, $coursemodule->section);
-            course_delete_module($cmid);
-            $DB->delete_records('coursereport_etexts_usage', array('cmid' => $cmid));
-        }
+        course_delete_module($cmid);
+        $DB->delete_records('coursereport_etexts_usage', array('cmid' => $cmid));
 
         $this->add_file($coursemodule->section, $resource->name, $updatefilepath,
                 $resource->display);

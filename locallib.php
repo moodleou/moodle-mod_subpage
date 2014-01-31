@@ -341,7 +341,6 @@ ORDER BY
         global $CFG, $OUTPUT, $USER, $DB;
 
         $cm->modname = $DB->get_field("modules", "name", array("id"=>$cm->module));
-        $modcontext = get_context_instance(CONTEXT_MODULE, $cm->id);
 
         $modlib = "$CFG->dirroot/mod/$cm->modname/lib.php";
 
@@ -351,36 +350,11 @@ ORDER BY
             print_error('modulemissingcode', '', '', $modlib);
         }
 
-        $deleteinstancefunction = $cm->modname."_delete_instance";
-
-        if (!$deleteinstancefunction($cm->instance)) {
-            echo $OUTPUT->notification("Could not delete the $cm->modname (instance)");
-        }
-
-        // Remove all module files in case modules forget to do that.
-        $fs = get_file_storage();
-        $fs->delete_area_files($modcontext->id);
-
         try {
             course_delete_module($cm->id);
         } catch (moodle_exception $e) {
             echo $OUTPUT->notification("Could not delete the $cm->modname (coursemodule)");
         }
-        if (!delete_mod_from_section($cm->id, $cm->section)) {
-            echo $OUTPUT->notification("Could not delete the $cm->modname from that section");
-        }
-
-        // Trigger a mod_deleted event with information about this module.
-        $eventdata = new stdClass();
-        $eventdata->modulename = $cm->modname;
-        $eventdata->cmid       = $cm->id;
-        $eventdata->courseid   = $cm->course;
-        $eventdata->userid     = $USER->id;
-        events_trigger('mod_deleted', $eventdata);
-
-        add_to_log($cm->course, 'course', "delete mod",
-                   "view.php?id=$cm->course",
-                   "$cm->modname $cm->instance", $cm->id);
 
         rebuild_course_cache($cm->course);
     }
