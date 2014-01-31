@@ -173,10 +173,13 @@ function subpage_get_coursemodule_info($cm) {
             // Update on all shared versions
             $DB->execute("UPDATE {sharedsubpage} SET content=?, name=? WHERE subpageid=?",
                 array($content, sharedsubpage_get_name($subpage->name), $subpage->id));
-            // Clear modinfo on all courses that include shared versions
-            $DB->set_field_select('course', 'modinfo', null,
-                    'id IN (SELECT course FROM {sharedsubpage} WHERE subpageid=?)',
+            // Clear modinfo on all courses that include shared versions.
+            $courses = $DB->get_fieldset_sql(
+                    "SELECT DISTINCT course FROM {sharedsubpage} WHERE subpageid = ?",
                     array($subpage->id));
+            foreach ($courses as $courseid) {
+                rebuild_course_cache($courseid, true);
+            }
             // Set hash so we don't do that again
             $DB->set_field('subpage', 'sharedcontenthash', $hash, array('id'=>$subpage->id));
         }
