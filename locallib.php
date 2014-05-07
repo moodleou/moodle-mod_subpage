@@ -254,7 +254,7 @@ ORDER BY
         // Create a section entry with this section number then get it.
         course_create_sections_if_missing($this->course, $sectionnum);
         $section = $DB->get_record('course_sections', array(
-                'course' => $this->course->id, 'section' => $sectionnum), 'id');
+                'course' => $this->course->id, 'section' => $sectionnum), 'id', MUST_EXIST);
         // Now update summary/name if set above.
         if (!empty($name) or !empty($summary)) {
             $section->name = format_string($name);
@@ -336,6 +336,8 @@ ORDER BY
             $DB->update_record('subpage_sections', $subpagesection);
             $pageorder++;
         }
+        // Clear course cache.
+        rebuild_course_cache($this->get_course()->id, true);
         $transaction->allow_commit();
     }
 
