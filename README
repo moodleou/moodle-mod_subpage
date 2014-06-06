@@ -1,11 +1,18 @@
 Subpage
 =======
 
-Copyright 2012 The Open University
+Copyright 2014 The Open University
 
 
 Thes subpage module allows users to create, manage, and view lists of Moodle
 activities separately from the main course page
+
+
+Warning:
+
+We support the subpage module in Moodle 2.6 but it is likely that this module
+will be discontinued in a future version. I anticipate that we will probably
+continue to support it in Moodle 2.7, but possibly not Moodle 2.8.
 
 Limitations:
 
@@ -14,11 +21,8 @@ without making core changes you will find that you are constantly redirected
 back to the course page when you expected to be on the subpage.
 
 If you would like a patch that you can apply - at your own risk, of course,
-as is this whole thing - in order to make it all work a little more neatly, I
-have included this as corechanges.patch. This applies on MOODLE_21_STABLE as
-of writing. (If you do not know how to apply patches then this is not the time
-to learn...) It would be nice if we could get this functionality included into
-core at some point.
+as is this whole thing, see the README file for one of the branches (however
+we haven't provided a current patch, sorry).
 
 Also please note that if you put something on a subpage it will seem natural
 for the subpage to be included in the breadcrumbs, but it is not. We have
@@ -49,7 +53,7 @@ Moodle release.
 
 Requires:
 
-Moodle 2.3+
+Moodle 2.6+
 Postgres / MySQL
 
 Install:
