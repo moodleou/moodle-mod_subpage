@@ -420,7 +420,6 @@ ORDER BY
         $allmods = $modinfo->get_cms();
         $modnames = get_module_types_names();
         $modnamesplural = get_module_types_names(true);
-        $modnamesused = $modinfo->get_used_module_names();
         $mods = array();
 
         if ($move === 'to') {

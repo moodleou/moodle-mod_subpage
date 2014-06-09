@@ -66,7 +66,6 @@ class mod_subpage_renderer extends plugin_renderer_base {
         $mods = $modinfo->get_cms();
         $modnames = get_module_types_names();
         $modnamesplural = get_module_types_names(true);
-        $modnamesused = $modinfo->get_used_module_names();
         foreach ($mods as $modid => $unused) {
             if (!isset($modinfo->cms[$modid])) {
                 rebuild_course_cache($subpage->get_course()->id);
@@ -265,7 +264,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
                 }
 
                 $content .= $this->render_section($subpage, $modinfo, $section,
-                        $editing, $moveitem, $mods, $modnamesused);
+                        $editing, $moveitem, $mods);
                 if ($editing) {
                     $content .= $courserenderer->course_section_add_cm_control($subpage->get_course(),
                             $section->section);
@@ -363,7 +362,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
      * @return
      */
     protected function render_section($subpage, $modinfo, $section, $editing,
-            $moveitem, $mods, $modnamesused) {
+            $moveitem, $mods) {
         global $CFG, $PAGE;
         $courserenderer = $PAGE->get_renderer('core', 'course');
         $content = $courserenderer->course_section_cm_list($subpage->get_course(), $section);
