@@ -142,7 +142,7 @@ if ($formdata = $mform->get_data()) {
             $subpagesectioncm = array();
             foreach ($modinfo->get_instances_of('subpage') as $subpageid => $cm) {
                 // Get sectionsids array stored in the customdata.
-                $cmdata = $cm->get_custom_data();
+                $cmdata = $cm->customdata;
                 if ($cmdata) {
                     foreach ($cmdata->sectionids as $sectionid) {
                         $subpagesectioncm[$sectionid] = $cm;
