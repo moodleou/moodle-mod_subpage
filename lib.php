@@ -239,7 +239,8 @@ function subpage_extend_settings_navigation($settings, navigation_node $subpagen
  * @return array List of all system capabilitiess used in module
  */
 function subpage_get_extra_capabilities() {
-    // Note: I made this list by searching for moodle/ within the module
+    // Note: I made this list by searching for moodle/ within the module. We
+    // then added accessallgroups because of grouping restrictions.
     return array('moodle/course:update', 'moodle/course:viewhiddensections',
-            'moodle/course:manageactivities');
+            'moodle/course:manageactivities', 'moodle/site:accessallgroups');
 }
