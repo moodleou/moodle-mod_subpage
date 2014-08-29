@@ -65,7 +65,13 @@ $modcontext = context_module::instance($cmid);
 
 require_login($course, true, $subpage->get_course_module());
 require_capability('mod/subpage:view', $modcontext);
-add_to_log($course->id, 'subpage', 'view', "view.php?id=$cmid", '', $cmid);
+
+$event = \mod_subpage\event\course_module_viewed::create(array(
+    'objectid' => $subpage->get_course_module()->instance,
+    'context' => $modcontext,
+));
+$event->add_record_snapshot('course', $course);
+$event->trigger();
 
 if (!empty($recache) && confirm_sesskey()) {
     $context = context_course::instance($subpage->get_course()->id);

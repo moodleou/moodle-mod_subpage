@@ -18,7 +18,7 @@
  * Renderer.
  *
  * @package mod_subpage
- * @copyright 2013 The Open University
+ * @copyright 2014 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -373,6 +373,11 @@ class mod_subpage_renderer extends plugin_renderer_base {
                 'view.php?id='.$subpage->get_course_module()->id.'&amp;copy', $content);
         $content = str_replace("'togglecompletion.php'", "'" . $CFG->wwwroot .
                 "/course/togglecompletion.php'", $content);
+
+        // Hide indent option.
+        $content = str_replace('<a class="editing_moveright  ',
+                '<a class="editing_moveright hidden ', $content);
+
         $findcontent = "<input type='hidden' name='completionstate'";
         $content = str_replace($findcontent, "<input type='hidden' name='backto' value='" .
                 $CFG->wwwroot.'/mod/subpage/view.php?id=' . $subpage->get_course_module()->id .
