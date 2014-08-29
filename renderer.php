@@ -35,11 +35,12 @@ class mod_subpage_renderer extends plugin_renderer_base {
      * @param array $sections
      * @param boolean $editing whether the user is allowed to edit this page
      * @param int $moveitem (currently not used)
-     * @param boolean $movesection whether the user is allowed to move sections
+     * @param bool $canmovesection Whether the user is allowed to move sections
+     * @param bool $canhidesection Whether the user is allowed to hide/stealth.
      * @return string html for display
      */
     public function render_subpage($subpage, $modinfo, $sections, $editing,
-            $moveitem, $movesection) {
+            $moveitem, $canmovesection, $canhidesection) {
         global $PAGE, $OUTPUT, $CFG, $USER;
         $courserenderer = $PAGE->get_renderer('core_course');
         $this->subpagecm = $subpage->get_course_module()->id;
@@ -103,71 +104,73 @@ class mod_subpage_renderer extends plugin_renderer_base {
                     array('class' => 'section main clearfix', 'id'=>'section-'.$section->section));
             $content .= html_writer::tag('div', '&nbsp;', array('class' => 'left side'));
             $content .= html_writer::start_tag('div', array('class' => 'right side'));
-            if ($editing && has_capability('moodle/course:update', $coursecontext)) {
-                // Show the hide/show eye
-                if ($section->visible) {
-                    $content .= html_writer::start_tag('a', array(
-                            'href' => 'view.php?id=' . $subpage->get_course_module()->id .
-                                '&hide=' . $section->section . '&sesskey=' . sesskey() .
-                                '#section-'.$section->id,
-                            'title'=> $strhide));
-                    $content .= html_writer::empty_tag('img', array(
-                            'src' => $OUTPUT->pix_url('i/hide'), 'class'=>'icon hide',
-                            'alt'=>$strhide));
-                    $content .= html_writer::end_tag('a');
-                } else {
-                    $content .= html_writer::start_tag('a', array(
-                            'href' => 'view.php?id=' . $subpage->get_course_module()->id .
-                                '&show=' . $section->section . '&sesskey=' . sesskey() .
-                                '#section-' . $section->id,
-                            'title'=> $strshow));
-                    $content .= html_writer::empty_tag('img', array(
-                            'src' => $OUTPUT->pix_url('i/show'), 'class'=>'icon show',
-                            'alt'=>$strshow));
-                    $content .= html_writer::end_tag('a');
+            if ($editing) {
+                if ($canhidesection) {
+                    // Show the hide/show eye
+                    if ($section->visible) {
+                        $content .= html_writer::start_tag('a', array(
+                                'href' => 'view.php?id=' . $subpage->get_course_module()->id .
+                                    '&hide=' . $section->section . '&sesskey=' . sesskey() .
+                                    '#section-'.$section->id,
+                                'title'=> $strhide));
+                        $content .= html_writer::empty_tag('img', array(
+                                'src' => $OUTPUT->pix_url('i/hide'), 'class'=>'icon hide',
+                                'alt'=>$strhide));
+                        $content .= html_writer::end_tag('a');
+                    } else {
+                        $content .= html_writer::start_tag('a', array(
+                                'href' => 'view.php?id=' . $subpage->get_course_module()->id .
+                                    '&show=' . $section->section . '&sesskey=' . sesskey() .
+                                    '#section-' . $section->id,
+                                'title'=> $strshow));
+                        $content .= html_writer::empty_tag('img', array(
+                                'src' => $OUTPUT->pix_url('i/show'), 'class'=>'icon show',
+                                'alt'=>$strshow));
+                        $content .= html_writer::end_tag('a');
+                    }
+
+                    // Show the stealth/unstealth section link
+                    if ($section->stealth) {
+                        $content .= html_writer::start_tag('form',
+                                array('method' => 'post', 'action' => 'stealth.php'));
+                        $content .= html_writer::start_tag('div');
+                        $content .= html_writer::empty_tag('input',
+                                array('name' => 'id', 'value' => $subpage->get_course_module()->id,
+                                'type' => 'hidden'));
+                        $content .= html_writer::empty_tag('input',
+                                array('name' => 'sesskey', 'value' => sesskey(), 'type' => 'hidden'));
+                        $content .= html_writer::empty_tag('input',
+                                array('name' => 'unstealth', 'value' => $section->id,
+                                'type' => 'hidden'));
+                        $content .= html_writer::empty_tag('input',
+                                array('name' => 'icon',
+                                'src' => $OUTPUT->pix_url('unstealth', 'mod_subpage'),
+                                'type' => 'image', 'title' => $strunstealth, 'alt' => $strunstealth));
+                        $content .= html_writer::end_tag('div');
+                        $content .= html_writer::end_tag('form');
+                    } else {
+                        $content .= html_writer::start_tag('form',
+                                array('method' => 'post', 'action' => 'stealth.php'));
+                        $content .= html_writer::start_tag('div');
+                        $content .= html_writer::empty_tag('input',
+                                array('name' => 'id', 'value' => $subpage->get_course_module()->id,
+                                'type' => 'hidden'));
+                        $content .= html_writer::empty_tag('input',
+                                array('name' => 'sesskey', 'value' => sesskey(), 'type' => 'hidden'));
+                        $content .= html_writer::empty_tag('input',
+                                array('name' => 'stealth', 'value' => $section->id,
+                                'type' => 'hidden'));
+                        $content .= html_writer::empty_tag('input',
+                                array('name' => 'icon',
+                                'src' => $OUTPUT->pix_url('stealth', 'mod_subpage'),
+                                'type' => 'image', 'title' => $strstealth, 'alt' => $strstealth));
+                        $content .= html_writer::end_tag('div');
+                        $content .= html_writer::end_tag('form');
+                    }
+                    $content .= html_writer::empty_tag('br', array());
                 }
 
-                // Show the stealth/unstealth section link
-                if ($section->stealth) {
-                    $content .= html_writer::start_tag('form',
-                            array('method' => 'post', 'action' => 'stealth.php'));
-                    $content .= html_writer::start_tag('div');
-                    $content .= html_writer::empty_tag('input',
-                            array('name' => 'id', 'value' => $subpage->get_course_module()->id,
-                            'type' => 'hidden'));
-                    $content .= html_writer::empty_tag('input',
-                            array('name' => 'sesskey', 'value' => sesskey(), 'type' => 'hidden'));
-                    $content .= html_writer::empty_tag('input',
-                            array('name' => 'unstealth', 'value' => $section->id,
-                            'type' => 'hidden'));
-                    $content .= html_writer::empty_tag('input',
-                            array('name' => 'icon',
-                            'src' => $OUTPUT->pix_url('unstealth', 'mod_subpage'),
-                            'type' => 'image', 'title' => $strunstealth, 'alt' => $strunstealth));
-                    $content .= html_writer::end_tag('div');
-                    $content .= html_writer::end_tag('form');
-                } else {
-                    $content .= html_writer::start_tag('form',
-                            array('method' => 'post', 'action' => 'stealth.php'));
-                    $content .= html_writer::start_tag('div');
-                    $content .= html_writer::empty_tag('input',
-                            array('name' => 'id', 'value' => $subpage->get_course_module()->id,
-                            'type' => 'hidden'));
-                    $content .= html_writer::empty_tag('input',
-                            array('name' => 'sesskey', 'value' => sesskey(), 'type' => 'hidden'));
-                    $content .= html_writer::empty_tag('input',
-                            array('name' => 'stealth', 'value' => $section->id,
-                            'type' => 'hidden'));
-                    $content .= html_writer::empty_tag('input',
-                            array('name' => 'icon',
-                            'src' => $OUTPUT->pix_url('stealth', 'mod_subpage'),
-                            'type' => 'image', 'title' => $strstealth, 'alt' => $strstealth));
-                    $content .= html_writer::end_tag('div');
-                    $content .= html_writer::end_tag('form');
-                }
-                $content .= html_writer::empty_tag('br', array());
-
-                if ($movesection) {
+                if ($canmovesection) {
                     $content .= html_writer::start_tag('span', array(
                             'class' => 'section_move_commands'));
                     if ($section->pageorder > 1) {

@@ -17,9 +17,8 @@
 /**
  * Displays the subpage.
  *
- * @package mod
- * @subpackage subpage
- * @copyright 2011 The Open University
+ * @package mod_subpage
+ * @copyright 2014 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -225,7 +224,8 @@ if (! $sections = $subpage->get_sections()) {   // No sections found
 }
 $renderer = $PAGE->get_renderer('mod_subpage');
 echo $renderer->render_subpage($subpage, $modinfo, $sections, $PAGE->user_is_editing(),
-        $move, $PAGE->user_is_editing());
+        $move, has_capability('moodle/course:sectionvisibility', $modcontext),
+        has_capability('moodle/course:movesections', $modcontext));
 
 // Content wrapper end.
 

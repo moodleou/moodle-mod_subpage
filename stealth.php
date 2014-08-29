@@ -17,9 +17,8 @@
 /**
  * Deals with stealthing.
  *
- * @package mod
- * @subpackage subpage
- * @copyright 2011 The Open University
+ * @package mod_subpage
+ * @copyright 2014 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -35,6 +34,8 @@ $course = $subpage->get_course();
 $thisurl = new moodle_url('/mod/subpage/view.php', array('id' => $cmid));
 
 require_login($course, true, $subpage->get_course_module());
+$context = context_module::instance($cmid);
+require_capability('moodle/course:sectionvisibility', $context);
 
 if ($stealth && confirm_sesskey()) {
     $subpage->set_section_stealth($stealth, 1);
