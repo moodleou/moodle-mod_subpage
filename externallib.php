@@ -290,7 +290,6 @@ class mod_subpage_external extends external_api {
         }
         $module->popupwidth = $config->popupwidth;
         $module->popupheight = $config->popupheight;
-        $module->printheading = $config->printheading;
         $module->printintro = $config->printintro;
         // 'Show size' support only from Moodle 2.3 / OU moodle April 2012
         if (isset($config->showsize)) {
@@ -373,7 +372,7 @@ class mod_subpage_external extends external_api {
         self::require_access($course->id);
 
         course_delete_module($cmid);
-        $DB->delete_records('coursereport_etexts_usage', array('cmid' => $cmid));
+        $DB->delete_records('report_etexts_usage', array('cmid' => $cmid));
 
         $this->add_file($coursemodule->section, $resource->name, $updatefilepath,
                 $resource->display);
