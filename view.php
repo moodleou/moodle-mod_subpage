@@ -27,7 +27,6 @@ require_once('../../config.php');
 require_once('locallib.php');
 require_once('lib.php');
 require_once($CFG->dirroot.'/course/lib.php');
-require_once($CFG->dirroot.'/mod/forum/lib.php');
 require_once($CFG->libdir.'/completionlib.php');
 
 $cmid        = optional_param('id', 0, PARAM_INT);

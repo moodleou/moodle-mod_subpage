@@ -183,6 +183,11 @@ if ($formdata = $mform->get_data()) {
             // no reason to move if in the same section
             if ($cm->section !== $section->id) {
                 moveto_module($cm, $section);
+
+                // If moving TO a subpage, and if it has indent, set to zero.
+                if ($dest && $cm->indent) {
+                    $DB->set_field('course_modules', 'indent', 0, array('id' => $cm->id));
+                }
             }
         }
         rebuild_course_cache($course->id, true);
