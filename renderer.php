@@ -44,7 +44,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
         global $PAGE, $OUTPUT, $CFG, $USER;
         $courserenderer = $PAGE->get_renderer('core_course');
         $this->subpagecm = $subpage->get_course_module()->id;
-        if (!empty($USER->activitycopy) && $movesection) {
+        if (!empty($USER->activitycopy) && $canmovesection) {
             $content = $this->render_cancel_link($this->subpagecm);
         } else {
             $content = '';
