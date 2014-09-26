@@ -89,8 +89,15 @@ class mod_subpage_renderer extends plugin_renderer_base {
             } else {
                 $instances = array();
             }
+            $cms = $modinfo->get_cms();
             foreach ($instances as $instance) {
-                $cm = $modinfo->get_cm($instance);
+                if (!array_key_exists($instance, $cms)) {
+                    // This can happen if you have e.g. a feed present, but
+                    // feed has been disabled at site level.
+                    debugging('No module with cmid: ' . $instance, DEBUG_DEVELOPER);
+                    continue;
+                }
+                $cm = $cms[$instance];
                 // check to see whether cm is visible
                 if ($cm->uservisible) {
                     $visible = true;
