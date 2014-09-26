@@ -95,6 +95,7 @@ if (!empty($copy) and confirm_sesskey()) { // value = course module
     $USER->activitycopycourse = $cm->course;
     $USER->activitycopyname   = $cm->name;
 } else if (!empty($delete) and confirm_sesskey()) {
+    require_capability('moodle/course:update', $modcontext);
     if (empty($confirm)) {
         if (!$section = $DB->get_record('course_sections', array('id'=>$delete))) {
             print_error('sectionnotexist');
@@ -147,15 +148,18 @@ if ($PAGE->user_allowed_editing()) {
     }
 
     if ($hide && confirm_sesskey()) {
+        require_capability('moodle/course:sectionvisibility', $modcontext);
         set_section_visible($course->id, $hide, '0');
     }
 
     if ($show && confirm_sesskey()) {
+        require_capability('moodle/course:sectionvisibility', $modcontext);
         set_section_visible($course->id, $show, '1');
     }
 
     if (!empty($section)) {
-        if (!empty($move) and confirm_sesskey()) {
+        if (!empty($move) && confirm_sesskey()) {
+            require_capability('moodle/course:movesections', $modcontext);
             $pageorder = $DB->get_field('subpage_sections', 'pageorder',
                     array('subpageid'=>$subpage->get_subpage()->id, 'sectionid'=>$section));
             $subpage->move_section($section, $pageorder+$move);

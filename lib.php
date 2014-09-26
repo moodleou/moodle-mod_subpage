@@ -218,17 +218,17 @@ function subpage_cm_info_dynamic(cm_info $cm) {
 function subpage_extend_settings_navigation($settings, navigation_node $subpagenode) {
     global $PAGE;
 
-    $url = new moodle_url('/mod/subpage/view.php', array('id'=>$PAGE->cm->id));
-    $url->param('sesskey', sesskey());
-    if ($PAGE->user_is_editing()) {
-        $url->param('edit', 'off');
-        $editstring = get_string('turneditingoff');
-    } else {
-        $url->param('edit', 'on');
-        $editstring = get_string('turneditingon');
-    }
+    if ($PAGE->user_allowed_editing()) {
+        $url = new moodle_url('/mod/subpage/view.php', array('id'=>$PAGE->cm->id));
+        $url->param('sesskey', sesskey());
+        if ($PAGE->user_is_editing()) {
+            $url->param('edit', 'off');
+            $editstring = get_string('turneditingoff');
+        } else {
+            $url->param('edit', 'on');
+            $editstring = get_string('turneditingon');
+        }
 
-    if (has_capability('moodle/course:update', $PAGE->context)) {
         $node = navigation_node::create($editstring, $url,
                 navigation_node::TYPE_SETTING, null, 'subpageeditingtoggle');
         $subpagenode->add_node($node, 'modedit');
