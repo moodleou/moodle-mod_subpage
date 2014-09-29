@@ -22,6 +22,6 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$module->version = 2014082900;
+$module->version = 2014092900;
 $module->requires = 2011120100;
 $module->cron = 60*60*4; // 4 hours.

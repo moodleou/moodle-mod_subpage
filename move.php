@@ -45,7 +45,6 @@ $PAGE->set_url($moveurl);
 $coursecontext = context_course::instance($course->id);
 
 require_login($course);
-add_to_log($course->id, 'course', 'move', "move.php?id=$course->id&move=$move", "$course->id");
 
 $PAGE->set_pagelayout('incourse');
 $PAGE->set_other_editing_capability('moodle/course:manageactivities');
@@ -193,6 +192,15 @@ if ($formdata = $mform->get_data()) {
         rebuild_course_cache($course->id, true);
 
         $transaction->allow_commit();
+
+        // Get data for log.
+        $other = array('destsectionid' => $section->id, 'cmids' => array_values($cmids));
+        if ($dest) {
+            $other['destcmid'] = $dest->get_course_module()->id;
+        }
+        $event = \mod_subpage\event\items_moved::create(array(
+                'context' => context_module::instance($cm->id), 'other' => $other));
+        $event->trigger();
     }
 
     // return to original subpage view
