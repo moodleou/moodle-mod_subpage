@@ -34,12 +34,18 @@ class mod_subpage_generator extends testing_module_generator {
      * @return mod_subpage Subpage object created
      */
     public function create_instance($record = null, array $options = null) {
-        global $DB;
+        global $DB, $CFG;
 
         $record = (object)(array)$record;
         if (!isset($record->enablesharing)) {
             $record->enablesharing = 0;
         }
-        return parent::create_instance($record, (array)$options);
+        $result = parent::create_instance($record, (array)$options);
+        if (!empty($record->addsection)) {
+            require_once($CFG->dirroot . '/mod/subpage/locallib.php');
+            $subobj = mod_subpage::get_from_cmid($result->cmid);
+            $subobj->add_section();
+        }
+        return $result;
     }
 }

@@ -94,7 +94,7 @@ class mod_subpage  {
      * Obtains subpage modinfo, subpage and course records and constructs a subpage object.
      *
      * @param int $cmid the course module id
-     * @return class mod_subpage
+     * @return mod_subpage
      */
     public static function get_from_cmid($cmid) {
         global $DB;
@@ -203,7 +203,7 @@ class mod_subpage  {
     /**
      * Adds a new section object to be used by this subpage
      *
-     * @return object
+     * @return array Array with keys 'subpagesectionid' and 'sectionid'
      */
     public function add_section($name= '', $summary = '') {
         global $DB, $CFG;
