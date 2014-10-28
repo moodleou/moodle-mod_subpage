@@ -39,8 +39,8 @@ class mod_subpage_renderer extends plugin_renderer_base {
      * @param bool $canhidesection Whether the user is allowed to hide/stealth.
      * @return string html for display
      */
-    public function render_subpage($subpage, $modinfo, $sections, $editing,
-            $moveitem, $canmovesection, $canhidesection) {
+    public function render_subpage(mod_subpage $subpage, course_modinfo $modinfo,
+            array $sections, $editing, $moveitem, $canmovesection, $canhidesection) {
         global $PAGE, $OUTPUT, $CFG, $USER;
         $courserenderer = $PAGE->get_renderer('core_course');
         $this->subpagecm = $subpage->get_course_module()->id;
@@ -286,10 +286,6 @@ class mod_subpage_renderer extends plugin_renderer_base {
                                 '<div class="section_add_menus">' , $content);
                     }
                 }
-                //now add returnto links to editing links:
-                $pattern = '/mod.php\?[A-Za-z0-9-&;=%:\/\-.]+/';
-                $content = preg_replace_callback($pattern,
-                        'mod_subpage_renderer::subpage_url_regex', $content);
                 if ($section->stealth) {
                     $content .= html_writer::end_tag('div');
                 }
@@ -297,6 +293,18 @@ class mod_subpage_renderer extends plugin_renderer_base {
             $content .= html_writer::end_tag('div'); //end of div class=content
             $content .= html_writer::end_tag('li');
         }
+
+        // Add returnto links to editing links.
+        $pattern = '/mod.php\?[A-Za-z0-9-&;=%:\/\-.]+/';
+        $content = preg_replace_callback($pattern,
+                'mod_subpage_renderer::subpage_url_regex', $content);
+
+        // Add backto field to completion toggle forms.
+        $backto = new moodle_url('/mod/subpage/view.php',
+                array('id' => $subpage->get_course_module()->id));
+        $content = preg_replace('~<form[^>]* class="[^"]*togglecompletion[^>]*>[^<]*<div>~',
+                '$0<input type="hidden" name="backto" value="' . $backto->out(true) .
+                '" />', $content);
 
         $content .= html_writer::end_tag('ul');
         if ($editing) {
