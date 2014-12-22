@@ -53,11 +53,11 @@ if (!empty($cancelcopy) && confirm_sesskey()) {
 }
 
 // This must be done first because some horrible combination of junk means that
-// page might be initialised before we expect
+// page might be initialised before we expect.
 $PAGE->set_pagelayout('incourse');
 $subpage = mod_subpage::get_from_cmid($cmid);
 $course = $subpage->get_course();
-// Defined here to avoid notices on errors etc
+// Defined here to avoid notices on errors etc.
 $thisurl = new moodle_url('/mod/subpage/view.php', array('id' => $cmid));
 $PAGE->set_url($thisurl);
 $PAGE->set_cm($subpage->get_course_module());
@@ -87,7 +87,7 @@ if (!empty($copy) and confirm_sesskey()) { // value = course module
     $context = context_course::instance($cm->course);
     require_capability('moodle/course:manageactivities', $context);
 
-    if (!$section = $DB->get_record('course_sections', array('id'=>$cm->section))) {
+    if (!$section = $DB->get_record('course_sections', array('id' => $cm->section))) {
         print_error('sectionnotexist');
     }
 
@@ -97,7 +97,7 @@ if (!empty($copy) and confirm_sesskey()) { // value = course module
 } else if (!empty($delete) and confirm_sesskey()) {
     require_capability('moodle/course:update', $modcontext);
     if (empty($confirm)) {
-        if (!$section = $DB->get_record('course_sections', array('id'=>$delete))) {
+        if (!$section = $DB->get_record('course_sections', array('id' => $delete))) {
             print_error('sectionnotexist');
         }
         $sectionname = $section->id;
@@ -112,15 +112,15 @@ if (!empty($copy) and confirm_sesskey()) { // value = course module
         echo $OUTPUT->footer();
         exit;
     } else {
-        // check to see whether section exists
-        if (!$section = $DB->get_record('course_sections', array('id'=>$delete))) {
+        // Check to see whether section exists.
+        if (!$section = $DB->get_record('course_sections', array('id' => $delete))) {
             print_error('sectionnotexist');
         }
-        // check to see whether section has any content or is empty, if not empty get out
+        // Check to see whether section has any content or is empty, if not empty get out.
         if (! empty($section->sequence)) {
                 print_error('error_deletingsection', 'subpage');
         }
-        //delete section.
+        // Delete section.
         $subpage->delete_section($delete);
     }
 }
@@ -161,8 +161,8 @@ if ($PAGE->user_allowed_editing()) {
         if (!empty($move) && confirm_sesskey()) {
             require_capability('moodle/course:movesections', $modcontext);
             $pageorder = $DB->get_field('subpage_sections', 'pageorder',
-                    array('subpageid'=>$subpage->get_subpage()->id, 'sectionid'=>$section));
-            $subpage->move_section($section, $pageorder+$move);
+                    array('subpageid' => $subpage->get_subpage()->id, 'sectionid' => $section));
+            $subpage->move_section($section, $pageorder + $move);
             rebuild_course_cache($course->id, true);
         }
     }
@@ -183,7 +183,7 @@ $useajax = false;
 
 
 
-// this will add a new class to the header so we can style differently
+// This will add a new class to the header so we can style differently.
 $CFG->blocksdrag = $useajax;
 
 $completion = new completion_info($course);
@@ -212,23 +212,23 @@ if ($completion->is_enabled()) {
     // go to another page, (c) clicks Back button - the page will
     // automatically reload. Otherwise it would start with the wrong tick
     // values.
-    echo html_writer::start_tag('form', array('action'=>'.', 'method'=>'get'));
+    echo html_writer::start_tag('form', array('action' => '.', 'method' => 'get'));
     echo html_writer::start_tag('div');
-    echo html_writer::empty_tag('input', array('type'=>'hidden',
-            'id'=>'completion_dynamic_change', 'name'=>'completion_dynamic_change', 'value'=>'0'));
+    echo html_writer::empty_tag('input', array('type' => 'hidden',
+            'id' => 'completion_dynamic_change', 'name' => 'completion_dynamic_change', 'value' => '0'));
     echo html_writer::end_tag('div');
     echo html_writer::end_tag('form');
 }
 
 // Course wrapper start.
-echo html_writer::start_tag('div', array('class'=>'course-content'));
+echo html_writer::start_tag('div', array('class' => 'course-content'));
 
 $modinfo = get_fast_modinfo($COURSE);
 
 if (! $sections = $subpage->get_sections()) {   // No sections found
-    // Double-check to be extra sure
+    // Double-check to be extra sure.
     $subpage->add_section();
-    if (! $sections = $subpage->get_sections() ) {      // Try again
+    if (! $sections = $subpage->get_sections() ) {      // Try again.
         print_error('cannotcreateorfindstructs', 'error');
     }
 }

@@ -71,39 +71,39 @@ function subpage_update_instance($subpage) {
 function subpage_delete_instance($id) {
     global $DB, $PAGE, $CFG;
 
-    if (! $subpage = $DB->get_record("subpage", array("id"=>$id))) {
+    if (! $subpage = $DB->get_record("subpage", array("id" => $id))) {
         return false;
     }
     require_once($CFG->dirroot . '/mod/subpage/locallib.php');
     $transaction = $DB->start_delegated_transaction();
 
-    // if deleting a subpage activity from course/mod.php page (not delete the whole course)
+    // If deleting a subpage activity from course/mod.php page (not delete the whole course).
     if ($PAGE->pagetype == 'course-mod') {
         $subpagecmid = required_param('delete', PARAM_INT);
-        // Check if all the sections in this subpage is empty
+        // Check if all the sections in this subpage is empty.
         $subpageinstance = mod_subpage::get_from_cmid($subpagecmid);
         $subpagesections = $DB->get_records('subpage_sections',
                 array("subpageid" => $subpage->id), '', 'sectionid');
         foreach ($subpagesections as $sections) {
             if (!$subpageinstance->is_section_empty($sections->sectionid)) {
-                // Section is not empty
+                // Section is not empty.
                 $url = new moodle_url('/mod/subpage/view.php', array('id' => $subpagecmid));
                 print_error('error_deletingsubpage', 'mod_subpage', $url);
             }
         }
-        // all sections are empty, delete the empty sections
+        // All sections are empty, delete the empty sections.
         foreach ($subpagesections as $sections) {
             $subpageinstance->delete_section($sections->sectionid);
         }
     }
 
-    // Delete main table and sections
-    $DB->delete_records("subpage", array("id"=>$subpage->id));
-    $DB->delete_records("subpage_sections", array("subpageid"=>$subpage->id));
+    // Delete main table and sections.
+    $DB->delete_records("subpage", array("id" => $subpage->id));
+    $DB->delete_records("subpage_sections", array("subpageid" => $subpage->id));
 
     // If there are any shared subpages that reference this, rebuild those
-    // courses so that they reflect the deletion
-    if ($DB->get_field('modules', 'id', array('name'=>'sharedsubpage'))) {
+    // courses so that they reflect the deletion.
+    if ($DB->get_field('modules', 'id', array('name' => 'sharedsubpage'))) {
         $references = $DB->get_records('sharedsubpage',
                 array('subpageid' => $subpage->id), 'id,course');
         foreach ($references as $sharedsubpage) {
@@ -162,15 +162,15 @@ function subpage_supports($feature) {
  */
 function subpage_get_coursemodule_info($cm) {
     global $DB, $CFG;
-    $subpage = $DB->get_record('subpage', array('id'=>$cm->instance), '*', MUST_EXIST);
+    $subpage = $DB->get_record('subpage', array('id' => $cm->instance), '*', MUST_EXIST);
     if ($subpage->enablesharing) {
-        // Work out current value
+        // Work out current value.
         require_once($CFG->dirroot . '/mod/sharedsubpage/locallib.php');
         $content = serialize(sharedsubpage_gather_data($subpage));
         $hash = sha1($subpage->name . "\n" . $content);
 
         if ($hash != $subpage->sharedcontenthash) {
-            // Update on all shared versions
+            // Update on all shared versions.
             $DB->execute("UPDATE {sharedsubpage} SET content=?, name=? WHERE subpageid=?",
                 array($content, sharedsubpage_get_name($subpage->name), $subpage->id));
             // Clear modinfo on all courses that include shared versions.
@@ -180,16 +180,16 @@ function subpage_get_coursemodule_info($cm) {
             foreach ($courses as $courseid) {
                 rebuild_course_cache($courseid, true);
             }
-            // Set hash so we don't do that again
-            $DB->set_field('subpage', 'sharedcontenthash', $hash, array('id'=>$subpage->id));
+            // Set hash so we don't do that again.
+            $DB->set_field('subpage', 'sharedcontenthash', $hash, array('id' => $subpage->id));
         }
     }
-    // Add the all the sectionids within this subpage to the customdata
+    // Add the all the sectionids within this subpage to the customdata.
     $info = new cached_cm_info();
     $sectionids = array();
     $sectionstealth = array();
     $sections = $DB->get_records('subpage_sections',
-            array('subpageid'=>$subpage->id), 'pageorder');
+            array('subpageid' => $subpage->id), 'pageorder');
     foreach ($sections as $section) {
         $sectionids[] = $section->sectionid;
         $sectionstealth[$section->sectionid] = $section->stealth;
@@ -219,7 +219,7 @@ function subpage_extend_settings_navigation($settings, navigation_node $subpagen
     global $PAGE;
 
     if ($PAGE->user_allowed_editing()) {
-        $url = new moodle_url('/mod/subpage/view.php', array('id'=>$PAGE->cm->id));
+        $url = new moodle_url('/mod/subpage/view.php', array('id' => $PAGE->cm->id));
         $url->param('sesskey', sesskey());
         if ($PAGE->user_is_editing()) {
             $url->param('edit', 'off');

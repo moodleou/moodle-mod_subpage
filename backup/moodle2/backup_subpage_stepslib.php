@@ -26,35 +26,35 @@ class backup_subpage_activity_structure_step extends backup_activity_structure_s
 
     protected function define_structure() {
 
-        // To know if we are including userinfo
+        // To know if we are including userinfo.
         $userinfo = $this->get_setting_value('userinfo');
 
-        // Define each element separated
+        // Define each element separated.
         $subpage = new backup_nested_element('subpage', array('id'),
                 array('course', 'name', 'intro', 'introformat', 'enablesharing'));
 
-        $subpage_sections = new backup_nested_element('subpage_sections');
+        $subpagesections = new backup_nested_element('subpage_sections');
 
-        $subpage_section = new backup_nested_element('subpage_section', array('id'),
+        $subpagesection = new backup_nested_element('subpage_section', array('id'),
                 array('sectionid', 'pageorder', 'stealth'));
 
-        // Build the tree
-        $subpage->add_child($subpage_sections);
-        $subpage_sections->add_child($subpage_section);
+        // Build the tree.
+        $subpage->add_child($subpagesections);
+        $subpagesections->add_child($subpagesection);
 
-        // Define sources
+        // Define sources.
         $subpage->set_source_table('subpage', array('id' => backup::VAR_ACTIVITYID));
 
-        $subpage_section->set_source_table('subpage_sections',
+        $subpagesection->set_source_table('subpage_sections',
                 array('subpageid' => backup::VAR_PARENTID));
 
         // Define id annotations
-        // none
+        // none.
 
         // Define file annotations
-        // none
+        // none.
 
-        // Return the root element (wiki), wrapped into standard activity structure
+        // Return the root element (wiki), wrapped into standard activity structure.
         return $this->prepare_activity_structure($subpage);
 
     }

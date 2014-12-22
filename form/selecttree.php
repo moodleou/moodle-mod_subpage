@@ -31,7 +31,7 @@ require_once("$CFG->libdir/form/selectgroups.php");
  * @access public
  */
 class MoodleQuickForm_selecttree extends MoodleQuickForm_selectgroups {
-    private $_options = array('top'=>false, 'currentcat'=>0, 'nochildrenof' => -1);
+    private $_options = array('top' => false, 'currentcat' => 0, 'nochildrenof' => -1);
 
     /**
      * Constructor
@@ -57,6 +57,6 @@ class MoodleQuickForm_selecttree extends MoodleQuickForm_selectgroups {
 
 }
 
-//register wikieditor
+// Register wikieditor.
 MoodleQuickForm::registerElementType('selecttree',
         $CFG->dirroot . "/mod/subpage/form/selecttree.php", 'MoodleQuickForm_selecttree');

@@ -51,8 +51,8 @@ class backup_subpage_activity_task extends backup_activity_task {
 
         $base = preg_quote($CFG->wwwroot, "/");
 
-        $search="/(".$base."\/mod\/subpage\/view.php\?id\=)([0-9]+)/";
-        $content= preg_replace($search, '$@SUBPAGEVIEW*$2@$', $content);
+        $search = "/(".$base."\/mod\/subpage\/view.php\?id\=)([0-9]+)/";
+        $content = preg_replace($search, '$@SUBPAGEVIEW*$2@$', $content);
 
         return $content;
     }

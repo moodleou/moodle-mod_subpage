@@ -1,0 +1,30 @@
+Subpage: Restrict access functionality
+=========================================
+
+When conditional activity is enabled, then "Restrict access" functionality
+will be available in the activity form (in this case, subpage)
+
+Enabling conditional access
+------------------------------
+To enable conditional access goto
+System administration -> Advanced features
+and tick the checkbox for "Enable conditional access"
+
+Setting "Restrict access"
+-----------------------
+Assuming you are creating a new subpage or modifying an existing one.
+1) Expand the "Restrict access" link and press "Add restrictions..." button
+2) choose an option such as "Date", "Grade", Grouping", "User profile", etc.
+   from the popup menu
+3) Fill the relevant form fields and press "save and display" button
+4) You should see the information displayed.
+
+Testing "Restric access" on a section within a subpage
+------------------------------------------------------
+Assuming you have an existing subpage
+a) Click on "Turn editing on" under "Subpage administration"
+b) press the "Add section" button
+c) click on editing icon in the newly created section
+D) Fill the form as required and set "Restrict access" as described above
+   in (1) and (2) and press the "Save changes" button
+e) You should see the information about restrict access being displayed

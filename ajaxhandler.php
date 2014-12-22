@@ -45,24 +45,24 @@ require_sesskey();
 
 if ($action == 'movesection') {
 
-    //cleanup and check vars
-    if (strpos($thisid, 'section-')===0) { //section must be provided - if not then can't move.
+    // Cleanup and check vars.
+    if (strpos($thisid, 'section-') === 0) { // Section must be provided - if not then can't move.
 
         $thisid = str_replace('section-', '', $thisid);
         $thissection = $DB->get_record('course_sections',
-                array('course'=>$subpage->get_course()->id, 'section'=> $thisid), '*', MUST_EXIST);
+                array('course' => $subpage->get_course()->id, 'section' => $thisid), '*', MUST_EXIST);
 
-        if (!empty($nextid) && strpos($nextid, 'section-')===0) {
+        if (!empty($nextid) && strpos($nextid, 'section-') === 0) {
             // Section must be provided - if not then can't move.
             $nextid = str_replace('section-', '', $nextid);
             $nextid = $DB->get_record('course_sections',
-                    array('course'=>$subpage->get_course()->id, 'section'=> $nextid),
+                    array('course' => $subpage->get_course()->id, 'section' => $nextid),
                     '*', MUST_EXIST);
             $newlocation = $DB->get_field('subpage_sections', 'pageorder',
-                    array('subpageid'=>$subpage->get_subpage()->id, 'sectionid'=>$nextid->id));
+                    array('subpageid' => $subpage->get_subpage()->id, 'sectionid' => $nextid->id));
             $oldlocation = $DB->get_field('subpage_sections', 'pageorder',
-                    array('subpageid'=>$subpage->get_subpage()->id,
-                        'sectionid'=>$thissection->id));
+                    array('subpageid' => $subpage->get_subpage()->id,
+                        'sectionid' => $thissection->id));
             if ($newlocation > $oldlocation) {
                 $newlocation--;
             }
@@ -77,9 +77,9 @@ if ($action == 'movesection') {
         $subpage->move_section($thissection->id, $newlocation);
     }
 
-} else if ($action =='moveactivity') {
-    //now cleanup and check vars
-    if (strpos($thisid, 'module-')===0) {
+} else if ($action == 'moveactivity') {
+    // Now cleanup and check vars.
+    if (strpos($thisid, 'module-') === 0) {
         $thisid = str_replace('module-', '', $thisid);
         $thisid = get_coursemodule_from_id(false, $thisid,
                 $subpage->get_course()->id, false, MUST_EXIST);
@@ -87,7 +87,7 @@ if ($action == 'movesection') {
         $thisid = '';
     }
 
-    if (strpos($nextid, 'module-')===0) {
+    if (strpos($nextid, 'module-') === 0) {
         $nextid = str_replace('module-', '', $nextid);
         $nextid = get_coursemodule_from_id(false, $nextid,
                 $subpage->get_course()->id, false, MUST_EXIST);
@@ -95,10 +95,10 @@ if ($action == 'movesection') {
         $nextid = '';
     }
 
-    if (strpos($section, 'section-')===0) { //section must be provided - if not then can't move.
+    if (strpos($section, 'section-') === 0) { // Section must be provided - if not then can't move.
         $section = str_replace('section-', '', $section);
         $section = $DB->get_record('course_sections', array(
-                'course'=>$subpage->get_course()->id, 'section'=> $section), '*', MUST_EXIST);
+                'course' => $subpage->get_course()->id, 'section' => $section), '*', MUST_EXIST);
 
         moveto_module($thisid, $section, $nextid);
     }

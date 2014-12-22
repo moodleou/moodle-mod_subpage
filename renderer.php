@@ -41,7 +41,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
      */
     public function render_subpage(mod_subpage $subpage, course_modinfo $modinfo,
             array $sections, $editing, $moveitem, $canmovesection, $canhidesection) {
-        global $PAGE, $OUTPUT, $CFG, $USER;
+        global $PAGE, $OUTPUT, $CFG, $USER, $COURSE;
         $courserenderer = $PAGE->get_renderer('core_course');
         $this->subpagecm = $subpage->get_course_module()->id;
         if (!empty($USER->activitycopy) && $canmovesection) {
@@ -81,10 +81,10 @@ class mod_subpage_renderer extends plugin_renderer_base {
         foreach ($sections as $section) {
             // Check to see whether cms within the section are visible or not
             // If all cms are not visible then we don't show the section at all,
-            // unless editing
+            // unless editing.
             $visible = false;
             if ($section->sequence) {
-                // get cm_info for this resources
+                // Get cm_info for this resources.
                 $instances = explode(',', $section->sequence);
             } else {
                 $instances = array();
@@ -98,45 +98,45 @@ class mod_subpage_renderer extends plugin_renderer_base {
                     continue;
                 }
                 $cm = $cms[$instance];
-                // check to see whether cm is visible
+                // Check to see whether cm is visible.
                 if ($cm->uservisible) {
                     $visible = true;
                     break;
                 }
             }
-            // If section is empty so should be hidden, record that in object
+            // If section is empty so should be hidden, record that in object.
             $section->autohide = !$visible;
 
             $content .= html_writer::start_tag('li',
-                    array('class' => 'section main clearfix', 'id'=>'section-'.$section->section));
+                    array('class' => 'section main clearfix', 'id' => 'section-'.$section->section));
             $content .= html_writer::tag('div', '&nbsp;', array('class' => 'left side'));
             $content .= html_writer::start_tag('div', array('class' => 'right side'));
             if ($editing) {
                 if ($canhidesection) {
-                    // Show the hide/show eye
+                    // Show the hide/show eye.
                     if ($section->visible) {
                         $content .= html_writer::start_tag('a', array(
                                 'href' => 'view.php?id=' . $subpage->get_course_module()->id .
                                     '&hide=' . $section->section . '&sesskey=' . sesskey() .
                                     '#section-'.$section->id,
-                                'title'=> $strhide));
+                                'title' => $strhide));
                         $content .= html_writer::empty_tag('img', array(
-                                'src' => $OUTPUT->pix_url('i/hide'), 'class'=>'icon hide',
-                                'alt'=>$strhide));
+                                'src' => $OUTPUT->pix_url('i/hide'), 'class' => 'icon hide',
+                                'alt' => $strhide));
                         $content .= html_writer::end_tag('a');
                     } else {
                         $content .= html_writer::start_tag('a', array(
                                 'href' => 'view.php?id=' . $subpage->get_course_module()->id .
                                     '&show=' . $section->section . '&sesskey=' . sesskey() .
                                     '#section-' . $section->id,
-                                'title'=> $strshow));
+                                'title' => $strshow));
                         $content .= html_writer::empty_tag('img', array(
-                                'src' => $OUTPUT->pix_url('i/show'), 'class'=>'icon show',
-                                'alt'=>$strshow));
+                                'src' => $OUTPUT->pix_url('i/show'), 'class' => 'icon show',
+                                'alt' => $strshow));
                         $content .= html_writer::end_tag('a');
                     }
 
-                    // Show the stealth/unstealth section link
+                    // Show the stealth/unstealth section link.
                     if ($section->stealth) {
                         $content .= html_writer::start_tag('form',
                                 array('method' => 'post', 'action' => 'stealth.php'));
@@ -181,30 +181,30 @@ class mod_subpage_renderer extends plugin_renderer_base {
                     $content .= html_writer::start_tag('span', array(
                             'class' => 'section_move_commands'));
                     if ($section->pageorder > 1) {
-                        // Add a arrow to move section up
+                        // Add a arrow to move section up.
                         $content .= html_writer::start_tag('a', array(
                                 'href' => 'view.php?id=' . $subpage->get_course_module()->id .
                                     '&random=' . rand(1, 10000) . '&section=' . $section->id .
                                     '&move=-1&sesskey=' . sesskey() .
-                                    '#section-' . ($section->id-1),
-                                'title'=> $strmoveup));
+                                    '#section-' . ($section->id - 1),
+                                'title' => $strmoveup));
                         $content .= html_writer::empty_tag('img', array(
-                                'src' => $OUTPUT->pix_url('t/up'), 'class'=>'icon up',
-                                'alt'=>$strmoveup));
+                                'src' => $OUTPUT->pix_url('t/up'), 'class' => 'icon up',
+                                'alt' => $strmoveup));
                         $content .= html_writer::end_tag('a');
                         $content .= html_writer::empty_tag('br', array());
                     }
 
                     if ($section->pageorder < $lastpageorder) {
-                        // Add an arrow to move section down
+                        // Add an arrow to move section down.
                         $content .= html_writer::start_tag('a', array(
                                 'href' => 'view.php?id=' . $subpage->get_course_module()->id .
                                     '&random=' . rand(1, 10000) . '&section=' . $section->id .
-                                    '&move=1&sesskey=' . sesskey() . '#section-'.($section->id+1),
-                                'title'=> $strmovedown));
+                                    '&move=1&sesskey=' . sesskey() . '#section-'.($section->id + 1),
+                                'title' => $strmovedown));
                         $content .= html_writer::empty_tag('img', array(
-                                'src' => $OUTPUT->pix_url('t/down'), 'class'=>'icon down',
-                                'alt'=>$strmovedown));
+                                'src' => $OUTPUT->pix_url('t/down'), 'class' => 'icon down',
+                                'alt' => $strmovedown));
                         $content .= html_writer::end_tag('a');
                         $content .= html_writer::empty_tag('br', array());
                     }
@@ -213,11 +213,17 @@ class mod_subpage_renderer extends plugin_renderer_base {
             }
             $content .= html_writer::end_tag('div');
 
+            $autohide = $section->autohide;
+            $sectioninfo = $modinfo->get_section_info($section->section, MUST_EXIST);
+            if (!$sectioninfo->uservisible && $sectioninfo->availableinfo) {
+                $autohide = false;
+            }
+
             $content .= html_writer::start_tag('div', array('class' => 'content'));
-            // Only show the section if visible and not stealthed or to users with permission
+            // Only show the section if visible and not stealthed or to users with permission.
             if ((($section->visible && !$section->stealth) ||
                     has_capability('moodle/course:viewhiddensections', $coursecontext)) &&
-                    ($editing || !$section->autohide)) {
+                    ($editing || !$autohide)) {
                 if ($section->stealth) {
                     $content .= html_writer::start_tag('div', array('class' => 'stealthed'));
                 }
@@ -249,21 +255,21 @@ class mod_subpage_renderer extends plugin_renderer_base {
                                 $section->id . '&returnurl=' . urlencode($CFG->wwwroot .
                                 '/mod/subpage/view.php?id=' . $subpage->get_course_module()->id .
                                 '&recache=1&sesskey=' . sesskey()),
-                            'title'=> $streditsummary));
+                            'title' => $streditsummary));
                     $summary .= html_writer::empty_tag('img', array(
-                            'src' => $OUTPUT->pix_url('t/edit'), 'class'=>'icon edit',
-                            'alt'=>$streditsummary));
+                            'src' => $OUTPUT->pix_url('t/edit'), 'class' => 'icon edit',
+                            'alt' => $streditsummary));
                     $summary .= html_writer::end_tag('a');
                     $summary .= html_writer::empty_tag('br', array());
                     $summary .= html_writer::start_tag('a', array(
                             'href' => $CFG->wwwroot . '/mod/subpage/view.php?id=' .
                                 $subpage->get_course_module()->id . '&delete=' .
                                 $section->id . '&sesskey=' . sesskey(),
-                            'title'=> $strdelete));
+                            'title' => $strdelete));
                     if (empty($section->sequence)) {
                         $summary .= html_writer::empty_tag('img', array(
-                                'src' => $OUTPUT->pix_url('t/delete'), 'class'=>'icon delete',
-                                'alt'=>$strdelete));
+                                'src' => $OUTPUT->pix_url('t/delete'), 'class' => 'icon delete',
+                                'alt' => $strdelete));
                     }
                     $summary .= html_writer::end_tag('a');
                     $summary .= html_writer::empty_tag('br', array());
@@ -273,14 +279,24 @@ class mod_subpage_renderer extends plugin_renderer_base {
                     $content .= html_writer::tag('div', $summary, array('class' => 'summary'));
                 }
 
-                $content .= $this->render_section($subpage, $modinfo, $section,
-                        $editing, $moveitem, $mods);
+                // Display restricted info in this section.
+                $sectioninfo = $modinfo->get_section_info($section->section, MUST_EXIST);
+                $context = context_course::instance($COURSE->id);
+                $content .= $this->section_availability_message($sectioninfo,
+                        has_capability('moodle/course:viewhiddensections', $context));
+
+                // Don't show contents of section when not visible to user.
+                if ($sectioninfo->uservisible) {
+                    $content .= $this->render_section($subpage, $modinfo, $section,
+                            $editing, $moveitem, $mods);
+                }
+
                 if ($editing) {
                     $content .= $courserenderer->course_section_add_cm_control($subpage->get_course(),
                             $section->section);
                     if (!empty($CFG->enablecourseajax) and $PAGE->theme->enablecourseajax) {
-                        // hacky way to add list to empty section to allow drag/drop into
-                        // empty sections
+                        // Hacky way to add list to empty section to allow drag/drop into
+                        // empty sections.
                         $content = str_replace('</div><div class="section_add_menus">',
                                 '</div><ul class="section img-text"><li></li></ul>' .
                                 '<div class="section_add_menus">' , $content);
@@ -290,7 +306,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
                     $content .= html_writer::end_tag('div');
                 }
             }
-            $content .= html_writer::end_tag('div'); //end of div class=content
+            $content .= html_writer::end_tag('div'); // end of div class=content
             $content .= html_writer::end_tag('li');
         }
 
@@ -321,7 +337,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
      */
     protected function subpage_url_regex($matches) {
         global $CFG;
-        if (strpos($matches[0], 'returnurl')=== false) {
+        if (strpos($matches[0], 'returnurl') === false) {
             return $matches[0] . "&amp;returnurl=" . $CFG->wwwroot . '/mod/subpage/view.php?id=' .
                     $this->subpagecm;
         } else {
@@ -336,19 +352,19 @@ class mod_subpage_renderer extends plugin_renderer_base {
      */
     public function render_intro(mod_subpage $subpage) {
         // Don't output anything if no text, so we don't get styling around
-        // something blank
+        // something blank.
         if (!$subpage->has_intro()) {
             return '';
         }
 
         // Make fake activity object in required format, and use to format
-        // intro for module with standard function (which handles images etc.)
+        // intro for module with standard function (which handles images etc.).
         $activity = (object)array('intro' => $subpage->get_intro(),
                     'introformat' => $subpage->get_intro_format());
         $intro = format_module_intro(
                     'subpage', $activity, $subpage->get_course_module()->id);
 
-        // Box styling appears to be consistent with some other modules
+        // Box styling appears to be consistent with some other modules.
         $intro = html_writer::tag('div', $intro, array('class' => 'generalbox box',
                     'id' => 'intro'));
 
@@ -401,6 +417,34 @@ class mod_subpage_renderer extends plugin_renderer_base {
     }
 
     /**
+     * This method was copies from course/format/renderer.php
+     *
+     * @param stdClass $section The course_section entry from DB
+     * @param bool $canviewhidden True if user can view hidden sections
+     * @return string HTML to output
+     */
+    protected function section_availability_message($section, $canviewhidden) {
+        global $CFG;
+        $o = '';
+        if (!$section->uservisible) {
+            // Note: We only get to this function if availableinfo is non-empty,
+            // so there is definitely something to print.
+            $formattedinfo = \core_availability\info::format_info(
+                    $section->availableinfo, $section->course);
+            $o .= html_writer::div($formattedinfo, 'availabilityinfo');
+        } else if ($canviewhidden && !empty($CFG->enableavailability) && $section->visible) {
+            $ci = new \core_availability\info_section($section);
+            $fullinfo = $ci->get_full_information();
+            if ($fullinfo) {
+                $formattedinfo = \core_availability\info::format_info(
+                        $fullinfo, $section->course);
+                $o .= html_writer::div($formattedinfo, 'availabilityinfo');
+            }
+        }
+        return $o;
+    }
+
+    /**
      * Render add button used to add a new section.
      *
      * @param
@@ -408,9 +452,9 @@ class mod_subpage_renderer extends plugin_renderer_base {
      */
     protected function render_add_button($subpage) {
         $addsection = new single_button(new moodle_url('view.php', array(
-                'id'=>$subpage->get_course_module()->id,
-                'addsection'=>1,
-                'sesskey'=>sesskey())),
+                'id' => $subpage->get_course_module()->id,
+                'addsection' => 1,
+                'sesskey' => sesskey())),
                 get_string('addsection', 'mod_subpage'), 'get');
         return $this->output->render($addsection);
     }
@@ -423,13 +467,13 @@ class mod_subpage_renderer extends plugin_renderer_base {
      */
     protected function render_bulkmove_buttons($subpage) {
         $moveto = new single_button(new moodle_url('move.php', array(
-                'id'=>$subpage->get_course_module()->id,
-                'move'=>'to',
-                'sesskey'=>sesskey())),
+                'id' => $subpage->get_course_module()->id,
+                'move' => 'to',
+                'sesskey' => sesskey())),
                 get_string('movetopage', 'mod_subpage'), 'get');
         $buttons = $this->output->render($moveto);
 
-        // can only move from if there are sections with modules
+        // Can only move from if there are sections with modules.
         $sections = $subpage->get_sections();
         if (!empty($sections)) {
             $sequence = '';
@@ -440,9 +484,9 @@ class mod_subpage_renderer extends plugin_renderer_base {
             }
             if ($sequence !== '') {
                 $movefrom = new single_button(new moodle_url('move.php', array(
-                        'id'=>$subpage->get_course_module()->id,
-                        'move'=>'from',
-                        'sesskey'=>sesskey())),
+                        'id' => $subpage->get_course_module()->id,
+                        'move' => 'from',
+                        'sesskey' => sesskey())),
                         get_string('movefrompage', 'mod_subpage'), 'get');
                 $buttons .= $this->output->render($movefrom);
             }

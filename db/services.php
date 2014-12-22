@@ -24,38 +24,38 @@
 
 $functions = array(
     'mod_subpage_add_subpage' => array(
-        'classname'   => 'mod_subpage_external',
-        'methodname'  => 'add_subpage',
-        'classpath'   => 'mod/subpage/externallib.php',
-        'description' => 'Creates new subpage.',
-        'type'        => 'write',
-        'capabilities'=> 'moodle/course:manageactivities',
+        'classname'    => 'mod_subpage_external',
+        'methodname'   => 'add_subpage',
+        'classpath'    => 'mod/subpage/externallib.php',
+        'description'  => 'Creates new subpage.',
+        'type'         => 'write',
+        'capabilities' => 'moodle/course:manageactivities'
     ),
 
     'mod_subpage_add_section' => array(
-        'classname'   => 'mod_subpage_external',
-        'methodname'  => 'add_section',
-        'classpath'   => 'mod/subpage/externallib.php',
-        'description' => 'Creates new section in a given subpage.',
-        'type'        => 'write',
-        'capabilities'=> 'moodle/course:manageactivities',
+        'classname'    => 'mod_subpage_external',
+        'methodname'   => 'add_section',
+        'classpath'    => 'mod/subpage/externallib.php',
+        'description'  => 'Creates new section in a given subpage.',
+        'type'         => 'write',
+        'capabilities' => 'moodle/course:manageactivities'
     ),
 
     'mod_subpage_add_link' => array(
-        'classname'   => 'mod_subpage_external',
-        'methodname'  => 'add_link',
-        'classpath'   => 'mod/subpage/externallib.php',
-        'description' => 'Adds a link to a section.',
-        'type'        => 'write',
-        'capabilities'=> 'moodle/course:manageactivities',
+        'classname'    => 'mod_subpage_external',
+        'methodname'   => 'add_link',
+        'classpath'    => 'mod/subpage/externallib.php',
+        'description'  => 'Adds a link to a section.',
+        'type'         => 'write',
+        'capabilities' => 'moodle/course:manageactivities'
     ),
 
     'mod_subpage_add_file' => array(
-        'classname'   => 'mod_subpage_external',
-        'methodname'  => 'add_file',
-        'classpath'   => 'mod/subpage/externallib.php',
-        'description' => 'Adds a file to a section.',
-        'type'        => 'write',
-        'capabilities'=> 'moodle/course:manageactivities',
+        'classname'    => 'mod_subpage_external',
+        'methodname'   => 'add_file',
+        'classpath'    => 'mod/subpage/externallib.php',
+        'description'  => 'Adds a file to a section.',
+        'type'         => 'write',
+        'capabilities' => 'moodle/course:manageactivities'
     ),
 );

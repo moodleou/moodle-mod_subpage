@@ -27,24 +27,24 @@ function xmldb_subpage_upgrade($oldversion=0) {
 
     global $CFG, $DB;
 
-    $dbman = $DB->get_manager(); /// loads ddl manager and xmldb classes
+    $dbman = $DB->get_manager(); // Loads ddl manager and xmldb classes.
 
     if ($oldversion < 2011041900) {
-        // Define field enablesharing to be added to subpage
+        // Define field enablesharing to be added to subpage.
         $table = new xmldb_table('subpage');
         $field = new xmldb_field('enablesharing', XMLDB_TYPE_INTEGER, '1', null,
                 XMLDB_NOTNULL, null, '0', 'introformat');
 
-        // Conditionally launch add field enablesharing
+        // Conditionally launch add field enablesharing.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
 
-        // Define field sharedcontenthash to be added to subpage
+        // Define field sharedcontenthash to be added to subpage.
         $field = new xmldb_field('sharedcontenthash', XMLDB_TYPE_CHAR, '40', null,
                 null, null, null, 'enablesharing');
 
-        // Conditionally launch add field sharedcontenthash
+        // Conditionally launch add field sharedcontenthash.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
@@ -53,17 +53,17 @@ function xmldb_subpage_upgrade($oldversion=0) {
     }
 
     if ($oldversion < 2011061300) {
-        // Define field stealth to be added to subpage_sections
+        // Define field stealth to be added to subpage_sections.
         $table = new xmldb_table('subpage_sections');
         $field = new xmldb_field('stealth', XMLDB_TYPE_INTEGER, '1', null,
                 null, null, null, 'sectionid');
 
-        // Conditionally launch add field stealth
+        // Conditionally launch add field stealth.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
 
-        // Set the field to its new default value, then reset the field's notnull
+        // Set the field to its new default value, then reset the field's notnull.
         $DB->set_field('subpage_sections', 'stealth', 0);
         $field = new xmldb_field('stealth', XMLDB_TYPE_INTEGER, '1', null,
                 XMLDB_NOTNULL, null, null, 'sectionid');
@@ -79,7 +79,7 @@ function xmldb_subpage_upgrade($oldversion=0) {
         // query is supposed to delete all those sections except the one with
         // the lowest id (on the basis that this is the 'original').
 
-        // Query to select ids
+        // Query to select ids.
         $selectids = "
 SELECT
     ss.id
@@ -115,7 +115,7 @@ WHERE
             cs.id IS NULL
     )";
 
-        // List all subpage ids, courses corresponding to those ids
+        // List all subpage ids, courses corresponding to those ids.
         $subpageids = $DB->get_records_sql("
 SELECT
     DISTINCT ss.subpageid, s.course
@@ -125,21 +125,21 @@ FROM
 WHERE
     ss.id IN($selectids)");
 
-        // Delete matching those ids
+        // Delete matching those ids.
         $DB->execute("DELETE FROM {subpage_sections} WHERE id IN ($selectids)");
 
-        // Re-number the sections in affected subpages after delete
+        // Re-number the sections in affected subpages after delete.
         $lastindex = -1;
         foreach ($subpageids as $subpageidrec) {
             $subpageid = $subpageidrec->subpageid;
-            // Get sections for this subpage in reverse order
+            // Get sections for this subpage in reverse order.
             $sections = $DB->get_records('subpage_sections', array('subpageid' => $subpageid),
                     'pageorder DESC');
             foreach ($sections as $section) {
                 // Is there a gap?
                 $thisindex = $section->pageorder;
-                if ($lastindex != -1 && $thisindex < $lastindex-1) {
-                    // There's a gap. Reduce all the numbers above this one
+                if ($lastindex != -1 && $thisindex < $lastindex - 1) {
+                    // There's a gap. Reduce all the numbers above this one.
                     $DB->execute("UPDATE {subpage_sections} " .
                             "SET pageorder = pageorder - ? WHERE subpageid = ? AND pageorder > ?",
                             array($lastindex - 1 - $thisindex, $subpageid, $thisindex));
@@ -148,39 +148,39 @@ WHERE
             }
             // Is there a gap at the start?
             if ($lastindex > 1) {
-                // There's a gap. Reduce all the numbers above this one
+                // There's a gap. Reduce all the numbers above this one.
                 $DB->execute("UPDATE {subpage_sections} " .
                         "SET pageorder = pageorder - ? WHERE subpageid = ?",
                         array($lastindex - 1, $subpageid));
             }
 
-            // Clear course cache just in case
+            // Clear course cache just in case.
             rebuild_course_cache($subpageidrec->course, true);
         }
 
-        // Define key sectionid (foreign-unique) to be added to subpage_sections
+        // Define key sectionid (foreign-unique) to be added to subpage_sections.
         $table = new xmldb_table('subpage_sections');
         $key = new xmldb_key('sectionid', XMLDB_KEY_FOREIGN_UNIQUE, array('sectionid'),
                 'course_sections', array('id'));
 
-        // Launch add key sectionid
+        // Launch add key sectionid.
         $dbman->add_key($table, $key);
 
-        // Define key subpageid (foreign) to be added to subpage_sections
+        // Define key subpageid (foreign) to be added to subpage_sections.
         $table = new xmldb_table('subpage_sections');
         $key = new xmldb_key('subpageid', XMLDB_KEY_FOREIGN, array('subpageid'),
                 'subpage', array('id'));
 
-        // Launch add key subpageid
+        // Launch add key subpageid.
         $dbman->add_key($table, $key);
 
-        // subpage savepoint reached
+        // Subpage savepoint reached.
         upgrade_mod_savepoint(true, 2011100500, 'subpage');
         $transaction->allow_commit();
     }
 
     if ($oldversion < 2012021301) {
-        // Delete the cached modinfo data for all the courses
+        // Delete the cached modinfo data for all the courses.
         rebuild_course_cache(0, true);
         upgrade_mod_savepoint(true, 2012021301, 'subpage');
     }

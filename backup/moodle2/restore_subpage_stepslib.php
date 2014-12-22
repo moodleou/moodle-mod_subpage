@@ -33,7 +33,7 @@ class restore_subpage_activity_structure_step extends restore_activity_structure
         $paths[] = new restore_path_element('subpage_sections',
                 '/activity/subpage/subpage_sections/subpage_section');
 
-        // Return the paths wrapped into standard activity structure
+        // Return the paths wrapped into standard activity structure.
         return $this->prepare_activity_structure($paths);
     }
 
@@ -44,10 +44,10 @@ class restore_subpage_activity_structure_step extends restore_activity_structure
         $oldid = $data->id;
         $data->course = $this->get_courseid();
 
-        // insert the subpage record
+        // Insert the subpage record.
         $newitemid = $DB->insert_record('subpage', $data);
 
-        // immediately after inserting "activity" record, call this
+        // Immediately after inserting "activity" record, call this.
         $this->apply_activity_instance($newitemid);
         $this->subpageid = $newitemid;
     }
@@ -77,7 +77,7 @@ class restore_subpage_activity_structure_step extends restore_activity_structure
         global $DB;
 
         // Add subpage related files, no need to match by itemname (just
-        // internally handled context)
+        // internally handled context).
         $this->add_related_files('mod_subpage', 'intro', null);
 
         // Check for duplicate idnumbers. This query returns the module's OWN
@@ -95,11 +95,11 @@ WHERE
     AND cm.idnumber IS NOT NULL
     AND cm.idnumber <> ''", array($this->subpageid));
         if ($details) {
-            // Remove idnumber from restored module
+            // Remove idnumber from restored module.
             $DB->set_field('course_modules', 'idnumber', '', array('id' => $details->id));
             $DB->set_field('subpage', 'enablesharing', 0, array('id' => $details->instance));
 
-            // Put it in backup log (that nobody can see at the moment)
+            // Put it in backup log (that nobody can see at the moment).
             $this->get_logger()->process('Removing idnumber ' . $details->idnumber .
                     ' from subpage because existing item already has that idnumber',
                     backup::LOG_WARNING);
