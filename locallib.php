@@ -24,11 +24,8 @@
  * initialises all the questiontype classes.
  *
  * @package mod_subpage
- * @copyright 2013 The Open University
+ * @copyright 2015 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author Dan Marsden <dan@danmarsden.com>
- * @author Stacey Walker <stacey@catalyst-eu.net>
- * @author Open University developers
  */
 
 if (!defined('MOODLE_INTERNAL')) {
@@ -589,11 +586,8 @@ ORDER BY
                 foreach ($coursesections as $coursesection) {
                     if ($coursesection->section < $minsection
                             && ($coursesection->section <= $numsections)) {
-                        if (function_exists($callbackfunction)) {
-                            $coursesection->name =
-                            $callbackfunction($subpage->get_course(), $coursesection);
-                        }
-                        $options[$mainpagestr]['course,'.$coursesection->id] = $coursesection->name;
+                        $name = get_section_name($subpage->get_course(), $coursesection);
+                        $options[$mainpagestr]['course,'.$coursesection->id] = $name;
                     }
                 }
             }
