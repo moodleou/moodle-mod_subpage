@@ -26,4 +26,4 @@ $module->version = 2014092900;
 $module->requires = 2011120100;
 $module->cron = 60*60*4; // 4 hours.
 
-$plugin->outestssufficient = true;
+$module->outestssufficient = true;
