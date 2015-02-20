@@ -155,6 +155,10 @@ if ($formdata = $mform->get_data()) {
             while (true) {
                 if (array_key_exists($cm->section, $subpagesectioncm)) {
                     $cm = $subpagesectioncm[$cm->section];
+                    // In case of a subpage within itself, prevent endless loop.
+                    if (array_key_exists($cm->id, $parentcmids)) {
+                        break;
+                    }
                     $parentcmids[$cm->id] = true;
                 } else {
                     break;
