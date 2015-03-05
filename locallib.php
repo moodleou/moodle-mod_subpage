@@ -105,7 +105,7 @@ class mod_subpage  {
                   JOIN {course} c ON c.id = cm.course
                  WHERE cm.id = ?', array($cmid), MUST_EXIST);
         $cm = get_fast_modinfo($course)->get_cm($cmid);
-        $subpage = $DB->get_record('subpage', array('id'=>$cm->instance), '*', MUST_EXIST);
+        $subpage = $DB->get_record('subpage', array('id' => $cm->instance), '*', MUST_EXIST);
         return new mod_subpage($subpage, $cm, $course);
     }
 
@@ -264,19 +264,19 @@ ORDER BY
 
         $sql = "SELECT MAX(pageorder) FROM {subpage_sections} WHERE subpageid = ?";
         // Get highest pageorder and add 1.
-        $pageorder = $DB->get_field_sql($sql, array($this->subpage->id))+1;
+        $pageorder = $DB->get_field_sql($sql, array($this->subpage->id)) + 1;
 
-        $subpage_section = new stdClass();
-        $subpage_section->subpageid = $this->subpage->id;
-        $subpage_section->sectionid = $section->id;
-        $subpage_section->pageorder = $pageorder;
-        $subpage_section->stealth = 0;
+        $subpagesection = new stdClass();
+        $subpagesection->subpageid = $this->subpage->id;
+        $subpagesection->sectionid = $section->id;
+        $subpagesection->pageorder = $pageorder;
+        $subpagesection->stealth = 0;
 
-        $ss = $DB->insert_record('subpage_sections', $subpage_section);
+        $ss = $DB->insert_record('subpage_sections', $subpagesection);
 
         $transaction->allow_commit();
 
-        return array('subpagesectionid'=>$ss, 'sectionid'=>$section->id);
+        return array('subpagesectionid' => $ss, 'sectionid' => $section->id);
     }
 
     /**
@@ -288,12 +288,12 @@ ORDER BY
         global $DB;
 
         $updatesection = $DB->get_record('subpage_sections',
-                array('sectionid'=>$sectionid, 'subpageid'=>$this->subpage->id));
+                array('sectionid' => $sectionid, 'subpageid' => $this->subpage->id));
         $updatesection->pageorder = $pageorder;
         $DB->update_record('subpage_sections', $updatesection);
 
         $sections = $DB->get_records('subpage_sections',
-                array('subpageid'=>$this->subpage->id), 'pageorder');
+                array('subpageid' => $this->subpage->id), 'pageorder');
         $newpageorder = 1;
         foreach ($sections as $section) {
             if ($section->sectionid == $sectionid) {
@@ -317,16 +317,16 @@ ORDER BY
         global $DB;
         $transaction = $DB->start_delegated_transaction();
         $coursemodules = $DB->get_records('course_modules',
-                array('course'=>$this->course->id, 'section'=>$sectionid));
+                array('course' => $this->course->id, 'section' => $sectionid));
         foreach ($coursemodules as $cm) {
             $this->delete_module($cm);
         }
         $DB->delete_records('subpage_sections',
-                array('sectionid'=>$sectionid, 'subpageid'=>$this->subpage->id));
+                array('sectionid' => $sectionid, 'subpageid' => $this->subpage->id));
 
         // Now delete from course_sections.
         $DB->delete_records('course_sections',
-                array('id'=>$sectionid, 'course'=>$this->get_course()->id));
+                array('id' => $sectionid, 'course' => $this->get_course()->id));
         // Fix pageorder.
         $subpagesections = $DB->get_records('subpage_sections',
                 array('subpageid' => $this->subpage->id), 'pageorder');
@@ -349,7 +349,7 @@ ORDER BY
     public function delete_module($cm) {
         global $CFG, $OUTPUT, $USER, $DB;
 
-        $cm->modname = $DB->get_field("modules", "name", array("id"=>$cm->module));
+        $cm->modname = $DB->get_field("modules", "name", array("id" => $cm->module));
 
         $modlib = "$CFG->dirroot/mod/$cm->modname/lib.php";
 
@@ -439,9 +439,13 @@ ORDER BY
 
             // Loop through ancestor subpages.
             $cm = $modinfo->get_cm($subpage->get_course_module()->id);
-            while(true) {
+            while (true) {
                 if (array_key_exists($cm->section, $subpagesectioncm)) {
                     $cm = $subpagesectioncm[$cm->section];
+                    // In case of a subpage within itself, prevent endless loop.
+                    if (array_key_exists($cm->id, $parentcmids)) {
+                        break;
+                    }
                     $parentcmids[$cm->id] = true;
                 } else {
                     break;
@@ -467,8 +471,7 @@ ORDER BY
                         continue;
                     }
 
-                    $sectionalt = (isset($section->pageorder)) ? $section->pageorder
-                            : $section->section;
+                    $sectionalt = (isset($section->pageorder)) ? $section->pageorder : $section->section;
                     if ($move === 'to') {
                         // Include the required course/format library.
                         global $CFG;
@@ -478,7 +481,7 @@ ORDER BY
                         $subpage->get_course()->format . '_get_section_name';
 
                         if (function_exists($callbackfunction)) {
-                            $name =  $callbackfunction($subpage->get_course(), $section);
+                            $name = $callbackfunction($subpage->get_course(), $section);
                         } else {
                             $name = $section->name ? $section->name
                                     : get_string('section') . ' ' . $sectionalt;
@@ -486,7 +489,7 @@ ORDER BY
 
                     } else {
                         $name = $section->name ? $section->name
-                        : get_string('section') . ' ' . $sectionalt;
+                            : get_string('section') . ' ' . $sectionalt;
                     }
 
                     $sectionmods = explode(',', $section->sequence);

@@ -38,7 +38,7 @@ $move        = optional_param('move', '', PARAM_RAW);
 $subpage = mod_subpage::get_from_cmid($cmid);
 $cm = $subpage->get_course_module();
 $course = $subpage->get_course();
-// Defined here to avoid notices on errors etc
+// Defined here to avoid notices on errors etc.
 $moveurl = new moodle_url('/mod/subpage/move.php', array('id' => $cmid, 'move' => $move));
 $PAGE->set_url($moveurl);
 
@@ -60,12 +60,12 @@ $PAGE->navbar->add(format_string($subpage->get_name()),
         new moodle_url('/mod/subpage/view.php', array('id' => $cmid)));
 $PAGE->navbar->add(get_string('moveitems', 'mod_subpage'));
 
-// general information
+// General information.
 $modinfo = get_fast_modinfo($course);
 $coursesections = $modinfo->get_section_info_all();
-$allsubpages =  mod_subpage::get_course_subpages($course);
+$allsubpages = mod_subpage::get_course_subpages($course);
 
-// options specifically for moving
+// Options specifically for moving.
 $moveableitems = mod_subpage::moveable_modules($subpage, $allsubpages,
         $coursesections, $modinfo, $move);
 $options = mod_subpage::destination_options($subpage, $allsubpages,
@@ -74,7 +74,7 @@ $options = mod_subpage::destination_options($subpage, $allsubpages,
 if (empty($moveableitems)) {
     echo $OUTPUT->header();
     // Course wrapper start.
-    echo html_writer::start_tag('div', array('class'=>'course-content'));
+    echo html_writer::start_tag('div', array('class' => 'course-content'));
     echo $OUTPUT->notification(get_string('nomodules', 'mod_subpage'));
     echo $OUTPUT->continue_button("$CFG->wwwroot/mod/subpage/view.php?id=$cmid");
     echo html_writer::end_tag('div');
@@ -117,7 +117,7 @@ if ($formdata = $mform->get_data()) {
     if (empty($cmids)) {
         echo $OUTPUT->header();
         // Course wrapper start.
-        echo html_writer::start_tag('div', array('class'=>'course-content'));
+        echo html_writer::start_tag('div', array('class' => 'course-content'));
         echo $OUTPUT->notification(get_string('nomodulesselected', 'mod_subpage'));
         echo $OUTPUT->continue_button("$CFG->wwwroot/mod/subpage/view.php?id=$cmid");
         echo html_writer::end_tag('div');
@@ -126,7 +126,7 @@ if ($formdata = $mform->get_data()) {
     } else {
         $transaction = $DB->start_delegated_transaction();
 
-        // destination is either null or a subpage
+        // Destination is either null or a subpage.
         $dest = ($info[0] !== 'course') ? mod_subpage::get_from_cmid($info[0]) : null;
         if ($createnew && $dest) {
             $newsection = $dest->add_section();
@@ -152,9 +152,13 @@ if ($formdata = $mform->get_data()) {
             // Loop through ancestor subpages.
             $parentcmids = array();
             $cm = $modinfo->get_cm($dest->get_course_module()->id);
-            while(true) {
+            while (true) {
                 if (array_key_exists($cm->section, $subpagesectioncm)) {
                     $cm = $subpagesectioncm[$cm->section];
+                    // In case of a subpage within itself, prevent endless loop.
+                    if (array_key_exists($cm->id, $parentcmids)) {
+                        break;
+                    }
                     $parentcmids[$cm->id] = true;
                 } else {
                     break;
@@ -162,7 +166,7 @@ if ($formdata = $mform->get_data()) {
             }
         }
 
-        // ensure that the destination section does exists
+        // Ensure that the destination section does exists.
         if (!$section = $DB->get_record('course_sections', array('id' => (int)$id))) {
             print_error('sectionnotcreatedorexisting', 'mod_subpage',
                     "$CFG->wwwroot/mod/subpage/view.php?id=$cmid");
@@ -179,7 +183,7 @@ if ($formdata = $mform->get_data()) {
                 print_error('error_movecircular', 'subpage', $moveurl);
             }
 
-            // no reason to move if in the same section
+            // No reason to move if in the same section.
             if ($cm->section !== $section->id) {
                 moveto_module($cm, $section);
 
@@ -203,7 +207,7 @@ if ($formdata = $mform->get_data()) {
         $event->trigger();
     }
 
-    // return to original subpage view
+    // Return to original subpage view.
     if (!$dest) {
         redirect("$CFG->wwwroot/course/view.php?id=" . $subpage->get_course()->id .
                 "#section-$section->section");
@@ -217,9 +221,9 @@ if ($formdata = $mform->get_data()) {
 echo $OUTPUT->header();
 
 // Course wrapper start.
-echo html_writer::start_tag('div', array('class'=>'course-content'));
+echo html_writer::start_tag('div', array('class' => 'course-content'));
 
-// display form
+// Display form.
 if (!$formdata) {
     $data = new StdClass;
     $data->id = $cmid;

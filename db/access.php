@@ -33,12 +33,12 @@ $capabilities = array(
         'archetypes' => array(
             // Assigning this to all users means the default behaviour is
             // similar to course main page (no extra permissions needed beyond
-            // enrolment + login)
+            // enrolment + login).
             'user' => CAP_ALLOW
         )
     ),
 
-    // Ability to add new subpage to a course
+    // Ability to add new subpage to a course.
     'mod/subpage:addinstance' => array(
         'riskbitmask' => RISK_XSS,
 

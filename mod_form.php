@@ -45,8 +45,8 @@ class mod_subpage_mod_form extends moodleform_mod {
         $this->add_intro_editor(false);
 
         // Sharing facilities are only available if the 'sharedsubpage' module
-        // is installed
-        if ($DB->get_field('modules', 'id', array('name'=>'sharedsubpage'))) {
+        // is installed.
+        if ($DB->get_field('modules', 'id', array('name' => 'sharedsubpage'))) {
             $mform->addElement('checkbox', 'enablesharing', '',
                 get_string('enablesharing', 'subpage'));
             $mform->addHelpButton('enablesharing', 'enablesharing', 'subpage');
@@ -77,23 +77,23 @@ class mod_subpage_mod_form extends moodleform_mod {
         global $DB;
         $errors = parent::validation($data, $files);
 
-        // If you enable sharing, you must enter an idnumber
+        // If you enable sharing, you must enter an idnumber.
         if (!empty($data['enablesharing']) && empty($data['cmidnumber'])) {
             $errors['cmidnumber'] = get_string('error_noidnumber', 'subpage');
         }
-        // If you turn off sharing, there must be no shared pages using it
+        // If you turn off sharing, there must be no shared pages using it.
         if (empty($data['enablesharing']) && !empty($this->_instance)) {
-            if ($DB->get_field('modules', 'id', array('name'=>'sharedsubpage'))) {
+            if ($DB->get_field('modules', 'id', array('name' => 'sharedsubpage'))) {
                 // Check if there is a shared subpage...
                 if ($DB->record_exists('sharedsubpage',
-                        array('subpageid'=>$this->_instance))) {
+                        array('subpageid' => $this->_instance))) {
                     $errors['enablesharing'] = get_string('error_sharingused', 'subpage');
                 }
             }
         }
-        // ID numbers must be unique, systemwide
+        // ID numbers must be unique, systemwide.
         if (!empty($data['cmidnumber'])) {
-            // Except obviously on this existing course-module (if it does exist)
+            // Except obviously on this existing course-module (if it does exist).
             $except = -1;
             if (!empty($data['coursemodule'])) {
                 $except = $data['coursemodule'];
