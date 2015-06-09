@@ -1,7 +1,7 @@
 Subpage
 =======
 
-Copyright 2014 The Open University
+Copyright 2015 The Open University
 
 
 Thes subpage module allows users to create, manage, and view lists of Moodle
@@ -11,8 +11,9 @@ activities separately from the main course page
 Warning:
 
 We support the subpage module in Moodle 2.8 but it is likely that this module
-will be discontinued in a future version. However that might be some way off -
-we are likely to continue to support it through Moodle 2.9 and probably beyond.
+will be discontinued in a future version. I anticipate that we will continue
+to support it in Moodle 2.9 and 3.0.
+
 
 Limitations:
 
@@ -21,13 +22,26 @@ without making core changes you will find that you are constantly redirected
 back to the course page when you expected to be on the subpage.
 
 If you would like a patch that you can apply - at your own risk, of course,
-as is this whole thing, see the README file for one of the branches (however
-we haven't provided a current patch, sorry).
+as is this whole thing - in order to make it all work a little more neatly, I
+used to include this as corechanges.patch. You can retrieve this from an old
+branch using the following Git command line:
+
+git show fab7f893b4ecbda3c32c4bf2b626327cb461e837:corechanges.patch
+
+However this patch was developed for MOODLE_21_STABLE and has not been updated
+for later versions. (If you do not know how to apply patches then this is not
+the time to learn...) It would be nice if we could get this functionality
+included into core at some point.
 
 Also please note that if you put something on a subpage it will seem natural
 for the subpage to be included in the breadcrumbs, but it is not. We have
 implemented code to address this as part of our theme; doing this properly
 would require a significant core change which we haven't implemented yet.
+
+Finally please note that in order to be able to add activities to the subpage,
+you need to turn OFF the 'Activity chooser' feature that was introduced in
+Moodle 2.3, and use the old 'Add an activity/resource' dropdowns. Currently
+it doesn't support the activity chooser.
 
 Support:
 
@@ -42,18 +56,19 @@ the subpage that is available from:
 
 https://github.com/moodleou/moodle-mod_subpage
 
-In the bug report, please include your Moodle version (e.g. 2.3.2) and your
-subpage version (which you can find under plugins/activities page). 
+In the bug report, please include your Moodle version and your subpage
+version (which you can find under plugins/activities page). 
 
 Status:
 
-Development code. This has not been fully tested and may contain serious bugs.
-Please see the current stable branch if you want a tested version for a specific
-Moodle release.
+Tested, live code based on our Moodle 2.8 release.
+
+Please note that this code is tested on OU systems but we rely on the
+community for testing on other systems.
 
 Requires:
 
-Moodle 2.6+
+Moodle 2.8+
 Postgres / MySQL
 
 Install:
