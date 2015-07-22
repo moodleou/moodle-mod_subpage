@@ -15,15 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version number.
+ * Custom restore serach class to change restriction capabilities.
  *
- * @package mod_subpage
- * @copyright 2014 The Open University
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_subpage
+ * @copyright  2015 The Open University
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$plugin->version = 2015072200;
-$plugin->requires = 2011120100;
-$plugin->cron = 60*60*4; // 4 hours.
+namespace mod_subpage\copy;
 
-$plugin->outestssufficient = true;
+class restore_course_search extends \restore_course_search {
+    protected function setup_restrictions() {
+        $this->require_capability('moodle/restore:restoreactivity');
+        $this->require_capability('moodle/restore:restoresection');
+    }
+}

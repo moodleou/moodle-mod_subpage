@@ -135,7 +135,8 @@ WHERE
                 $this->get_logger()->process("Failed to restore section dependency " .
                         "{$needfix->oldsectionid} in subpage '{$needfix->name}'. " .
                         "Backup and restore will not work correctly unless you include " .
-                        "the relevant course sections.",
+                        "relevant course sections. If you are seeing this message on copy " .
+                        "then you must not copy this original subpage again.",
                         backup::LOG_ERROR);
             }
         }
