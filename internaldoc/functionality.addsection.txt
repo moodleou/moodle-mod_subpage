@@ -1,0 +1,30 @@
+Subpage: Add section functionality
+==================================
+
+"Section title" field has been added to Subpage to allow Subpage creators
+to be able to add a section on a Subpage and give that section a title
+directly on Subpage view page (when the editing is turned on).
+
+User interface
+--------------
+
+Subpage creators (course team members) will find the new text field
+just before (on the left of) the "Add section" button.
+This field is set with a placeholder indicating "Section title" where
+they can type the required section title and then press the "Add section"
+button. This action is equivalent to the following steps:
+1) Pressing "Add section" button
+    (before these changes, or leaving the Section title empty)
+2) Clicking on "Edit summary" icon
+3) Unchecking "Use default section name" checkbox
+4) Typing required section title in "Section name" field
+5) Pressing "Save changes" button
+
+In other words, new changes make adding sections faster and easier:
+
+1) Typing required section title in field with placeholder
+    "Section title" (empty by default)
+2) Pressing "Add section" button
+
+and Subpage creators will stay on the same page while adding sections (with
+or without section title).

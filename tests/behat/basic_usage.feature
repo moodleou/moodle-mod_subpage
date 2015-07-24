@@ -189,8 +189,21 @@ Feature: Basic usage of subpage
     And I should see "SUMMARY1"
 
     # Add a section.
-    When I press "Add section"
+    When I set the field "sectiontitle" to "Section title for section 2"
+    And I press "Add section"
     Then "//li[contains(@class, 'section')][2]" "xpath_element" should exist
+    And I should see "Section title for section 2"
+
+    # Check the title and edit settings.
+    When I click on "Edit summary" "link" in the "//li[contains(@class, 'section')][2]" "xpath_element"
+    Then I should see "Section title for section 2"
+    Given I set the following fields to these values:
+    | id_name                  | Section 2  |
+    | Summary                  | Summary 2  |
+    And I press "Save changes"
+    Then I should not see "Section title for section 2"
+    But I should see "Section 2"
+    And I should see "Summary 2"
 
     # Move the section up and then down (flips them).
     When I click on "Move up" "link" in the "//li[contains(@class, 'section')][2]" "xpath_element"

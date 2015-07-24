@@ -115,7 +115,8 @@ Basic editing and adding content (~4m)
 EDT01 / U.ET
   On the course page, turn editing on. Click on SP1.
   - Verify that the resulting page includes the subpage title (in crumb
-  trail), a single empty section box, and an 'Add section' button.
+  trail), a single empty section box, a text box hinting "Section title" and
+  an 'Add section' button.
   - Verify that the empty section box appears essentially the same as a
   section box on the main course page, with the exception that it does not
   display a section number or date. It should include an edit icon that can be

@@ -41,6 +41,7 @@ $string['coursemainpage'] = 'Course main page';
 $string['anothersection'] = 'Another section on this subpage';
 $string['moveto'] = 'Move to';
 $string['section'] = 'Section';
+$string['sectiontitle'] = 'Section Title';
 $string['nomodulesselected'] = 'No modules were selected to move.';
 $string['sectionnotcreatedorexisting'] = 'Section doesn\'t exist or can\'t be created.';
 $string['modulenotfound'] = 'Module not found.';
