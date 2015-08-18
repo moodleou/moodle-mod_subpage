@@ -16,6 +16,10 @@ Feature: Basic usage of subpage
       | username | firstname | lastname |
       | teacher1 | Teacher   | 1        |
       | student1 | Student   | 1        |
+    And the following "groups" exist:
+      | name    | course | idnumber |
+      | NOCOPY! | C1     | GI1      |
+      | EXISTS! | C2     | GI2      |
     And the following "course enrolments" exist:
       | user     | course | role           |
       | teacher1 | C1     | editingteacher |
@@ -110,3 +114,7 @@ Feature: Basic usage of subpage
     And I should see "Toad!"
     Given I follow "Sub Subpage"
     Then I should see "Zombie!"
+    # Check groups were not copied to course.
+    Given I navigate to "Groups" node in "Course administration > Users"
+    Then I should see "EXISTS!"
+    And I should not see "NOCOPY!"

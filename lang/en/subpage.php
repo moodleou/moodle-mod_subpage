@@ -83,7 +83,8 @@ $string['copy_continue'] = '
 <p>Target: <strong>{$a}</strong></p>
 <p>The subpage copy will be added to section 0 and will be hidden.</p>
 <p>User data will not be included in any activities (with the exception of non-student glossaries).</p>
-<p>Activity role assignments will not be  included (role permission overrides are included).</p>
+<p>Activity role assignments will not be included (role permission overrides are included).</p>
+<p>If your subpage includes any iCMAs, then the entire question bank from this website will be copied to the target website.</p>
 <p>Start the subpage copy process by selecting \'Continue\':</p>';
 $string['copy_event'] = 'Copied subpage';
 $string['copy_help'] = 'Performs an intelligent backup and restore of this subpage and all items within it.';

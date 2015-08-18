@@ -299,6 +299,13 @@ class lib {
             }
         }
 
+        // Ensure we don't copy groups and groupings.
+        file_put_contents($path . '/groups.xml', '<groups></groups>');
+
+        // If there are no quizzes included then don't copy the question bank.
+        if (!self::get_matching_files($path, $allfiles, "activities/quiz_[0-9]+/module\.xml")) {
+            file_put_contents($path . '/questions.xml', '<question_categories></question_categories>');
+        }
     }
 
     /**
