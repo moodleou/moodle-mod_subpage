@@ -22,6 +22,7 @@ Feature: Restrict access of subpage
       | student2 | C1     | student        |
       | student3 | C1     | student        |
     And I log in as "admin"
+    And I am on site homepage
     And I follow "Course 1"
 
   @javascript
