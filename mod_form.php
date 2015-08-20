@@ -42,7 +42,7 @@ class mod_subpage_mod_form extends moodleform_mod {
         }
         $mform->addRule('name', null, 'required', null, 'client');
 
-        $this->add_intro_editor(false);
+        $this->standard_intro_elements();
 
         // Sharing facilities are only available if the 'sharedsubpage' module
         // is installed.
