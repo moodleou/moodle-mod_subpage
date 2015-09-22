@@ -324,8 +324,10 @@ class mod_subpage_renderer extends plugin_renderer_base {
 
         $content .= html_writer::end_tag('ul');
         if ($editing) {
+            $content .= html_writer::start_div('controlbuttons');
             $content .= $this->render_add_button($subpage);
             $content .= $this->render_bulkmove_buttons($subpage);
+            $content .= html_writer::end_div();
         }
         return $content;
     }
@@ -451,12 +453,25 @@ class mod_subpage_renderer extends plugin_renderer_base {
      * @return
      */
     protected function render_add_button($subpage) {
-        $addsection = new single_button(new moodle_url('view.php', array(
-                'id' => $subpage->get_course_module()->id,
-                'addsection' => 1,
-                'sesskey' => sesskey())),
-                get_string('addsection', 'mod_subpage'), 'get');
-        return $this->output->render($addsection);
+        $content = html_writer::start_tag('form',
+                array('method' => 'post','action' => 'view.php'));
+
+        $content .= html_writer::empty_tag('input',
+            array('name' => 'sectiontitle', 'type' => 'text', 'placeholder' => get_string('sectiontitle', 'subpage'),
+                    'value' => '', 'class' => 'sectiontitle'));
+        $content .= html_writer::empty_tag('input',
+                array('name' => 'addsectionbutton', 'type' => 'submit', 'value' => get_string('addsection', 'mod_subpage')));
+
+        $content .= html_writer::empty_tag('input',
+                array('name' => 'id', 'value' => $subpage->get_course_module()->id, 'type' => 'hidden'));
+        $content .= html_writer::empty_tag('input',
+                  array('name' => 'addsection', 'value' => 1, 'type' => 'hidden'));
+        $content .= html_writer::empty_tag('input',
+                array('name' => 'sesskey', 'value' => sesskey(), 'type' => 'hidden'));
+
+        $content .= html_writer::end_tag('form');
+
+        return html_writer::div($content, 'addsectionbutton');
     }
 
     /**
@@ -492,6 +507,6 @@ class mod_subpage_renderer extends plugin_renderer_base {
             }
         }
 
-        return $buttons;
+        return html_writer::div($buttons, 'movetobutton');
     }
 }

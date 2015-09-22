@@ -231,6 +231,14 @@ function subpage_extend_settings_navigation($settings, navigation_node $subpagen
                 navigation_node::TYPE_SETTING, null, 'subpageeditingtoggle');
         $subpagenode->add_node($node, 'modedit');
     }
+
+    if (has_all_capabilities(array('moodle/backup:backupsection', 'moodle/backup:backupactivity'),
+            $PAGE->context)) {
+            $url = new moodle_url('/mod/subpage/copy.php', array('id' => $PAGE->cm->id));
+            $node = navigation_node::create(get_string('copy', 'subpage'), $url,
+                    navigation_node::TYPE_SETTING, null, 'subpagecopy');
+            $subpagenode->add_node($node);
+    }
 }
 
 /**

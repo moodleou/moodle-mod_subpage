@@ -15,15 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version number.
+ * Custom progress class for subpage copy functionality.
  *
- * @package mod_subpage
- * @copyright 2014 The Open University
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_subpage
+ * @copyright  2015 The Open University
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$plugin->version = 2015081800;
-$plugin->requires = 2011120100;
-$plugin->cron = 60*60*4; // 4 hours.
+namespace mod_subpage\copy;
 
-$plugin->outestssufficient = true;
+/**
+ * Custom progress reporting that just prints dots.
+ */
+class progress extends \core\progress\base {
+    protected function update_progress() {
+        \mod_subpage\copy\lib::$currentlogger->potential_dot();
+    }
+}

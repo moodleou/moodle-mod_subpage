@@ -115,7 +115,8 @@ Basic editing and adding content (~4m)
 EDT01 / U.ET
   On the course page, turn editing on. Click on SP1.
   - Verify that the resulting page includes the subpage title (in crumb
-  trail), a single empty section box, and an 'Add section' button.
+  trail), a single empty section box, a text box hinting "Section title" and
+  an 'Add section' button.
   - Verify that the empty section box appears essentially the same as a
   section box on the main course page, with the exception that it does not
   display a section number or date. It should include an edit icon that can be
@@ -543,3 +544,30 @@ BKM11 / U.ET
   Submit form.
   - Verify that you are taken back to subpage S1.
   - Verify that it now includes [S2, TOAD, FROG], [], [], [].
+
+  Copy subpage (~15m)
+  (This is an independant test)
+  Identify or create a subpage that is suitable for this test, it should have several
+  sections, labels and activities (including a subpage).
+---------------
+
+CPS01 / Admin
+  Enter the subpage to be used for testing.
+  Select the 'Copy subpage' link in the 'Administration' block.
+  - Verify 'Restore into an existing course' table shown.
+  Enter name (or partial text) of a course into text input field and select 'Search'.
+  - Verify course(s) matching text shown in table.
+  Select the course you wish to copy the subpage to and select 'Continue'.
+  - Verify 'Target: SHORT NAME OF COURSE' is shown in confirmation box.
+  Select 'Continue'.
+  - Verify backup and restore process is undertaken without error/warnings and no time out.
+  (This step could take sometime on a subpage with many assets/activities)
+
+CPS02 / Admin
+  Select 'Continue'.
+  - Verify redirect to target course.
+  - Verify subpage has been copied to section 0 and is hidden from students.
+  (Depending on target course setup editing may need to be turned on to see section 0)
+  Enter the copied subpage.
+  - Verify contents have been copied from original.
+  (Note user submitted data is not included, so forums etc will be empty)

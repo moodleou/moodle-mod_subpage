@@ -66,11 +66,8 @@ Feature: Restrict access of subpage
   @javascript
   Scenario: Add a new subpage with access restrictions to a Page in a subpage and a section in a subpage
     # Update advanced settings by enabling conditional access.
-    Given I navigate to "Advanced features" node in "Site administration"
-    And I set the following administration settings values:
-      | Enable conditional access | 1 |
-    And I press "Save changes"
-    And I am on homepage
+    Given the following config values are set as admin:
+      | enableavailability | 1 |
     And I follow "Course 1"
     Given I turn editing mode on
     Then I follow "Add an activity or resource"

@@ -41,6 +41,7 @@ $string['coursemainpage'] = 'Course main page';
 $string['anothersection'] = 'Another section on this subpage';
 $string['moveto'] = 'Move to';
 $string['section'] = 'Section';
+$string['sectiontitle'] = 'Section Title';
 $string['nomodulesselected'] = 'No modules were selected to move.';
 $string['sectionnotcreatedorexisting'] = 'Section doesn\'t exist or can\'t be created.';
 $string['modulenotfound'] = 'Module not found.';
@@ -75,3 +76,19 @@ $string['courseminsection_desc'] = 'Advanced setting. The subpage normally uses 
 $string['error_movenotallowed'] = 'A selected item cannot be moved because somebody else has moved it since the form was displayed.';
 $string['error_movecircular'] = 'A selected item cannot be moved because it would create a circular reference (e.g. subpage A contains subpage B, which contains subpage A).';
 $string['eventitems_moved'] = 'Items moved';
+
+$string['copy'] = 'Copy subpage';
+$string['copy_backingupcourse'] = 'Backing up subpage ...';
+$string['copy_continue'] = '
+<p>Target: <strong>{$a}</strong></p>
+<p>The subpage copy will be added to section 0 and will be hidden.</p>
+<p>User data will not be included in any activities (with the exception of non-student glossaries).</p>
+<p>Activity role assignments will not be included (role permission overrides are included).</p>
+<p>If your subpage includes any iCMAs, then the entire question bank from this website will be copied to the target website.</p>
+<p>Start the subpage copy process by selecting \'Continue\':</p>';
+$string['copy_event'] = 'Copied subpage';
+$string['copy_help'] = 'Performs an intelligent backup and restore of this subpage and all items within it.';
+$string['copy_modifyingbackup'] = 'Modifying Backup ...';
+$string['copy_restoringcourse'] = 'Restoring subpage ...';
+$string['copy_timetaken'] = 'Time taken: {$a}';
+$string['copy_wait'] = 'Please wait ...';

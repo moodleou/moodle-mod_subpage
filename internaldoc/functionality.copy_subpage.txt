@@ -1,0 +1,31 @@
+Subpage: Copying subpages functionality
+=========================================
+
+It is not possible to directly copy a single subpage using Moodle backup/restore tools.
+
+Subpage has its own mechanism to do this (which automates Moodle backup/restore) and this
+can be accessed from the 'Copy subpage' link in the 'Administration' block.
+
+When copying a subpage all content within the subpage will be included.
+User data is not included for any activities, apart from Glossaries that
+have no student editing role.
+Any subpages within the content will also be included (and sub, sub, sub pages etc).
+
+The subpage copy will be added to section 0 of the target course and be hidden.
+
+Capabilities
+------------
+
+In order to copy a subpage you must have moodle/backup:backupsection
+and moodle/backup:backupactivity capabilities at current subpage level.
+
+In order to copy into a course you must have moodle/restore:restoreactivity
+and moodle/restore:restoresection at the target course level.
+
+User interface
+--------------
+
+On access the page will show a list of courses available that the subpage
+can be copied to. This can be searched (it is the same as on the Moodle restore page).
+
+A backup and restore of the subpage will then be carried out.

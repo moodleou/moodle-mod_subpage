@@ -28,18 +28,19 @@ require_once('lib.php');
 require_once($CFG->dirroot.'/course/lib.php');
 require_once($CFG->libdir.'/completionlib.php');
 
-$cmid        = optional_param('id', 0, PARAM_INT);
-$edit        = optional_param('edit', -1, PARAM_BOOL);
-$hide        = optional_param('hide', 0, PARAM_INT);
-$show        = optional_param('show', 0, PARAM_INT);
-$section     = optional_param('section', 0, PARAM_INT);
-$move        = optional_param('move', 0, PARAM_INT);
-$delete      = optional_param('delete', 0, PARAM_INT);
-$copy        = optional_param('copy', 0, PARAM_INT);
-$confirm     = optional_param('confirm', 0, PARAM_INT);
-$addsection  = optional_param('addsection', 0, PARAM_INT);
-$recache     = optional_param('recache', 0, PARAM_INT);
-$cancelcopy = optional_param('cancelcopy', 0, PARAM_BOOL);
+$cmid         = optional_param('id', 0, PARAM_INT);
+$edit         = optional_param('edit', -1, PARAM_BOOL);
+$hide         = optional_param('hide', 0, PARAM_INT);
+$show         = optional_param('show', 0, PARAM_INT);
+$section      = optional_param('section', 0, PARAM_INT);
+$sectiontitle = optional_param('sectiontitle', '', PARAM_TEXT);
+$move         = optional_param('move', 0, PARAM_INT);
+$delete       = optional_param('delete', 0, PARAM_INT);
+$copy         = optional_param('copy', 0, PARAM_INT);
+$confirm      = optional_param('confirm', 0, PARAM_INT);
+$addsection   = optional_param('addsection', 0, PARAM_INT);
+$recache      = optional_param('recache', 0, PARAM_INT);
+$cancelcopy   = optional_param('cancelcopy', 0, PARAM_BOOL);
 
 if (empty($cmid)) {
     print_error('unspecifysubpageid', 'subpage');
@@ -142,9 +143,9 @@ if ($PAGE->user_allowed_editing()) {
         }
         redirect($PAGE->url);
     }
-
     if ($addsection && confirm_sesskey()) {
-        $subpage->add_section();
+        $subpage->add_section($sectiontitle);
+        redirect($PAGE->url);
     }
 
     if ($hide && confirm_sesskey()) {
