@@ -25,5 +25,5 @@
 $plugin->version = 2015081800;
 $plugin->requires = 2011120100;
 $plugin->cron = 60*60*4; // 4 hours.
-
+$plugin->component = 'mod_subpage';
 $plugin->outestssufficient = true;
