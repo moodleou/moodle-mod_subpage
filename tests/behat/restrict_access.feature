@@ -14,6 +14,7 @@ Feature: Restrict access of subpage
       | student1 | Student   | 1        | Bedford       | GB      |
       | student2 | Student   | 2        | Milton Keynes | GB      |
       | student3 | Student   | 3        | Berlin        | DE      |
+      | manager  | Manager   | 1        | Timbuktu      | ML      |
 
     And the following "course enrolments" exist:
       | user     | course | role           |
@@ -21,8 +22,8 @@ Feature: Restrict access of subpage
       | student1 | C1     | student        |
       | student2 | C1     | student        |
       | student3 | C1     | student        |
-    And I log in as "admin"
-    And I am on site homepage
+      | manager  | C1     | manager        |
+    And I log in as "manager"
     And I follow "Course 1"
 
   @javascript
