@@ -99,7 +99,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
                 }
                 $cm = $cms[$instance];
                 // Check to see whether cm is visible.
-                if ($cm->uservisible) {
+                if ($cm->uservisible || $cm->availableinfo) {
                     $visible = true;
                     break;
                 }
