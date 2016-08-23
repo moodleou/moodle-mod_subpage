@@ -238,9 +238,10 @@ class mod_subpage  {
      * Add a new section for a subpage to a course
      * @param int $courseid Course id to add sections to
      * @param int $minsection Lowest section number (default, null, uses get_min_section_number())
+     * @param bool $add Add the section
      * @return int new section number
      */
-    public static function add_course_section($courseid, $minsection = null) {
+    public static function add_course_section($courseid, $minsection = null, $add = true) {
         global $DB, $CFG;
         require_once($CFG->dirroot .'/course/lib.php'); // For course_create_sections_if_missing().
 
@@ -280,7 +281,9 @@ class mod_subpage  {
         }
 
         // Create a section entry with this section number then get it.
-        course_create_sections_if_missing($courseid, $sectionnum);
+        if ($add) {
+            course_create_sections_if_missing($courseid, $sectionnum);
+        }
         return $sectionnum;
     }
 
