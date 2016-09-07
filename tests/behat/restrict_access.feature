@@ -28,6 +28,10 @@ Feature: Restrict access of subpage
 
   @javascript
   Scenario: Add subpage and items, then view it
+    # Turn availability off.
+    Given the following config values are set as admin:
+      | enableavailability | 0 |
+
     # Add a subpage
     Given I turn editing mode on
     Then I follow "Add an activity or resource"
@@ -67,9 +71,6 @@ Feature: Restrict access of subpage
 
   @javascript
   Scenario: Add a new subpage with access restrictions to a Page in a subpage and a section in a subpage
-    # Update advanced settings by enabling conditional access.
-    Given the following config values are set as admin:
-      | enableavailability | 1 |
     And I follow "Course 1"
     Given I turn editing mode on
     Then I follow "Add an activity or resource"
