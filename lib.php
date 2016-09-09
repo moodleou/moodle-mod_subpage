@@ -178,6 +178,23 @@ function subpage_get_coursemodule_info($cm) {
             foreach ($courses as $courseid) {
                 rebuild_course_cache($courseid, true);
             }
+
+            // Update OSEP theme shared subpages.
+            if (class_exists('\mod_oustudyplanshare\backend')) {
+                    // Update on all shared versions.
+                    $DB->execute('UPDATE {oustudyplanshare} SET content = ?, name = ? ' .
+                            'WHERE oustudyplansubpageid = ?', array($content,
+                            \mod_oustudyplanshare\backend::get_share_name($subpage->name),
+                            -$subpage->id));
+                    // Clear modinfo on all courses that include shared versions.
+                    $courses = $DB->get_fieldset_sql(
+                            "SELECT DISTINCT course FROM {oustudyplanshare} WHERE oustudyplansubpageid = ?",
+                            array(-$subpage->id));
+                    foreach ($courses as $courseid) {
+                        rebuild_course_cache($courseid, true);
+                    }
+            }
+
             // Set hash so we don't do that again.
             $DB->set_field('subpage', 'sharedcontenthash', $hash, array('id' => $subpage->id));
         }
