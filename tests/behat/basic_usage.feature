@@ -93,13 +93,13 @@ Feature: Basic usage of subpage
 
     # Try the Hide feature.
     When I click on "Hide" "link" in the "li.modtype_page ul.menu" "css_element"
-    Then ".activityinstance > a.dimmed" "css_element" should exist
+    Then ".activityinstance > span > a.dimmed" "css_element" should exist
 
     When I click on "Edit" "link" in the "li.modtype_page ul.menubar" "css_element"
     Then "Hide" "link" should not exist in the "ul.menu" "css_element"
 
     When I click on "Show" "link" in the "li.modtype_page ul.menu" "css_element"
-    Then ".activityinstance > a.dimmed" "css_element" should not exist
+    Then ".activityinstance > span > a.dimmed" "css_element" should not exist
 
     # Delete the item
     When I click on "Edit" "link" in the "li.modtype_page ul.menubar" "css_element"
