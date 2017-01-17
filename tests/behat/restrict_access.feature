@@ -55,7 +55,7 @@ Feature: Restrict access of subpage
     And I press "Add"
     Then I should see "Adding a new Page" in the "h2" "css_element"
     And I set the following fields to these values:
-      | Name                   | Page 001                 !
+      | Name                   | Page 001                 |
       | Description            | Description for Page 001 |
       | Page content           | Content for Page 001     |
     And I should not see "Restrict access"
