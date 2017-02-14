@@ -87,7 +87,8 @@ $string['copy_continue'] = '
 <p>If your subpage includes any iCMAs, then the entire question bank from this website will be copied to the target website.</p>
 <p>Start the subpage copy process by selecting \'Continue\':</p>';
 $string['copy_event'] = 'Copied subpage';
-$string['copy_help'] = 'Performs an intelligent backup and restore of this subpage and all items within it.';
+$string['copy_help'] = 'Performs an intelligent backup and restore of this subpage and all items within it.
+You will only be able to copy to an old-style website (one that looks like this one).';
 $string['copy_modifyingbackup'] = 'Modifying Backup ...';
 $string['copy_restoringcourse'] = 'Restoring subpage ...';
 $string['copy_timetaken'] = 'Time taken: {$a}';
