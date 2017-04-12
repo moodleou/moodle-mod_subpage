@@ -55,7 +55,7 @@ Feature: Basic usage of subpage
     And I should see "My page"
 
     # Turn editing off.
-    When I follow "Turn editing off"
+    When I turn editing mode off
     Then I should see "Frog!"
     And I should see "My page"
 
@@ -81,29 +81,28 @@ Feature: Basic usage of subpage
     Then I should see "Edit" in the "li.activity" "css_element"
 
     # Check basic edit settings feature.
-    When I click on "Edit" "link" in the "li.modtype_page ul.menubar" "css_element"
-    And I click on "Edit settings" "link" in the "li.modtype_page ul.menu" "css_element"
+    When I click on "Edit" "link" in the "li.modtype_page div.menubar" "css_element"
+    And I click on "Edit settings" "link" in the "li.modtype_page div.menu" "css_element"
     Then I should see "Updating Page"
 
     # Check there isn't an indent option.
     Given I follow "C1"
     And I follow "Test subpage"
-    When I click on "Edit" "link" in the "li.modtype_page ul.menubar" "css_element"
-    Then I should not see "Move right"
+    When I click on "Edit" "link" in the "li.modtype_page div.menubar" "css_element"
 
     # Try the Hide feature.
-    When I click on "Hide" "link" in the "li.modtype_page ul.menu" "css_element"
+    When I click on "Hide" "link" in the "li.modtype_page div.menu" "css_element"
     Then ".activityinstance > span > a.dimmed" "css_element" should exist
 
-    When I click on "Edit" "link" in the "li.modtype_page ul.menubar" "css_element"
-    Then "Hide" "link" should not exist in the "ul.menu" "css_element"
+    When I click on "Edit" "link" in the "li.modtype_page div.menubar" "css_element"
+    Then "Hide" "link" should not exist in the "div.menu" "css_element"
 
-    When I click on "Show" "link" in the "li.modtype_page ul.menu" "css_element"
+    When I click on "Show" "link" in the "li.modtype_page div.menu" "css_element"
     Then ".activityinstance > span > a.dimmed" "css_element" should not exist
 
     # Delete the item
-    When I click on "Edit" "link" in the "li.modtype_page ul.menubar" "css_element"
-    And I click on "Delete" "link" in the "li.modtype_page ul.menu" "css_element"
+    When I click on "Edit" "link" in the "li.modtype_page div.menubar" "css_element"
+    And I click on "Delete" "link" in the "li.modtype_page div.menu" "css_element"
     Then I should see "Are you sure"
 
     When I press "Yes"
@@ -147,7 +146,7 @@ Feature: Basic usage of subpage
     Then I should see "My page"
 
     # Show it again.
-    When I follow "Turn editing on"
+    And I turn editing mode on
     When I click on "Show" "link" in the ".section" "css_element"
     Then "Hide" "link" should exist in the ".section" "css_element"
 
