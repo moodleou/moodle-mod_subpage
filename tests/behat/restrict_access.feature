@@ -65,6 +65,7 @@ Feature: Restrict access of subpage
     Then I follow "Subpage 001"
     And I should see "Subpage 001" in the "h2" "css_element"
     And I should see "Description for Subpage 001"
+    And I follow "Course 1"
     Then I follow "Page 001"
     And I should see "Page 001" in the "h2" "css_element"
     And I should see "Content for Page 001"
