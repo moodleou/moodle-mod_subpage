@@ -45,7 +45,7 @@ class MoodleQuickForm_selecttree extends MoodleQuickForm_selectgroups {
      * @access public
      * @return void
      */
-    public function MoodleQuickForm_selecttree($elementname = null, $elementlabel = null,
+    public function __construct($elementname = null, $elementlabel = null,
             $options = null, $attributes = null) {
         parent::__construct($elementname, $elementlabel, array(), $attributes);
         $this->_type = 'selecttree';
