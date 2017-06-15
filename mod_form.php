@@ -34,12 +34,13 @@ class mod_subpage_mod_form extends moodleform_mod {
 
         $mform = $this->_form;
 
-        $mform->addElement('text', 'name', get_string('name'));
+        $mform->addElement('text', 'name', get_string('name'), array('size' => '64'));
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
         } else {
             $mform->setType('name', PARAM_CLEANHTML);
         }
+        $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $mform->addRule('name', null, 'required', null, 'client');
 
         $this->standard_intro_elements();

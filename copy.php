@@ -29,8 +29,12 @@ require_once($CFG->dirroot . '/backup/util/includes/backup_includes.php');
 require_once($CFG->dirroot . '/backup/moodle2/backup_plan_builder.class.php');
 
 $cmid = required_param('id', PARAM_INT);
-
-$targetcourseid = optional_param('targetid', null, PARAM_INT);
+$searchcourses = optional_param('searchcourses', null, PARAM_TEXT);
+if ($searchcourses) {
+    $targetcourseid = null;
+} else {
+    $targetcourseid = optional_param('targetid', null, PARAM_INT);
+}
 $confirm = optional_param('confirm', null, PARAM_BOOL);
 
 $url = new moodle_url('/mod/subpage/copy.php', array('id' => $cmid));
@@ -62,11 +66,15 @@ if (!$targetcourseid) {
     echo $restrenderer->course_selector($url, false, null, $coursesearch, null);
 } else if (!$confirm) {
     // Confirmation screen.
-    $shortname = $DB->get_field('course', 'shortname', array('id' => $targetcourseid), MUST_EXIST);
+    $course = $DB->get_record('course', array('id' => $targetcourseid), 'shortname,format', MUST_EXIST);
+    if (\format_oustudyplan\features::is_supported($course)) {
+        throw new moodle_exception('You cannot copy a subpage to ' . $course->shortname . ' as it
+                supports the new subpage format only');
+    }
     $starturl = clone $url;
     $starturl->param('targetid', $targetcourseid);
     $starturl->param('confirm', true);
-    echo $OUTPUT->confirm(get_string('copy_continue', 'subpage', $shortname), $starturl, $url);
+    echo $OUTPUT->confirm(get_string('copy_continue', 'subpage', $course->shortname), $starturl, $url);
 } else {
     // Copy process + feedback.
     $targetcourse = $DB->get_record('course', array('id' => $targetcourseid), '*', MUST_EXIST);
