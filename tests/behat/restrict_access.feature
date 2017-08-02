@@ -27,7 +27,7 @@ Feature: Restrict access of subpage
     And I follow "Course 1"
 
   @javascript
-  Scenario: Add subpage and items, then view it
+  Scenario: Add subpage with restricted access, then view it
     # Turn availability off.
     Given the following config values are set as admin:
       | enableavailability | 0 |

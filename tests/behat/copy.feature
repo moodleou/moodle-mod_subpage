@@ -1,5 +1,5 @@
 @mod @mod_subpage @ou @ou_vle
-Feature: Basic usage of subpage
+Feature: Copy a subpage
   In order to copy a subpage
   As a teacher
   I need to use the copy subpage page
