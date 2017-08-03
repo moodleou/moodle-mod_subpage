@@ -17,7 +17,7 @@ Feature: Basic usage of subpage
       | teacher1 | C1     | editingteacher |
       | student1 | C1     | student        |
     And I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
 
   @javascript
   Scenario: Add subpage and items, then view it
@@ -134,14 +134,14 @@ Feature: Basic usage of subpage
     # As student, page should be hidden.
     When I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test subpage"
     Then I should not see "My page"
 
     # Back in as teacher, can see it still.
     When I log out
     And I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test subpage"
     Then I should see "My page"
 
@@ -157,7 +157,7 @@ Feature: Basic usage of subpage
     # Back as student - should be hidden again.
     When I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test subpage"
     Then I should not see "My page"
 

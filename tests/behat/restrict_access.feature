@@ -24,7 +24,7 @@ Feature: Restrict access of subpage
       | student3 | C1     | student        |
       | manager  | C1     | manager        |
     And I log in as "manager"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
 
   @javascript
   Scenario: Add subpage with restricted access, then view it
@@ -48,7 +48,7 @@ Feature: Restrict access of subpage
     And I should see "Subpage 001" in the "h2" "css_element"
     And I should see "Description for Subpage 001"
 
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     Given I turn editing mode on
     Then I follow "Add an activity or resource"
     And I set the field "Page" to "1"
@@ -65,14 +65,14 @@ Feature: Restrict access of subpage
     Then I follow "Subpage 001"
     And I should see "Subpage 001" in the "h2" "css_element"
     And I should see "Description for Subpage 001"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     Then I follow "Page 001"
     And I should see "Page 001" in the "h2" "css_element"
     And I should see "Content for Page 001"
 
   @javascript
   Scenario: Add a new subpage with access restrictions to a Page in a subpage and a section in a subpage
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     Given I turn editing mode on
     Then I follow "Add an activity or resource"
     And I set the field "Subpage" to "1"
@@ -114,7 +114,7 @@ Feature: Restrict access of subpage
     And I log out
 
     Given I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Subpage 002"
     Then I should see "Subpage 002"
     And I should see "Section 001"
@@ -123,7 +123,7 @@ Feature: Restrict access of subpage
     And I log out
 
     Given I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Subpage 002"
     Then I should see "Subpage 002"
     And I should not see "Section 001"

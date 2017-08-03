@@ -15,7 +15,7 @@ Feature: Check that user is not able to
       | teacher1 | C1     | editingteacher |
     And I log in as "teacher1"
     And I am on site homepage
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
 
   Scenario: Check that moving subpage are disabled, other activity is normal.
     When I follow "Turn editing on"

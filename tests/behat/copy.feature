@@ -38,12 +38,12 @@ Feature: Copy a subpage
 
   Scenario: Check access and course search
     Given I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     When I follow "Test subpage"
     Then I should not see "Copy subpage"
     And I log out
     Given I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     When I follow "Test subpage"
     Then I should see "Copy subpage"
     # Check course search.
@@ -60,14 +60,14 @@ Feature: Copy a subpage
     And I should not see "Site 1"
     # Test link cap access
     Given I am on homepage
-    And I follow "Course 2"
+    And I am on "Course 2" course homepage
     When I follow "Test sp2"
     Then I should not see "Copy subpage"
 
 @javascript
   Scenario: Check copy 
     Given I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I turn editing mode on
     And I follow "Test subpage"
     # Add Label in 2 sections (need to do this manually because not on course page).

@@ -17,7 +17,7 @@ Feature: Moving items to and from subpages
       | teacher1 | C1     | editingteacher |
       | student1 | C1     | student        |
     And I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
 
   @javascript
   Scenario: Add subpage and move some items onto it
