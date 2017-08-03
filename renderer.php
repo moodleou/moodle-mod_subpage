@@ -121,7 +121,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
                                     '#section-'.$section->id,
                                 'title' => $strhide));
                         $content .= html_writer::empty_tag('img', array(
-                                'src' => $OUTPUT->pix_url('i/hide'), 'class' => 'icon hide',
+                                'src' => $OUTPUT->image_url('i/hide'), 'class' => 'icon hide',
                                 'alt' => $strhide));
                         $content .= html_writer::end_tag('a');
                     } else {
@@ -131,7 +131,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
                                     '#section-' . $section->id,
                                 'title' => $strshow));
                         $content .= html_writer::empty_tag('img', array(
-                                'src' => $OUTPUT->pix_url('i/show'), 'class' => 'icon show',
+                                'src' => $OUTPUT->image_url('i/show'), 'class' => 'icon show',
                                 'alt' => $strshow));
                         $content .= html_writer::end_tag('a');
                     }
@@ -151,7 +151,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
                                 'type' => 'hidden'));
                         $content .= html_writer::empty_tag('input',
                                 array('name' => 'icon',
-                                'src' => $OUTPUT->pix_url('unstealth', 'mod_subpage'),
+                                'src' => $OUTPUT->image_url('unstealth', 'mod_subpage'),
                                 'type' => 'image', 'title' => $strunstealth, 'alt' => $strunstealth));
                         $content .= html_writer::end_tag('div');
                         $content .= html_writer::end_tag('form');
@@ -169,7 +169,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
                                 'type' => 'hidden'));
                         $content .= html_writer::empty_tag('input',
                                 array('name' => 'icon',
-                                'src' => $OUTPUT->pix_url('stealth', 'mod_subpage'),
+                                'src' => $OUTPUT->image_url('stealth', 'mod_subpage'),
                                 'type' => 'image', 'title' => $strstealth, 'alt' => $strstealth));
                         $content .= html_writer::end_tag('div');
                         $content .= html_writer::end_tag('form');
@@ -189,7 +189,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
                                     '#section-' . ($section->id - 1),
                                 'title' => $strmoveup));
                         $content .= html_writer::empty_tag('img', array(
-                                'src' => $OUTPUT->pix_url('t/up'), 'class' => 'icon up',
+                                'src' => $OUTPUT->image_url('t/up'), 'class' => 'icon up',
                                 'alt' => $strmoveup));
                         $content .= html_writer::end_tag('a');
                         $content .= html_writer::empty_tag('br', array());
@@ -203,7 +203,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
                                     '&move=1&sesskey=' . sesskey() . '#section-'.($section->id + 1),
                                 'title' => $strmovedown));
                         $content .= html_writer::empty_tag('img', array(
-                                'src' => $OUTPUT->pix_url('t/down'), 'class' => 'icon down',
+                                'src' => $OUTPUT->image_url('t/down'), 'class' => 'icon down',
                                 'alt' => $strmovedown));
                         $content .= html_writer::end_tag('a');
                         $content .= html_writer::empty_tag('br', array());
@@ -257,7 +257,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
                                 '&recache=1&sesskey=' . sesskey()),
                             'title' => $streditsummary));
                     $summary .= html_writer::empty_tag('img', array(
-                            'src' => $OUTPUT->pix_url('t/edit'), 'class' => 'icon edit',
+                            'src' => $OUTPUT->image_url('t/edit'), 'class' => 'icon edit',
                             'alt' => $streditsummary));
                     $summary .= html_writer::end_tag('a');
                     $summary .= html_writer::empty_tag('br', array());
@@ -268,7 +268,7 @@ class mod_subpage_renderer extends plugin_renderer_base {
                             'title' => $strdelete));
                     if (empty($section->sequence)) {
                         $summary .= html_writer::empty_tag('img', array(
-                                'src' => $OUTPUT->pix_url('t/delete'), 'class' => 'icon delete',
+                                'src' => $OUTPUT->image_url('t/delete'), 'class' => 'icon delete',
                                 'alt' => $strdelete));
                     }
                     $summary .= html_writer::end_tag('a');
