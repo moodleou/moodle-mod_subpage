@@ -6,8 +6,8 @@ Feature: Moving items to and from subpages
 
   Background:
     Given the following "courses" exist:
-      | fullname | shortname |
-      | Course 1 | C1        |
+      | fullname | shortname | format    |
+      | Course 1 | C1        | studyplan |
     And the following "users" exist:
       | username | firstname | lastname |
       | teacher1 | Teacher   | 1        |
@@ -17,14 +17,16 @@ Feature: Moving items to and from subpages
       | teacher1 | C1     | editingteacher |
       | student1 | C1     | student        |
     And I log in as "teacher1"
+    And I am using the OU theme
+    And the following "activities" exist:
+      | course | section | activity | name     | idnumber |
+      | C1     | 1       | subpage  | Subpage1 | S1       |
     And I am on "Course 1" course homepage
+    And I follow "Turn editing on"
 
   @javascript
   Scenario: Add subpage and move some items onto it
     # Add a subpage.
-    Given I turn editing mode on
-    And I add a "Subpage" to section "1" and I fill the form with:
-      | Name | Subpage1 |
     And I follow "Subpage1"
 
     # Check the 'Move to' box shows nothing.
@@ -33,14 +35,14 @@ Feature: Moving items to and from subpages
 
     # Continue should go back to subpage.
     When I press "Continue"
-    Then I should see "Subpage1" in the "h2" "css_element"
+    Then I should see "Subpage1" in the "#region-main h2" "css_element"
 
     # Go to course page and add a couple more subpages.
+    When the following "activities" exist:
+      | course | section | activity | name     | idnumber |
+      | C1     | 1       | subpage  | Subpage2 | S2       |
+      | C1     | 2       | subpage  | Subpage3 | S3       |
     When I follow "C1"
-    And I add a "Subpage" to section "1" and I fill the form with:
-      | Name | Subpage2 |
-    And I add a "Subpage" to section "2" and I fill the form with:
-      | Name | Subpage3 |
 
     # Should now be possible to add these (but not itself) to Subpage1.
     When I follow "Subpage1"
@@ -55,7 +57,7 @@ Feature: Moving items to and from subpages
     And I press "Move selected items"
 
     # Should get to subpage1, with subpage2 on it
-    Then I should see "Subpage1" in the "h2" "css_element"
+    Then I should see "Subpage1" in the "#region-main h2" "css_element"
     And I should see "Subpage2" in the "#region-main" "css_element"
 
     # Now go to subpage2. It shouldn't let you move subpage1 onto it...
@@ -67,13 +69,10 @@ Feature: Moving items to and from subpages
   @javascript
   Scenario: Add subpage and move some items from it
     # Add subpages.
-    Given I turn editing mode on
-    And I add a "Subpage" to section "1" and I fill the form with:
-      | Name | Subpage1 |
-    And I add a "Subpage" to section "1" and I fill the form with:
-      | Name | Subpage2 |
-    And I add a "Subpage" to section "2" and I fill the form with:
-      | Name | Subpage3 |
+    Given the following "activities" exist:
+      | course | section| activity | name     | idnumber |
+      | C1     | 1      | subpage  | Subpage2 | S2       |
+      | C1     | 2      | subpage  | Subpage3 | S3       |
     And I follow "Subpage1"
 
     # Check the 'Move from' button is not present.
@@ -93,16 +92,16 @@ Feature: Moving items to and from subpages
     # Check the 'Move to' values for subpage and course page are there.
     Then the "Move to" select box should contain "Section 1"
     And the "Move to" select box should contain "Section 2"
-    And the "Move to" select box should contain "General"
-    And the "Move to" select box should contain "Topic 1"
+    And the "Move to" select box should contain "Resources & forums"
+    And the "Move to" select box should contain "Week 1"
 
     # Move them to a particular week
     When I click on "Subpage3" "checkbox"
-    And I set the field "Move to" to "Topic 3"
+    And I set the field "Move to" to "Week 3"
     And I press "Move selected items"
 
     # Should be on home page, with Subpage3 there.
-    Then I should see "Subpage3" in the "li#section-3" "css_element"
+    Then I should see "Subpage3" in the "#section-3" "css_element"
 
     # The subpage still has Subpage2.
     When I follow "Subpage1"
