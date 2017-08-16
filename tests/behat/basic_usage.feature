@@ -179,9 +179,9 @@ Feature: Basic usage of subpage
 
     # Edit settings.
     When I click on "Edit summary" "link" in the "//li[contains(@class, 'section')][1]" "xpath_element"
-    And I set the field "Use default section name" to "0"
+    And I set the field "id_name_customize" to "1"
     And I set the following fields to these values:
-    | id_name                  | SECTION1      |
+    | name[value]              | SECTION1      |
     | Summary                  | SUMMARY1      |
     And I press "Save changes"
     Then I should see "SECTION1"
@@ -197,7 +197,7 @@ Feature: Basic usage of subpage
     When I click on "Edit summary" "link" in the "//li[contains(@class, 'section')][2]" "xpath_element"
     Then I should see "Section title for section 2"
     Given I set the following fields to these values:
-    | id_name                  | Section 2  |
+    | name[value]              | Section 2  |
     | Summary                  | Summary 2  |
     And I press "Save changes"
     Then I should not see "Section title for section 2"
