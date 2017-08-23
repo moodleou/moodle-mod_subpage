@@ -89,9 +89,9 @@ Feature: Restrict access of subpage
     And I press "Add section"
     When I click on "Edit summary" "link" in the "//li[contains(@class, 'section')][1]" "xpath_element"
     And I set the following fields to these values:
-      | Use default section name | 0                      |
-      | id_name                  | Section 001            |
-      | Summary                  | Summary of Section 001 |
+      | id_name_customize | 1                      |
+      | id_name_value     | Section 001            |
+      | Summary           | Summary of Section 001 |
 
     And I press "Add restriction..."
     Then I press "Date"
@@ -126,6 +126,6 @@ Feature: Restrict access of subpage
     And I am on "Course 1" course homepage
     And I follow "Subpage 002"
     Then I should see "Subpage 002"
-    And I should not see "Section 001"
+    And "Section 001" "text" in the "content" "region" should not be visible
     And I should not see "Summary of Section 001"
     And I should not see "Not available unless: Your City/town is Milton Keynes"
