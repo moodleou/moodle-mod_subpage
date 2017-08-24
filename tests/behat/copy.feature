@@ -65,7 +65,7 @@ Feature: Copy a subpage
     Then I should not see "Copy subpage"
 
 @javascript
-  Scenario: Check copy 
+  Scenario: Check copy
     Given I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I turn editing mode on
@@ -79,8 +79,8 @@ Feature: Copy a subpage
     And I press "Save and return to course"
     And I press "Add section"
     And I click on "ul.topics li:nth-of-type(2) .summary a" "css_element"
-    And I set the field "usedefaultname" to "0"
-    And I set the field "name" to "TEST2"
+    And I set the field "Custom" to "1"
+    And I set the field "New value for Section name" to "TEST2"
     And I press "Save changes"
     # Add a label to TEST2 section
     And I click on "Add an activity or resource" "link" in the "TEST2" "section"
@@ -105,8 +105,8 @@ Feature: Copy a subpage
     # Start copy to C2.
     Given I follow "C1"
     And I follow "Test subpage"
-    And I click on "action-menu-toggle-3" "link"
-    And I click on "Copy subpage" "link" in the "#action-menu-3" "css_element"
+    And I click on "dropdown-3" "link"
+    And I click on "Copy subpage" "link" in the "#action-menu-3-menu" "css_element"
     And I set the field with xpath "//tbody//tr[2]//input[@type='radio']" to "1"
     When I press "Continue"
     Then I should see "Target: C2"
