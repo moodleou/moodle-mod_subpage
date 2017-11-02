@@ -41,7 +41,7 @@ class logger extends \output_indented_logger {
         $now = time();
         if ($this->time != $now) {
             $this->time = $now;
-            set_time_limit(350);
+            \core_php_time_limit::raise(350);
             print '.' . str_repeat(' ', 16);
             flush();
         }
