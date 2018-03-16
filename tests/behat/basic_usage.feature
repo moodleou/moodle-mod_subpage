@@ -108,7 +108,7 @@ Feature: Basic usage of subpage
     When I press "Yes"
     # If it's broken there is sometimes a JS window that appears here.
     Then I should not see "Error"
-    And I should not see "My page"
+    And I should not see "My page" in the ".content" "css_element"
 
   @javascript
   Scenario: Hide sections
@@ -159,7 +159,7 @@ Feature: Basic usage of subpage
     And I log in as "student1"
     And I am on "Course 1" course homepage
     And I follow "Test subpage"
-    Then I should not see "My page"
+    Then I should not see "My page" in the ".content" "css_element"
 
   @javascript
   Scenario: Edit and move sections
