@@ -93,3 +93,4 @@ $string['copy_modifyingbackup'] = 'Modifying Backup ...';
 $string['copy_restoringcourse'] = 'Restoring subpage ...';
 $string['copy_timetaken'] = 'Time taken: {$a}';
 $string['copy_wait'] = 'Please wait ...';
+$string['privacy:metadata'] = 'The Subpage plugin does not store any personal data.';
