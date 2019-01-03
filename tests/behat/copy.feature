@@ -105,8 +105,8 @@ Feature: Copy a subpage
     # Start copy to C2.
     Given I follow "C1"
     And I follow "Test subpage"
-    And I open the action menu in "#region-main-settings-menu" "css_element"
-    And I choose "Copy subpage" in the open action menu
+    And I click on "dropdown-3" "link"
+    And I click on "Copy subpage" "link" in the "#action-menu-3-menu" "css_element"
     And I set the field with xpath "//tbody//tr[2]//input[@type='radio']" to "1"
     When I press "Continue"
     Then I should see "Target: C2"
