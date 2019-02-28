@@ -123,6 +123,6 @@ Feature: Copy a subpage
     Given I follow "Sub Subpage"
     Then I should see "Zombie!"
     # Check groups were not copied to course.
-    Given I navigate to "Groups" node in "Course administration > Users"
+    Given I navigate to "Users > Groups" in current page administration
     Then I should see "EXISTS!"
     And I should not see "NOCOPY!"
