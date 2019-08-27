@@ -81,28 +81,28 @@ Feature: Basic usage of subpage
     Then I should see "Edit" in the "li.activity" "css_element"
 
     # Check basic edit settings feature.
-    When I click on "Edit" "link" in the "li.modtype_page div.menubar" "css_element"
-    And I click on "Edit settings" "link" in the "li.modtype_page div.menu" "css_element"
+    When I open the action menu in "My page" "list_item"
+    And I click on "Edit settings" "link" in the "My page" "list_item"
     Then I should see "Updating Page"
 
     # Check there isn't an indent option.
     Given I follow "C1"
     And I follow "Test subpage"
-    When I click on "Edit" "link" in the "li.modtype_page div.menubar" "css_element"
+    When I open the action menu in "My page" "list_item"
 
     # Try the Hide feature.
-    When I click on "Hide" "link" in the "li.modtype_page div.menu" "css_element"
+    When I click on "Hide" "link" in the "My page" "list_item"
     Then ".activityinstance > span > a.dimmed" "css_element" should exist
 
-    When I click on "Edit" "link" in the "li.modtype_page div.menubar" "css_element"
-    Then "Hide" "link" should not exist in the "div.menu" "css_element"
+    When I open the action menu in "My page" "list_item"
+    Then "Hide" "link" should not exist in the "My page" "list_item"
 
-    When I click on "Show" "link" in the "li.modtype_page div.menu" "css_element"
+    When I click on "Show" "link" in the "My page" "list_item"
     Then ".activityinstance > span > a.dimmed" "css_element" should not exist
 
     # Delete the item
-    When I click on "Edit" "link" in the "li.modtype_page div.menubar" "css_element"
-    And I click on "Delete" "link" in the "li.modtype_page div.menu" "css_element"
+    When I open the action menu in "My page" "list_item"
+    And I click on "Delete" "link" in the "My page" "list_item"
     Then I should see "Are you sure"
 
     When I press "Yes"

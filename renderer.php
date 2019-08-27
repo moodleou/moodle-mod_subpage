@@ -23,7 +23,8 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->dirroot.'/course/format/renderer.php');
+require_once($CFG->dirroot . '/course/format/renderer.php');
+require_once($CFG->dirroot . '/mod/sharedsubpage/locallib.php');
 
 class mod_subpage_renderer extends plugin_renderer_base {
     protected $subpagecm;
@@ -329,7 +330,39 @@ class mod_subpage_renderer extends plugin_renderer_base {
             $content .= $this->render_bulkmove_buttons($subpage);
             $content .= html_writer::end_div();
         }
+
+        if ($subpage->get_subpage()->enablesharing &&
+                has_capability('moodle/course:manageactivities', \context_module::instance($subpage->get_course_module()->id))) {
+            $content .= $this->uses_of_shared_subpage($subpage->get_course_module()->idnumber,
+                    sharedsubpage_get_places_subpage_is_shared($subpage->get_subpage()->id));
+        }
+
         return $content;
+    }
+
+    /**
+     * Render the list of places where a subpage is shared.
+     *
+     * @param string $idnumber subpage idnumber.
+     * @param array $subpageuses URL => course shortname where the subpage is shared.
+     * @return string
+     */
+    public function uses_of_shared_subpage(string $idnumber, array $subpageuses) : string {
+        $a = new stdClass();
+        $a->idnumber = html_writer::tag('b', $idnumber);
+
+        if ($subpageuses) {
+            $links = [];
+            foreach ($subpageuses as $url => $shortname) {
+                $links[] = html_writer::link($url, s($shortname));
+            }
+            $a->links = implode(', ', $links);
+            $message = get_string('subpagesharedplaces', 'oustudyplansubpage', $a);
+        } else {
+            $message = get_string('subpagesharednowhere', 'oustudyplansubpage', $a);
+        }
+
+        return html_writer::div($message, 'subpage-shared-message');
     }
 
     /**
