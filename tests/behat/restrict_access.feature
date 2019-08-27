@@ -34,9 +34,14 @@ Feature: Restrict access of subpage
 
     # Add a subpage
     Given I turn editing mode on
-    And I add a "Subpage" to section "0" and I fill the form with:
-      | Name        | Subpage 001                 |
-      | Description | Description for Subpage 001 |
+    Then I follow "Add an activity or resource"
+    And I set the field "Subpage" to "1"
+    And I press "Add"
+    Then I should see "Adding a new Subpage" in the "h2" "css_element"
+    And I set the field "Name" to "Subpage 001"
+    And I set the field "Description" to "Description for Subpage 001"
+    And I should not see "Restrict access"
+    Then I press "Save and return to course"
 
     Given I turn editing mode off
     Then I follow "Subpage 001"
@@ -45,10 +50,16 @@ Feature: Restrict access of subpage
 
     And I am on "Course 1" course homepage
     Given I turn editing mode on
-    And I add a "Page" to section "0" and I fill the form with:
+    Then I follow "Add an activity or resource"
+    And I set the field "Page" to "1"
+    And I press "Add"
+    Then I should see "Adding a new Page" in the "h2" "css_element"
+    And I set the following fields to these values:
       | Name                   | Page 001                 |
       | Description            | Description for Page 001 |
       | Page content           | Content for Page 001     |
+    And I should not see "Restrict access"
+    Then I press "Save and return to course"
 
     Given I turn editing mode off
     Then I follow "Subpage 001"
@@ -63,9 +74,13 @@ Feature: Restrict access of subpage
   Scenario: Add a new subpage with access restrictions to a Page in a subpage and a section in a subpage
     And I am on "Course 1" course homepage
     Given I turn editing mode on
-    And I add a "Subpage" to section "0" and I fill the form with:
-      | Name        | Subpage 002                 |
-      | Description | Description for Subpage 002 |
+    Then I follow "Add an activity or resource"
+    And I set the field "Subpage" to "1"
+    And I press "Add"
+    Then I should see "Adding a new Subpage" in the "h2" "css_element"
+    And I set the field "Name" to "Subpage 002"
+    And I set the field "Description" to "Description for Subpage 002"
+    Then I press "Save and return to course"
 
     When I follow "Subpage 002"
     Then I should see "Subpage 002" in the "h2" "css_element"
