@@ -67,7 +67,7 @@ if (!$targetcourseid) {
 } else if (!$confirm) {
     // Confirmation screen.
     $course = $DB->get_record('course', array('id' => $targetcourseid), 'shortname,format', MUST_EXIST);
-    if (\format_oustudyplan\features::is_supported($course)) {
+    if (class_exists('\format_oustudyplan\features') && \format_oustudyplan\features::is_supported($course)) {
         throw new moodle_exception('You cannot copy a subpage to ' . $course->shortname . ' as it
                 supports the new subpage format only');
     }
