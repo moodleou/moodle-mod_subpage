@@ -91,9 +91,11 @@ class mod_subpage  {
      * Obtains subpage modinfo, subpage and course records and constructs a subpage object.
      *
      * @param int $cmid the course module id
+     * @param bool $redirectifosepconverted if true, and if this is not a subpage any more
+     *      because it has been converted to an oustudyplansubpage, then redirect instead of throwing an error.
      * @return mod_subpage
      */
-    public static function get_from_cmid($cmid) {
+    public static function get_from_cmid($cmid, $redirectifosepconverted = false) {
         global $DB;
 
         $course = $DB->get_record_sql('
@@ -102,6 +104,14 @@ class mod_subpage  {
                   JOIN {course} c ON c.id = cm.course
                  WHERE cm.id = ?', array($cmid), MUST_EXIST);
         $cm = get_fast_modinfo($course)->get_cm($cmid);
+
+        // If what we acutally have is the cmid of an oustudyplansubpage,
+        // and if $redirectifosepconverted is true, then redirect to the
+        // correct URL, rather than displaying the inevitable error.
+        if ($redirectifosepconverted && $cm->modname === 'oustudyplansubpage') {
+            redirect(new \moodle_url('/mod/oustudyplansubpage/view.php', ['id' => $cm->id]));
+        }
+
         $subpage = $DB->get_record('subpage', array('id' => $cm->instance), '*', MUST_EXIST);
         return new mod_subpage($subpage, $cm, $course);
     }

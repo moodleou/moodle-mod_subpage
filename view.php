@@ -56,7 +56,7 @@ if (!empty($cancelcopy) && confirm_sesskey()) {
 // This must be done first because some horrible combination of junk means that
 // page might be initialised before we expect.
 $PAGE->set_pagelayout('incourse');
-$subpage = mod_subpage::get_from_cmid($cmid);
+$subpage = mod_subpage::get_from_cmid($cmid, true);
 $course = $subpage->get_course();
 // Defined here to avoid notices on errors etc.
 $thisurl = new moodle_url('/mod/subpage/view.php', array('id' => $cmid));
