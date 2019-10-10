@@ -372,7 +372,6 @@ class mod_subpage_external extends external_api {
         self::require_access($course->id);
 
         course_delete_module($cmid);
-        $DB->delete_records('report_etexts_usage', array('cmid' => $cmid));
 
         $this->add_file($coursemodule->section, $resource->name, $updatefilepath,
                 $resource->display);
