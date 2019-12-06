@@ -24,7 +24,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/course/format/renderer.php');
-require_once($CFG->dirroot . '/mod/sharedsubpage/locallib.php');
 
 class mod_subpage_renderer extends plugin_renderer_base {
     protected $subpagecm;
@@ -332,7 +331,9 @@ class mod_subpage_renderer extends plugin_renderer_base {
         }
 
         if ($subpage->get_subpage()->enablesharing &&
-                has_capability('moodle/course:manageactivities', \context_module::instance($subpage->get_course_module()->id))) {
+                has_capability('moodle/course:manageactivities', \context_module::instance($subpage->get_course_module()->id)) &&
+                file_exists($CFG->dirroot . '/mod/sharedsubpage/locallib.php')) {
+            require_once($CFG->dirroot . '/mod/sharedsubpage/locallib.php');
             $content .= $this->uses_of_shared_subpage($subpage->get_course_module()->idnumber,
                     sharedsubpage_get_places_subpage_is_shared($subpage->get_subpage()->id));
         }
