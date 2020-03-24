@@ -189,7 +189,7 @@ $CFG->blocksdrag = $useajax;
 
 $completion = new completion_info($course);
 if ($completion->is_enabled()) {
-    $PAGE->requires->string_for_js(['completion-alt-manual-y', 'completion-alt-manual-n'], 'completion');
+    $PAGE->requires->strings_for_js(['completion-alt-manual-y', 'completion-alt-manual-n'], 'completion');
     $PAGE->requires->js_init_call('M.core_completion.init');
 }
 
