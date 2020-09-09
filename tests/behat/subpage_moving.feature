@@ -66,9 +66,7 @@ Feature: Check that user is not able to
     And I add a "Subpage" to section "0" and I fill the form with:
       | Name | Subpage 2 |
     # Repeat "Subpage 1"
-    When I follow "Add an activity or resource"
-    And I click on "Repeat" "radio"
-    And I click on "#chooserform input.submitbutton" "css_element"
+    When I add a "Repeat" to section "0"
     And I set the field "Source activity type" to "Subpage"
     And I set the field "originalcmid" to "Subpage 1"
     Then I press "Save and return to course"
@@ -87,9 +85,7 @@ Feature: Check that user is not able to
     And I add a "Subpage" to section "0" and I fill the form with:
       | Name | Subpage 2 |
     # Repeat "Subpage 1"
-    When I follow "Add an activity or resource"
-    And I click on "Repeat" "radio"
-    And I click on "#chooserform input.submitbutton" "css_element"
+    When I add a "Repeat" to section "0"
     And I set the field "Source activity type" to "Subpage"
     And I set the field "originalcmid" to "Subpage 1"
     Then I press "Save and return to course"
@@ -128,23 +124,17 @@ Feature: Check that user is not able to
     And I add a "Subpage" to section "1" and I fill the form with:
       | Name | Subpage 2 |
     # Repeat "Subpage 1"
-    When I follow "Add an activity or resource"
-    And I click on "Repeat" "radio"
-    And I click on "#chooserform input.submitbutton" "css_element"
+    When I add a "Repeat" to section "0"
     And I set the field "Source activity type" to "Subpage"
     And I set the field "originalcmid" to "Subpage 1"
     Then I press "Save and return to course"
     # Repeat "Subpage 1"
-    When I follow "Add an activity or resource"
-    And I click on "Repeat" "radio"
-    And I click on "#chooserform input.submitbutton" "css_element"
+    When I add a "Repeat" to section "0"
     And I set the field "Source activity type" to "Subpage"
     And I set the field "originalcmid" to "Subpage 1"
     Then I press "Save and return to course"
     # Repeat "Subpage 1"
-    When I follow "Add an activity or resource"
-    And I click on "Repeat" "radio"
-    And I click on "#chooserform input.submitbutton" "css_element"
+    When I add a "Repeat" to section "0"
     And I set the field "Source activity type" to "Subpage"
     And I set the field "originalcmid" to "Subpage 1"
     Then I press "Save and return to course"
@@ -162,15 +152,11 @@ Feature: Check that user is not able to
     And I add a section to the end of the OU study planner
     And I add a "Subpage" to section "1" and I fill the form with:
       | Name | Subpage 1 |
-    When I follow "Add an activity or resource"
-    And I click on "Repeat" "radio"
-    And I click on "#chooserform input.submitbutton" "css_element"
+    When I add a "Repeat" to section "0"
     And I set the field "Source activity type" to "Subpage"
     And I set the field "originalcmid" to "Subpage 1"
     Then I press "Save and return to course"
-    When I follow "Add an activity or resource"
-    And I click on "Repeat" "radio"
-    And I click on "#chooserform input.submitbutton" "css_element"
+    When I add a "Repeat" to section "0"
     And I set the field "Source activity type" to "Subpage"
     And I set the field "originalcmid" to "Subpage 1"
     Then I press "Save and return to course"
@@ -187,9 +173,7 @@ Feature: Check that user is not able to
     And I add a "Subpage" to section "0" and I fill the form with:
       | Name | Subpage 1 |
     # Repeat "Subpage 1"
-    When I follow "Add an activity or resource"
-    And I click on "Repeat" "radio"
-    And I click on "#chooserform input.submitbutton" "css_element"
+    When I add a "Repeat" to section "0"
     And I set the field "Source activity type" to "Subpage"
     And I set the field "originalcmid" to "Subpage 1"
     And I press "Save and return to course"
