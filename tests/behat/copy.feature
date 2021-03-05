@@ -35,6 +35,8 @@ Feature: Copy a subpage
       | activity | name         | addsection  | course | idnumber |
       | subpage  | Test subpage | 1           | C1     | 123456   |
       | subpage  | Test sp2     | 1           | C2     | 234567   |
+    And the following config values are set as admin:
+      | maxsections | 200 | moodlecourse |
 
   Scenario: Check access and course search
     Given I log in as "student1"

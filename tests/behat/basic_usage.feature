@@ -16,6 +16,8 @@ Feature: Basic usage of subpage
       | user     | course | role           |
       | teacher1 | C1     | editingteacher |
       | student1 | C1     | student        |
+    And the following config values are set as admin:
+      | maxsections | 200 | moodlecourse |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
 
