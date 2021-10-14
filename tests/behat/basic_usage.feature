@@ -16,6 +16,8 @@ Feature: Basic usage of subpage
       | user     | course | role           |
       | teacher1 | C1     | editingteacher |
       | student1 | C1     | student        |
+    And the following config values are set as admin:
+      | maxsections | 200 | moodlecourse |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
 
@@ -30,12 +32,8 @@ Feature: Basic usage of subpage
     And I should see "Add an activity or resource"
 
     # Add a Label (need to do this manually because not on course page).
-    When I follow "Add an activity or resource"
-    And I click on "Label" "radio"
-    # For some reason, 'And I press "Add"' doesn't work here.
-    And I click on "#chooserform input.submitbutton" "css_element"
-    And I set the field "Label text" to "Frog!"
-    And I press "Save and return to course"
+    When I add a "Label" to section "110" and I fill the form with:
+      | Label text | Frog! |
 
     # I think this part might only work in OU Moodle; in core, you might get
     # dumped back to the course page at this point.
@@ -43,14 +41,10 @@ Feature: Basic usage of subpage
     And I should see "Frog!"
 
     # Add a Page.
-    When I follow "Add an activity or resource"
-    And I click on "Page" "radio"
-    And I click on "#chooserform input.submitbutton" "css_element"
-    And I set the following fields to these values:
-    | Name         | My page  |
-    | Description  | Mine     |
-    | Page content | All mine |
-    And I press "Save and return to course"
+    When I add a "Page" to section "110" and I fill the form with:
+      | Name         | My page  |
+      | Description  | Mine     |
+      | Page content | All mine |
     Then I should see "Test subpage" in the "h2" "css_element"
     And I should see "My page"
 
@@ -70,14 +64,10 @@ Feature: Basic usage of subpage
     And I add a "Subpage" to section "1" and I fill the form with:
       | Name | Test subpage |
     And I follow "Test subpage"
-    And I follow "Add an activity or resource"
-    And I click on "Page" "radio"
-    And I click on "#chooserform input.submitbutton" "css_element"
-    And I set the following fields to these values:
-    | Name         | My page  |
-    | Description  | Mine     |
-    | Page content | All mine |
-    And I press "Save and return to course"
+    And I add a "Page" to section "110" and I fill the form with:
+      | Name         | My page  |
+      | Description  | Mine     |
+      | Page content | All mine |
     Then I should see "Edit" in the "li.activity" "css_element"
 
     # Check basic edit settings feature.
@@ -117,14 +107,10 @@ Feature: Basic usage of subpage
     And I add a "Subpage" to section "1" and I fill the form with:
       | Name | Test subpage |
     And I follow "Test subpage"
-    And I follow "Add an activity or resource"
-    And I click on "Page" "radio"
-    And I click on "#chooserform input.submitbutton" "css_element"
-    And I set the following fields to these values:
-    | Name         | My page  |
-    | Description  | Mine     |
-    | Page content | All mine |
-    And I press "Save and return to course"
+    And I add a "Page" to section "110" and I fill the form with:
+      | Name         | My page  |
+      | Description  | Mine     |
+      | Page content | All mine |
     Then "Hide" "link" should exist in the ".section" "css_element"
 
     # Hide the section.
@@ -168,14 +154,10 @@ Feature: Basic usage of subpage
     And I add a "Subpage" to section "1" and I fill the form with:
       | Name | Test subpage |
     And I follow "Test subpage"
-    And I follow "Add an activity or resource"
-    And I click on "Page" "radio"
-    And I click on "#chooserform input.submitbutton" "css_element"
-    And I set the following fields to these values:
-    | Name         | My page  |
-    | Description  | Mine     |
-    | Page content | All mine |
-    And I press "Save and return to course"
+    And I add a "Page" to section "110" and I fill the form with:
+      | Name         | My page  |
+      | Description  | Mine     |
+      | Page content | All mine |
 
     # Edit settings.
     When I click on "Edit summary" "link" in the "//li[contains(@class, 'section')][1]" "xpath_element"

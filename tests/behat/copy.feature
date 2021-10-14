@@ -35,6 +35,8 @@ Feature: Copy a subpage
       | activity | name         | addsection  | course | idnumber |
       | subpage  | Test subpage | 1           | C1     | 123456   |
       | subpage  | Test sp2     | 1           | C2     | 234567   |
+    And the following config values are set as admin:
+      | maxsections | 200 | moodlecourse |
 
   Scenario: Check access and course search
     Given I log in as "student1"
@@ -64,43 +66,31 @@ Feature: Copy a subpage
     When I follow "Test sp2"
     Then I should not see "Copy subpage"
 
-@javascript
+  @javascript
   Scenario: Check copy
     Given I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I turn editing mode on
     And I follow "Test subpage"
     # Add Label in 2 sections (need to do this manually because not on course page).
-    And I should see "Add an activity or resource"
-    And I follow "Add an activity or resource"
-    And I click on "Label" "radio"
-    And I click on "#chooserform input.submitbutton" "css_element"
-    And I set the field "Label text" to "Frog!"
-    And I press "Save and return to course"
+    And I add a "Label" to section "110" and I fill the form with:
+      | Label text | Frog! |
     And I press "Add section"
     And I click on "ul.topics li:nth-of-type(2) .summary a" "css_element"
     And I set the field "Custom" to "1"
     And I set the field "New value for Section name" to "TEST2"
     And I press "Save changes"
     # Add a label to TEST2 section
-    And I click on "Add an activity or resource" "link" in the "TEST2" "section"
-    And I click on "Label" "radio"
-    And I click on "#chooserform input.submitbutton" "css_element"
-    And I set the field "Label text" to "Toad!"
-    And I press "Save and return to course"
+    And I add a "Label" to section "111" and I fill the form with:
+      | Label text | Toad! |
     Then I should see "Frog!"
     And I should see "Toad!"
     # Add another subpage + label in that.
-    And I click on "Add an activity or resource" "link" in the "TEST2" "section"
-    And I click on "Subpage" "radio"
-    And I click on "#chooserform input.submitbutton" "css_element"
+    And I add a "Subpage" to section "111"
     And I set the field "name" to "Sub Subpage"
     And I press "Save and display"
-    And I follow "Add an activity or resource"
-    And I click on "Label" "radio"
-    And I click on "#chooserform input.submitbutton" "css_element"
-    And I set the field "Label text" to "Zombie!"
-    When I press "Save and return to course"
+    And I add a "Label" to section "112" and I fill the form with:
+      | Label text | Zombie! |
     Then I should see "Zombie!"
     # Start copy to C2.
     Given I follow "C1"
