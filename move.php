@@ -109,7 +109,7 @@ if ($formdata = $mform->get_data()) {
     // Check if they tried to move something else that isn't in the form, maybe
     // because something has changed since the form was displayed.
     foreach ($_POST as $key => $data) {
-        if (substr($key, 0, 3) === 'mod' && !array_key_exists($key, $formdata)) {
+        if (substr($key, 0, 3) === 'mod' && !property_exists($formdata, $key)) {
             print_error('error_movenotallowed', 'subpage', $moveurl);
         }
     }
