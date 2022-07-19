@@ -113,7 +113,6 @@ Feature: Copy a subpage
     Given I follow "Sub Subpage"
     Then I should see "Zombie!"
     # Check groups were not copied to course.
-    Given I am on "Course 2" course homepage
-    And I navigate to "Users > Groups" in current page administration
+    Given I am on the "Course 2" "groups" page
     Then I should see "EXISTS!"
     And I should not see "NOCOPY!"
