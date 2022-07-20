@@ -1,6 +1,5 @@
 @mod @mod_subpage @ou @ou_vle @javascript
-Feature: Check that user is not able to
-  move subpage or repeat of subpage into itself.
+Feature: Check that user is not able to move subpage or repeat of subpage into itself.
 
   Background:
     Given I am using the OSEP theme
