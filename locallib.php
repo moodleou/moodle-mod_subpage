@@ -604,7 +604,7 @@ class mod_subpage  {
 
                 // Get numsections.
                 $courseformatoptions = course_get_format($subpage->get_course())->get_format_options();
-                $numsections = $courseformatoptions['numsections'];
+                $numsections = $courseformatoptions['numsections'] ?? 0;
 
                 // These need to be formatted based on $course->format.
                 $minsection = self::get_min_section_number($subpage->get_course()->id);

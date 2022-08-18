@@ -18,8 +18,7 @@ Feature: Basic usage of subpage
       | student1 | C1     | student        |
     And the following config values are set as admin:
       | maxsections | 200 | moodlecourse |
-    And I log in as "teacher1"
-    And I am on "Course 1" course homepage
+    And I am on the "Course 1" course page logged in as teacher1
 
   @javascript
   Scenario: Add subpage and items, then view it
@@ -27,6 +26,7 @@ Feature: Basic usage of subpage
     Given I turn editing mode on
     And I add a "Subpage" to section "1" and I fill the form with:
       | Name | Test subpage |
+    When I click on "Open course index" "button"
     And I follow "Test subpage"
     Then I should see "Test subpage" in the "h2" "css_element"
     And I should see "Add an activity or resource"
@@ -54,6 +54,7 @@ Feature: Basic usage of subpage
     And I should see "My page"
 
     # Click on the Page link just in case.
+    And I click on "Open course index" "button"
     When I follow "My page"
     Then I should see "All mine"
 
@@ -63,36 +64,33 @@ Feature: Basic usage of subpage
     Given I turn editing mode on
     And I add a "Subpage" to section "1" and I fill the form with:
       | Name | Test subpage |
-    And I follow "Test subpage"
+    And I am on the "Test subpage" "subpage activity" page
     And I add a "Page" to section "110" and I fill the form with:
       | Name         | My page  |
       | Description  | Mine     |
       | Page content | All mine |
+    When I open "My page" actions menu
     Then I should see "Edit" in the "li.activity" "css_element"
-
     # Check basic edit settings feature.
-    When I open the action menu in "My page" "list_item"
-    And I click on "Edit settings" "link" in the "My page" "list_item"
+    When I choose "Edit settings" in the open action menu
     Then I should see "Updating Page"
 
     # Check there isn't an indent option.
-    Given I follow "C1"
-    And I follow "Test subpage"
-    When I open the action menu in "My page" "list_item"
+    Given I am on the "Test subpage" "subpage activity" page
+    And I open "My page" actions menu
 
     # Try the Hide feature.
-    When I click on "Hide" "link" in the "My page" "list_item"
-    Then ".activityinstance > span > a.dimmed" "css_element" should exist
+    When I choose "Hide" in the open action menu
+    Then I should see "Hidden from students"
 
-    When I open the action menu in "My page" "list_item"
-    Then "Hide" "link" should not exist in the "My page" "list_item"
+    When I open "My page" actions menu
+    Then "My page" actions menu should not have "Hide" item
 
-    When I click on "Show" "link" in the "My page" "list_item"
-    Then ".activityinstance > span > a.dimmed" "css_element" should not exist
-
+    When I choose "Show" in the open action menu
+    Then I should not see "Hidden from students"
     # Delete the item
-    When I open the action menu in "My page" "list_item"
-    And I click on "Delete" "link" in the "My page" "list_item"
+    When I open "My page" actions menu
+    And I choose "Delete" in the open action menu
     Then I should see "Are you sure"
 
     When I press "Yes"
@@ -106,35 +104,35 @@ Feature: Basic usage of subpage
     Given I turn editing mode on
     And I add a "Subpage" to section "1" and I fill the form with:
       | Name | Test subpage |
-    And I follow "Test subpage"
+    And I am on the "Test subpage" "subpage activity" page
     And I add a "Page" to section "110" and I fill the form with:
       | Name         | My page  |
       | Description  | Mine     |
       | Page content | All mine |
-    Then "Hide" "link" should exist in the ".section" "css_element"
+    When I open "My page" actions menu
+    Then "My page" actions menu should have "Hide" item
 
     # Hide the section.
-    When I click on "Hide" "link" in the ".section" "css_element"
-    Then "Show" "link" should exist in the ".section" "css_element"
+    When I choose "Hide" in the open action menu
+    Then I open "My page" actions menu
+    And "My page" actions menu should have "Show" item
 
     # As student, page should be hidden.
     When I log out
-    And I log in as "student1"
-    And I am on "Course 1" course homepage
-    And I follow "Test subpage"
+    And I am on the "Test subpage" "subpage activity" page logged in as "student1"
     Then I should not see "My page"
 
     # Back in as teacher, can see it still.
     When I log out
-    And I log in as "teacher1"
-    And I am on "Course 1" course homepage
-    And I follow "Test subpage"
+    And I am on the "Test subpage" "subpage activity" page logged in as "teacher1"
     Then I should see "My page"
 
     # Show it again.
     And I turn editing mode on
-    When I click on "Show" "link" in the ".section" "css_element"
-    Then "Hide" "link" should exist in the ".section" "css_element"
+    When I open "My page" actions menu
+    And I choose "Show" in the open action menu
+    Then I open "My page" actions menu
+    And "My page" actions menu should have "Hide" item
 
     # Stealth it.
     When I click on "//input[@title='Stealth']" "xpath_element" in the ".section" "css_element"
@@ -142,9 +140,7 @@ Feature: Basic usage of subpage
 
     # Back as student - should be hidden again.
     When I log out
-    And I log in as "student1"
-    And I am on "Course 1" course homepage
-    And I follow "Test subpage"
+    And I am on the "Test subpage" "subpage activity" page logged in as "student1"
     Then I should not see "My page" in the ".content" "css_element"
 
   @javascript
@@ -153,7 +149,7 @@ Feature: Basic usage of subpage
     Given I turn editing mode on
     And I add a "Subpage" to section "1" and I fill the form with:
       | Name | Test subpage |
-    And I follow "Test subpage"
+    And I am on the "Test subpage" "subpage activity" page
     And I add a "Page" to section "110" and I fill the form with:
       | Name         | My page  |
       | Description  | Mine     |

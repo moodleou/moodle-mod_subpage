@@ -39,39 +39,33 @@ Feature: Copy a subpage
       | maxsections | 200 | moodlecourse |
 
   Scenario: Check access and course search
-    Given I log in as "student1"
-    And I am on "Course 1" course homepage
-    When I follow "Test subpage"
+    When I am on the "Test subpage" "subpage activity" page logged in as student1
     Then I should not see "Copy subpage"
     And I log out
-    Given I log in as "teacher1"
-    And I am on "Course 1" course homepage
-    When I follow "Test subpage"
+    When I am on the "Test subpage" "subpage activity" page logged in as teacher1
     Then I should see "Copy subpage"
     # Check course search.
-    Given I follow "Copy subpage"
+    When I follow "Copy subpage"
     Then I should see "C1"
     And I should see "Course 2"
     And I should see "Site 1"
     And I should not see "Course 3"
     And I should not see "Site 2"
-    Given I set the field "search" to "C"
+    And I set the field "search" to "C"
     When I press "Search"
     Then I should see "Course 1"
     And I should see "Course 2"
     And I should not see "Site 1"
     # Test link cap access
-    Given I am on homepage
-    And I am on "Course 2" course homepage
-    When I follow "Test sp2"
+    And I am on homepage
+    When I am on the "Test sp2" "subpage activity" page
     Then I should not see "Copy subpage"
 
   @javascript
   Scenario: Check copy
-    Given I log in as "teacher1"
-    And I am on "Course 1" course homepage
+    When I am on the "Course 1" course page logged in as teacher1
     And I turn editing mode on
-    And I follow "Test subpage"
+    And I am on the "Test subpage" "subpage activity" page
     # Add Label in 2 sections (need to do this manually because not on course page).
     And I add a "Label" to section "110" and I fill the form with:
       | Label text | Frog! |
@@ -93,10 +87,8 @@ Feature: Copy a subpage
       | Label text | Zombie! |
     Then I should see "Zombie!"
     # Start copy to C2.
-    Given I follow "C1"
-    And I follow "Test subpage"
-    And I open the action menu in "#region-main-settings-menu" "css_element"
-    And I choose "Copy subpage" in the open action menu
+    Given I am on the "Test subpage" "subpage activity" page
+    And I click on "Copy subpage" "link"
     And I set the field with xpath "//tbody//tr[2]//input[@type='radio']" to "1"
     When I press "Continue"
     Then I should see "Target: C2"
@@ -104,13 +96,15 @@ Feature: Copy a subpage
     When I press "Continue"
     Then I should see "Course 2"
     And I should see "Test subpage"
-    And ".activityinstance .dimmed" "css_element" should exist
+    And I should see "Hidden from students"
     # Check contents.
-    Given I follow "Test subpage"
+    When I click on "Open course index" "button"
+    And I follow "Test subpage"
     Then I should see "TEST2"
     And I should see "Frog!"
     And I should see "Toad!"
-    Given I follow "Sub Subpage"
+    When I click on "Open course index" "button"
+    And I follow "Sub Subpage"
     Then I should see "Zombie!"
     # Check groups were not copied to course.
     Given I am on the "Course 2" "groups" page

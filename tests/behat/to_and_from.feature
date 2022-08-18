@@ -16,18 +16,17 @@ Feature: Moving items to and from subpages
       | user     | course | role           |
       | teacher1 | C1     | editingteacher |
       | student1 | C1     | student        |
-    And I log in as "teacher1"
     And I am using the OU theme
     And the following "activities" exist:
       | course | section | activity | name     | idnumber |
       | C1     | 1       | subpage  | Subpage1 | S1       |
-    And I am on "Course 1" course homepage
+    And I am on the "Course 1" course page logged in as teacher1
     And I follow "Turn editing on"
 
   @javascript
   Scenario: Add subpage and move some items onto it
     # Add a subpage.
-    And I follow "Subpage1"
+    And I am on the "Subpage1" "subpage activity" page
 
     # Check the 'Move to' box shows nothing.
     When I press "Move items to this page"
@@ -42,10 +41,9 @@ Feature: Moving items to and from subpages
       | course | section | activity | name     | idnumber |
       | C1     | 1       | subpage  | Subpage2 | S2       |
       | C1     | 2       | subpage  | Subpage3 | S3       |
-    When I follow "C1"
 
     # Should now be possible to add these (but not itself) to Subpage1.
-    When I follow "Subpage1"
+    When I am on the "Subpage1" "subpage activity" page
     And I press "Move items to this page"
     Then I should see "Subpage2" in the ".mform" "css_element"
     And I should see "Subpage3" in the ".mform" "css_element"
@@ -61,7 +59,7 @@ Feature: Moving items to and from subpages
     And I should see "Subpage2" in the "#region-main" "css_element"
 
     # Now go to subpage2. It shouldn't let you move subpage1 onto it...
-    When I follow "Subpage2"
+    When I am on the "Subpage2" "subpage activity" page
     And I press "Move items to this page"
     And I should see "Subpage3" in the ".mform" "css_element"
     And I should not see "Subpage1" in the ".mform" "css_element"
@@ -73,7 +71,7 @@ Feature: Moving items to and from subpages
       | course | section| activity | name     | idnumber |
       | C1     | 1      | subpage  | Subpage2 | S2       |
       | C1     | 2      | subpage  | Subpage3 | S3       |
-    And I follow "Subpage1"
+    And I am on the "Subpage1" "subpage activity" page
 
     # Check the 'Move from' button is not present.
     Then I should not see "Move items from this page"
@@ -104,5 +102,5 @@ Feature: Moving items to and from subpages
     Then I should see "Subpage3" in the "#section-3" "css_element"
 
     # The subpage still has Subpage2.
-    When I follow "Subpage1"
+    When I am on the "Subpage1" "subpage activity" page
     Then I should see "Subpage2" in the "#region-main" "css_element"

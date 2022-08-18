@@ -12,8 +12,7 @@ Feature: Check that user is not able to move subpage or repeat of subpage into i
     And the following "course enrolments" exist:
       | user     | course | role           |
       | teacher1 | C1     | editingteacher |
-    And I log in as "teacher1"
-    And I am on "Course 1" course homepage
+    And I am on the "Course 1" course page logged in as teacher1
 
   Scenario: Check that moving subpage are disabled, other activity is normal.
     When I follow "Turn editing on"
@@ -29,7 +28,7 @@ Feature: Check that user is not able to move subpage or repeat of subpage into i
     Then "a[href='#']" "css_element" should not exist in the "li.activity:nth-of-type(1)" "css_element"
     And "a[href='#']" "css_element" should not exist in the "li.activity:nth-of-type(2)" "css_element"
     # Click cancel button, There are 2 cancel button so we use css selector to pick it.
-    When I click on ".course-content > .oustudyplan-cancelbar button" "css_element"
+    When I click on ".course-content .oustudyplan-mainsections ~ .oustudyplan-cancelbar button" "css_element"
     And I press "Select and move items..."
     And I set the field "Subpage 1" to "1"
     And I press "Move selected"

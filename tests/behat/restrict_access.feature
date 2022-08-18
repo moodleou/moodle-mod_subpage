@@ -23,8 +23,7 @@ Feature: Restrict access of subpage
       | student2 | C1     | student        |
       | student3 | C1     | student        |
       | manager  | C1     | manager        |
-    And I log in as "manager"
-    And I am on "Course 1" course homepage
+    And I am on the "Course 1" course page logged in as manager
 
   @javascript
   Scenario: Add subpage with restricted access, then view it
@@ -39,7 +38,7 @@ Feature: Restrict access of subpage
       | Description | Description for Subpage 001 |
 
     Given I turn editing mode off
-    Then I follow "Subpage 001"
+    Then I am on the "Subpage 001" "subpage activity" page
     And I should see "Subpage 001" in the "h2" "css_element"
     And I should see "Description for Subpage 001"
 
@@ -51,12 +50,11 @@ Feature: Restrict access of subpage
       | Page content           | Content for Page 001     |
 
     Given I turn editing mode off
-    Then I follow "Subpage 001"
+    When I am on the "Subpage 001" "subpage activity" page
     And I should see "Subpage 001" in the "h2" "css_element"
     And I should see "Description for Subpage 001"
-    And I am on "Course 1" course homepage
-    Then I follow "Page 001"
-    And I should see "Page 001" in the "h2" "css_element"
+    And I am on the "Page 001" "page activity" page
+    Then I should see "Page 001"
     And I should see "Content for Page 001"
 
   @javascript
@@ -67,7 +65,7 @@ Feature: Restrict access of subpage
       | Name        | Subpage 002                 |
       | Description | Description for Subpage 002 |
 
-    When I follow "Subpage 002"
+    When I am on the "Subpage 002" "subpage activity" page
     Then I should see "Subpage 002" in the "h2" "css_element"
     And I should see "Description for Subpage 002"
 
@@ -98,18 +96,14 @@ Feature: Restrict access of subpage
     And I should see "Your City/town is Milton Keynes"
     And I log out
 
-    Given I log in as "student1"
-    And I am on "Course 1" course homepage
-    And I follow "Subpage 002"
+    When I am on the "Subpage 002" "subpage activity" page logged in as student1
     Then I should see "Subpage 002"
     And I should see "Section 001"
     And I should see "Summary of Section 001"
     And I should see "Not available unless: Your City/town is Milton Keynes"
     And I log out
 
-    Given I log in as "student2"
-    And I am on "Course 1" course homepage
-    And I follow "Subpage 002"
+    When I am on the "Subpage 002" "subpage activity" page logged in as student2
     Then I should see "Subpage 002"
     And "Section 001" "text" in the "content" "region" should not be visible
     And I should not see "Summary of Section 001"
