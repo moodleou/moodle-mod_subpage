@@ -23,7 +23,8 @@ Feature: Restrict access of subpage
       | student2 | C1     | student        |
       | student3 | C1     | student        |
       | manager  | C1     | manager        |
-    And I am on the "Course 1" course page logged in as manager
+    And I am on the "C1" "Course" page logged in as "manager"
+
 
   @javascript
   Scenario: Add subpage with restricted access, then view it

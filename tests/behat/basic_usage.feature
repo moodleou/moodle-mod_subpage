@@ -18,7 +18,7 @@ Feature: Basic usage of subpage
       | student1 | C1     | student        |
     And the following config values are set as admin:
       | maxsections | 200 | moodlecourse |
-    And I am on the "Course 1" course page logged in as teacher1
+    And I am on the "C1" "Course" page logged in as "teacher1"
 
   @javascript
   Scenario: Add subpage and items, then view it
@@ -71,6 +71,7 @@ Feature: Basic usage of subpage
       | Page content | All mine |
     When I open "My page" actions menu
     Then I should see "Edit" in the "li.activity" "css_element"
+
     # Check basic edit settings feature.
     When I choose "Edit settings" in the open action menu
     Then I should see "Updating Page"
