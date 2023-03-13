@@ -32,8 +32,8 @@ Feature: Basic usage of subpage
     And I should see "Add an activity or resource"
 
     # Add a Label (need to do this manually because not on course page).
-    When I add a "Label" to section "110" and I fill the form with:
-      | Label text | Frog! |
+    When I add a "Text and media area" to section "110" and I fill the form with:
+      | Text | Frog! |
 
     # I think this part might only work in OU Moodle; in core, you might get
     # dumped back to the course page at this point.

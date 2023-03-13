@@ -67,24 +67,24 @@ Feature: Copy a subpage
     And I turn editing mode on
     And I am on the "Test subpage" "subpage activity" page
     # Add Label in 2 sections (need to do this manually because not on course page).
-    And I add a "Label" to section "110" and I fill the form with:
-      | Label text | Frog! |
+    And I add a "Text and media area" to section "110" and I fill the form with:
+      | Text | Frog! |
     And I press "Add section"
     And I click on "ul.topics li:nth-of-type(2) .summary a" "css_element"
     And I set the field "Custom" to "1"
     And I set the field "New value for Section name" to "TEST2"
     And I press "Save changes"
     # Add a label to TEST2 section
-    And I add a "Label" to section "111" and I fill the form with:
-      | Label text | Toad! |
+    And I add a "Text and media area" to section "111" and I fill the form with:
+      | Text | Toad! |
     Then I should see "Frog!"
     And I should see "Toad!"
     # Add another subpage + label in that.
     And I add a "Subpage" to section "111"
     And I set the field "name" to "Sub Subpage"
     And I press "Save and display"
-    And I add a "Label" to section "112" and I fill the form with:
-      | Label text | Zombie! |
+    And I add a "Text and media area" to section "112" and I fill the form with:
+      | Text | Zombie! |
     Then I should see "Zombie!"
     # Start copy to C2.
     Given I am on the "Test subpage" "subpage activity" page
