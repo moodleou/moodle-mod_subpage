@@ -88,7 +88,7 @@ function subpage_delete_instance($id) {
             if (!$subpageinstance->is_section_empty($sections->sectionid)) {
                 // Section is not empty.
                 $url = new moodle_url('/mod/subpage/view.php', array('id' => $subpagecmid));
-                print_error('error_deletingsubpage', 'mod_subpage', $url);
+                throw new moodle_exception('error_deletingsubpage', 'mod_subpage', $url);
             }
         }
         // All sections are empty, delete the empty sections.

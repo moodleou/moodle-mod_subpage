@@ -110,7 +110,7 @@ if ($formdata = $mform->get_data()) {
     // because something has changed since the form was displayed.
     foreach ($_POST as $key => $data) {
         if (substr($key, 0, 3) === 'mod' && !property_exists($formdata, $key)) {
-            print_error('error_movenotallowed', 'subpage', $moveurl);
+            throw new moodle_exception('error_movenotallowed', 'subpage', $moveurl);
         }
     }
 
@@ -168,19 +168,19 @@ if ($formdata = $mform->get_data()) {
 
         // Ensure that the destination section does exists.
         if (!$section = $DB->get_record('course_sections', array('id' => (int)$id))) {
-            print_error('sectionnotcreatedorexisting', 'mod_subpage',
+            throw new moodle_exception('sectionnotcreatedorexisting', 'mod_subpage',
                     "$CFG->wwwroot/mod/subpage/view.php?id=$cmid");
         }
 
         foreach ($cmids as $id) {
             if (!$cm = get_coursemodule_from_id('', $id)) {
-                print_error('modulenotfound', 'mod_subpage',
+                throw new moodle_exception('modulenotfound', 'mod_subpage',
                         "$CFG->wwwroot/mod/subpage/view.php?id=$cmid");
             }
 
             // Check this move won't cause a loop.
             if (!empty($parentcmids[$id])) {
-                print_error('error_movecircular', 'subpage', $moveurl);
+                throw new moodle_exception('error_movecircular', 'subpage', $moveurl);
             }
 
             // No reason to move if in the same section.

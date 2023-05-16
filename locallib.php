@@ -374,7 +374,7 @@ class mod_subpage  {
         if (file_exists($modlib)) {
             require_once($modlib);
         } else {
-            print_error('modulemissingcode', '', '', $modlib);
+            throw new moodle_exception('modulemissingcode', '', '', $modlib);
         }
 
         try {

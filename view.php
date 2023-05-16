@@ -43,7 +43,7 @@ $recache      = optional_param('recache', 0, PARAM_INT);
 $cancelcopy   = optional_param('cancelcopy', 0, PARAM_BOOL);
 
 if (empty($cmid)) {
-    print_error('unspecifysubpageid', 'subpage');
+    throw new moodle_exception('unspecifysubpageid', 'subpage');
 }
 
 if (!empty($cancelcopy) && confirm_sesskey()) {
@@ -83,13 +83,13 @@ if (!empty($recache) && confirm_sesskey()) {
 
 if (!empty($copy) and confirm_sesskey()) { // value = course module
     if (!$cm = get_coursemodule_from_id('', $copy, 0, true)) {
-        print_error('invalidcoursemodule');
+        throw new moodle_exception('invalidcoursemodule');
     }
     $context = context_course::instance($cm->course);
     require_capability('moodle/course:manageactivities', $context);
 
     if (!$section = $DB->get_record('course_sections', array('id' => $cm->section))) {
-        print_error('sectionnotexist');
+        throw new moodle_exception('sectionnotexist');
     }
 
     $USER->activitycopy       = $copy;
@@ -99,7 +99,7 @@ if (!empty($copy) and confirm_sesskey()) { // value = course module
     require_capability('moodle/course:update', $modcontext);
     if (empty($confirm)) {
         if (!$section = $DB->get_record('course_sections', array('id' => $delete))) {
-            print_error('sectionnotexist');
+            throw new moodle_exception('sectionnotexist');
         }
         $sectionname = $section->id;
         if (!empty($section->name)) {
@@ -115,11 +115,11 @@ if (!empty($copy) and confirm_sesskey()) { // value = course module
     } else {
         // Check to see whether section exists.
         if (!$section = $DB->get_record('course_sections', array('id' => $delete))) {
-            print_error('sectionnotexist');
+            throw new moodle_exception('sectionnotexist');
         }
         // Check to see whether section has any content or is empty, if not empty get out.
         if (! empty($section->sequence)) {
-                print_error('error_deletingsection', 'subpage');
+            throw new moodle_exception('error_deletingsection', 'subpage');
         }
         // Delete section.
         $subpage->delete_section($delete);
@@ -220,7 +220,7 @@ if (! $sections = $subpage->get_sections()) {   // No sections found
     // Double-check to be extra sure.
     $subpage->add_section();
     if (! $sections = $subpage->get_sections() ) {      // Try again.
-        print_error('cannotcreateorfindstructs', 'error');
+        throw new moodle_exception('cannotcreateorfindstructs', 'error');
     }
 }
 $renderer = $PAGE->get_renderer('mod_subpage');
