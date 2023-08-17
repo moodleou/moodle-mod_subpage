@@ -58,13 +58,4 @@ class items_moved extends \core\event\base {
     public function get_url() {
         return new \moodle_url('/mod/subpage/view.php', array('id' => $this->contextinstanceid));
     }
-
-    public function get_legacy_logdata() {
-        return array($this->courseid, 'subpage', 'move',
-                '', $this->other['destsectionid'] . ' (' .
-                (empty($this->other['destcmid']) ? 'study planner' :
-                    'subpage cmid ' . $this->other['destcmid']) .
-                '): ' . implode(',', $this->other['cmids']),
-                $this->contextinstanceid);
-    }
 }

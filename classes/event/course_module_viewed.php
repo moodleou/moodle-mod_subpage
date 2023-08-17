@@ -38,11 +38,4 @@ class course_module_viewed extends \core\event\course_module_viewed {
         $this->data['objecttable'] = 'subpage';
         parent::init();
     }
-
-    protected function get_legacy_logdata() {
-        // Override to preserve identical log line (it has empty info field,
-        // otherwise default).
-        return array($this->courseid, $this->objecttable, 'view',
-                'view.php?id=' . $this->contextinstanceid, '', $this->contextinstanceid);
-    }
 }

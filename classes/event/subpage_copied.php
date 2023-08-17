@@ -50,9 +50,4 @@ class subpage_copied extends \core\event\base {
     public function get_url() {
         return new \moodle_url('/mod/subpage/view.php', array('id' => $this->contextinstanceid));
     }
-
-    public function get_legacy_logdata() {
-        return array($this->courseid, 'subpage', 'copy',
-                '', $this->other['dest'], $this->contextinstanceid);
-    }
 }
