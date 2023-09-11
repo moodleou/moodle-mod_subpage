@@ -69,11 +69,10 @@ Feature: Basic usage of subpage
       | Name         | My page  |
       | Description  | Mine     |
       | Page content | All mine |
-    When I open "My page" actions menu
-    Then I should see "Edit" in the "li.activity" "css_element"
 
     # Check basic edit settings feature.
-    When I choose "Edit settings" in the open action menu
+    When I open "My page" actions menu
+    And I choose "Edit settings" in the open action menu
     Then I should see "Updating Page"
 
     # Check there isn't an indent option.

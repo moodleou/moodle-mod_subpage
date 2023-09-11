@@ -173,7 +173,6 @@ if ($PAGE->user_allowed_editing()) {
 
 $SESSION->fromdiscussion = $CFG->wwwroot .'/course/view.php?id='. $course->id;
 
-
 if ($course->id == SITEID) {
     // This course is not a real course.
     redirect($CFG->wwwroot .'/');
