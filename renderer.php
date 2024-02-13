@@ -434,7 +434,16 @@ class mod_subpage_renderer extends plugin_renderer_base {
     protected function render_section($subpage, $modinfo, $section, $editing,
             $moveitem, $mods) {
         global $CFG, $PAGE;
-        $content = \format_studyplan\last_gasp::course_section_cm_list($subpage->get_course(), $section);
+        if (class_exists('\format_studyplan\last_gasp')) {
+            // Use custom code from local plugin which is a copy-paste of the below core code but
+            // without deprecation warnings.
+            $content = \format_studyplan\last_gasp::course_section_cm_list($subpage->get_course(), $section);
+        } else {
+            // This will work - until Moodle remove the deprecated code - but with deprecation
+            //warnings.
+            $courserenderer = $PAGE->get_renderer('core', 'course');
+            $content = $courserenderer->course_section_cm_list($subpage->get_course(), $section);
+        }
         $content = str_replace($CFG->wwwroot.'/course/mod.php?copy',
                 'view.php?id='.$subpage->get_course_module()->id.'&amp;copy', $content);
         $content = str_replace("'togglecompletion.php'", "'" . $CFG->wwwroot .
