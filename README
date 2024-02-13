@@ -10,9 +10,14 @@ activities separately from the main course page
 
 Warning:
 
-We support the subpage module in Moodle 2.8 but it is likely that this module
-will be discontinued in a future version. However that might be some way off -
-we are likely to continue to support it through Moodle 3.0 and possibly beyond.
+We have supported the subpage module throughout Moodle 3.x and it also appears
+to work, but with deprecation warnings, in Moodle 4.2+. The module will be
+completely discontinued in a future Moodle version when the deprecated code
+stops working.
+
+If you need an alternative solution, the 'Flexible sections' format might work
+for you, and I believe there might be future improvements in this area from
+Moodle HQ too.
 
 Limitations:
 
