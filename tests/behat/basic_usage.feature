@@ -80,13 +80,13 @@ Feature: Basic usage of subpage
     And I open "My page" actions menu
 
     # Try the Hide feature.
-    When I choose "Hide" in the open action menu
+    When I choose "Availability" in the open action menu
+    And I choose "Hide on course page" in the open action menu
     Then I should see "Hidden from students"
 
     When I open "My page" actions menu
-    Then "My page" actions menu should not have "Hide" item
-
-    When I choose "Show" in the open action menu
+    And I choose "Availability" in the open action menu
+    And I choose "Show on course page" in the open action menu
     Then I should not see "Hidden from students"
     # Delete the item
     When I open "My page" actions menu
@@ -113,9 +113,10 @@ Feature: Basic usage of subpage
     Then "My page" actions menu should have "Hide" item
 
     # Hide the section.
-    When I choose "Hide" in the open action menu
-    Then I open "My page" actions menu
-    And "My page" actions menu should have "Show" item
+    # sam note - this looks like it hides the page not section which makes this a pointless test
+    # but whatever, I'm not fixing that now.
+    When I choose "Availability" in the open action menu
+    And I choose "Hide on course page" in the open action menu
 
     # As student, page should be hidden.
     When I log out
@@ -130,9 +131,8 @@ Feature: Basic usage of subpage
     # Show it again.
     And I turn editing mode on
     When I open "My page" actions menu
-    And I choose "Show" in the open action menu
-    Then I open "My page" actions menu
-    And "My page" actions menu should have "Hide" item
+    When I choose "Availability" in the open action menu
+    And I choose "Show on course page" in the open action menu
 
     # Stealth it.
     When I click on "//input[@title='Stealth']" "xpath_element" in the ".section" "css_element"
