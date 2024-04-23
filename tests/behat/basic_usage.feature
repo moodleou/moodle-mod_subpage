@@ -28,7 +28,7 @@ Feature: Basic usage of subpage
       | Name | Test subpage |
     When I click on "Open course index" "button"
     And I follow "Test subpage"
-    Then I should see "Test subpage" in the "h2" "css_element"
+    Then I should see "Test subpage" in the ".page-header-headings" "css_element"
     And I should see "Add an activity or resource"
 
     # Add a Label (need to do this manually because not on course page).
@@ -37,7 +37,7 @@ Feature: Basic usage of subpage
 
     # I think this part might only work in OU Moodle; in core, you might get
     # dumped back to the course page at this point.
-    Then I should see "Test subpage" in the "h2" "css_element"
+    Then I should see "Test subpage" in the ".page-header-headings" "css_element"
     And I should see "Frog!"
 
     # Add a Page.
@@ -45,7 +45,7 @@ Feature: Basic usage of subpage
       | Name         | My page  |
       | Description  | Mine     |
       | Page content | All mine |
-    Then I should see "Test subpage" in the "h2" "css_element"
+    Then I should see "Test subpage" in the ".page-header-headings" "css_element"
     And I should see "My page"
 
     # Turn editing off.

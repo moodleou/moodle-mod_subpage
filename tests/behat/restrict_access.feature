@@ -67,7 +67,7 @@ Feature: Restrict access of subpage
       | Description | Description for Subpage 002 |
 
     When I am on the "Subpage 002" "subpage activity" page
-    Then I should see "Subpage 002" in the "h2" "css_element"
+    Then I should see "Subpage 002" in the ".page-header-headings" "css_element"
     And I should see "Description for Subpage 002"
 
     And I press "Add section"
@@ -88,7 +88,7 @@ Feature: Restrict access of subpage
       | Value to compare against | Milton Keynes |
 
     Then I press "Save changes"
-    And I should see "Subpage 002" in the "h2" "css_element"
+    And I should see "Subpage 002" in the ".page-header-headings" "css_element"
     And I should see "Summary of Section 001"
     And I should see "Not available unless:"
 
